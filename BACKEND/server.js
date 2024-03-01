@@ -34,6 +34,10 @@ app.use((err, req, res, next) => {
   });
 });
 
+const studentRouter = require("./route/studentsRoute.js");
+
+app.use("/student", studentRouter);
+
 app.listen(PORT, () => {
   console.log(`Server is up and running on port number: ${PORT}`);
 });
