@@ -27,6 +27,9 @@ const memberSchema = new Schema({
     labGroup: {
         type: String
     },
+    password: {
+        type: String,
+    }
 });
 
 const groupSchema = new Schema({
