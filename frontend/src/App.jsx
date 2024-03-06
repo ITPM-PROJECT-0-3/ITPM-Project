@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AdminHomePage from "./pages/AdminHomePage";
 import CordinaterAdminMainLayout from "./pages/CordinaterAdminMainLayout";
+import RegistrationForm from './components/form/RegistrationForm';
+import LoginForm from './components/form/LoginForm';
 
 
 function App() {
@@ -24,8 +26,8 @@ function App() {
         <Route path="/admin-nav" element={<CordinaterAdminMainLayout />}>
               <Route index={true} path="" element={<AdminHomePage />} />
             </Route>
-          
-        
+              <Route path="/registration" element={<RegistrationForm />} />
+              <Route path="/loginGrp" element={<LoginForm />} />
          
         </Routes>
       </Router>
