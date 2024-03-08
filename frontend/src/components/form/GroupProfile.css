@@ -1,0 +1,96 @@
+/* GroupProfile.css */
+
+#sachini_group_profile {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  #sachini_group_id {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 40px;
+    color:green;
+  }
+  
+  #sachini_topic {
+    font-size: 30px;
+    margin-top: 20px;
+    border-top: 2px solid #5eb493; /* Top border color for the line box */
+    border-bottom: 2px solid #5eb493; /* Bottom border color for the line box */
+    background-color: #5eb493; /* Background color for the topic box */
+    color: #fff; /* Text color to ensure visibility on the background */
+    padding: 10px; /* Padding inside the line box */
+    display: block; /* Ensures the line box takes up the full width */
+    text-align: center; 
+  }
+  
+  #sachini_member_details {
+    margin-top: 30px;
+  }
+  
+  #sachini_member_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  #sachini_member_table th,
+  #sachini_member_table td {
+    border: 1px solid hsl(185, 8%, 70%);
+    padding: 8px;
+    text-align: left;
+  }
+  
+  #sachini_member_table th {
+    background-color: #dddcdc;
+  }
+
+  #sachini_member_table tbody tr:hover {
+    animation: twinkling 0.5s ease-in-out infinite alternate;
+  }
+  
+  @keyframes twinkling {
+    0% {
+      background-color: #fbffff; /* Yellow */
+    }
+    100% {
+      background-color: #ced3d4; /* Original color */
+    }
+  }
+  
+  #sachini_contact_supervisors {
+    margin-top: 30px;
+  }
+  
+  #sachini_supervisor_table,
+  #sachini_co_supervisor_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  #sachini_supervisor_table th,
+  #sachini_supervisor_table td,
+  #sachini_co_supervisor_table th,
+  #sachini_co_supervisor_table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  #sachini_supervisor_table th,
+  #sachini_co_supervisor_table th {
+    background-color: #dad8d8;
+  }
+  
+  #sachini_assignments_schedules {
+    background-color: #dad9d8; /* Yellow background color */
+    padding: 10px;
+    margin-top: 20px;
+    text-align: left;
+    font-size: 22px;
+    color: black;
+    font-weight: bold;
+  }
