@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Group = require("../model/StudentModel");
+const DeleteGroup = require("../model/DeleteGroupModel");
 
 const registerGroup = async (req, res) => {
     console.log('Received request to /api/registerGrp'); 
@@ -107,13 +108,23 @@ const updateGroup = async (req, res) => {
 
 const deleteGroup = async (req, res) => {
     try {
-        
         const groupId = req.params.groupId;
 
         if (!groupId) {
             return res.status(400).send({ status: "Error", error: "Invalid groupId parameter" });
         }
 
+        const groupToDelete = await Group.findOne({ groupId: { $regex: new RegExp('^' + groupId + '$', 'i') } });
+
+        if (!groupToDelete) {
+            return res.status(404).send({ status: "Group not found" });
+        }
+
+        // Save the group details to DeleteGroup table before deletion
+        const deletedGroup = new DeleteGroup(groupToDelete.toJSON());
+        await deletedGroup.save();
+
+        // Delete the group from the original table
         const result = await Group.findOneAndDelete({ groupId: { $regex: new RegExp('^' + groupId + '$', 'i') } });
 
         if (result) {
@@ -126,6 +137,7 @@ const deleteGroup = async (req, res) => {
         res.status(500).send({ status: "Error with delete group", error: err.message });
     }
 };
+
 
 
 const getOneGroup = async (req, res) => {
