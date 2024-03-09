@@ -17,6 +17,9 @@ const ExaminerSchema = new mongoose.Schema(
     Facalty: {
       type: String,
     },
+    OtherUniversity: {
+      type: String,
+    },
     Email: {
       type: String,
     },
