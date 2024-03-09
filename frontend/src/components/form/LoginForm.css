@@ -5,6 +5,7 @@
     padding: 20px;
     margin-top: 50px;
     border-radius: 8px; 
+    background-color: #e4dfdf;
   }
   
   #sachini_heading {
@@ -23,6 +24,8 @@
     width: 100%;
     padding: 8px;
     margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
   }
   
   #sachini_form button {
@@ -30,8 +33,10 @@
     color: white;
     padding: 10px;
     border: none;
+    border-radius: 15px;
     cursor: pointer;
-    width: 100%;
+    width: 60%;
+    margin: auto;
   }
   
   #sachini_form button:hover {

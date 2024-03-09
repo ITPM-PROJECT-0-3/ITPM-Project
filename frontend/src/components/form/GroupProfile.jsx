@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './GroupProfile.css';
+import UpdatePswrdForm from './UpdatePswrdForm';
 
 const GroupProfile = () => {
   const { grpId } = useParams();
+  const navigate = useNavigate();
   const [groupData, setGroupData] = useState(null);
+  const [showUpdatePswrdForm, setShowUpdatePswrdForm] = useState(false);
 
   useEffect(() => {
     const fetchGroupData = async () => {
@@ -20,8 +23,20 @@ const GroupProfile = () => {
     fetchGroupData();
   }, [grpId]);
 
+  const handleSettingsClick = () => {
+    setShowUpdatePswrdForm(true);
+    navigate(`/updatePassword/${grpId}`);
+  };
+  
+
   return (
     <div id="sachini_group_profile">
+      <button id="sachini_settings_button" onClick={handleSettingsClick}>
+        Settings
+      </button>
+      {showUpdatePswrdForm && (
+        <UpdatePswrdForm grpId={grpId} />
+      )}
       {groupData ? (
         <div>
           <h2 id="sachini_group_id">{groupData.groupId}</h2>
