@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './LoginForm.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:8000/student/loginGrp', { username, password });
       console.log(response.data);
       alert('Login successful!');
+
+      const authToken = response.data.token;
+      localStorage.setItem('authToken', authToken);
+      console.log(authToken);
+      navigate(`/getOneGroup/${username}`);
     } catch (err) {
       setError('Invalid username or password.');
       console.error(err);
@@ -40,10 +48,11 @@ const LoginForm = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <p>Change Password</p>
+        <center>
         <button type="button" onClick={handleLogin}>
           Login
         </button>
+        </center>
       </form>
       {error && <p id="sachini_error">{error}</p>}
     </div>

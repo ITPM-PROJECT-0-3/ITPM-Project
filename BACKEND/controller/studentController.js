@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const Group = require("../model/StudentModel");
 
 const registerGroup = async (req, res) => {
@@ -162,6 +163,8 @@ const loginGroup = async (req, res) => {
             console.log('Invalid password');
             return res.status(401).json({ status: "Error", message: "Invalid username or password." });
         }
+
+        const token = jwt.sign({ groupId: group.groupId }, 'your-secret-key', { expiresIn: '1h' });
 
         res.status(200).json({ status: "Login successful", group });
     } catch (error) {
