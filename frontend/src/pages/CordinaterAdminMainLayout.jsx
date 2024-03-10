@@ -14,12 +14,17 @@ export default function CordinaterAdminMainLayout() {
   const CustomTabs = [
     {
       to: "/admin-nav",
+      iconClass: "bx bx-grid-alt",
+      label: "Dasshboard",
+    },
+    {
+      to: "/admin-nav",
       iconClass: "bx bx-spreadsheet",
       label: "Publication-Marks",
     },
     {
       to: "/examiner-admin-table",
-      iconClass: "bx bx-registered bx-sm",
+      iconClass: "bx bx-registered",
       label: "Examiners",
     },
   ];
