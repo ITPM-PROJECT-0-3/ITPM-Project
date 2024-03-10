@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import styles from "../styles/AdminExaminerTable.module.css";
 import AdminSidebar from "../components/Sidebar/Sidebar";
 import AdminHeader from "../components/SlideHeader/SlideHeader";
-import { Outlet } from "react-router-dom";
-import styles from "../styles/CordinaterAdminMainLayout.module.css";
+import ExaminerlistTable from "../components/ExaminerTable/ExaminerlistTable";
 
-export default function CordinaterAdminMainLayout() {
+export default function AdminExaminerTable() {
   const [sidebarActive, setSidebarActive] = useState(true);
 
   const toggleSidebar = () => {
@@ -32,8 +32,8 @@ export default function CordinaterAdminMainLayout() {
   const customNavLinks = [
     { href: "/admin-nav", label: "Home" },
     { href: "/admin-nav", label: "Dashboard" },
+    { href: "/examiner-registration-admin", label: "Registration" },
   ];
-
   return (
     <div className={styles.bodyD}>
       <div>
@@ -52,8 +52,7 @@ export default function CordinaterAdminMainLayout() {
         }}
       >
         <AdminHeader customNavLinks={customNavLinks} />
-        <br />
-        <Outlet />
+        <ExaminerlistTable />
       </div>
     </div>
   );

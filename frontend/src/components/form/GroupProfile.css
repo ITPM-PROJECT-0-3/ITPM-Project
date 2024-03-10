@@ -1,0 +1,115 @@
+#sachini_group_profile {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  #sachini_group_id {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 40px;
+    color:green;
+  }
+  
+  #sachini_topic {
+    font-size: 30px;
+    margin-top: 20px;
+    border-top: 2px solid #5eb493; 
+    border-bottom: 2px solid #5eb493; 
+    background-color: #5eb493; 
+    color: #fff; 
+    padding: 10px; 
+    display: block; 
+    text-align: center; 
+  }
+  
+  #sachini_member_details {
+    margin-top: 30px;
+  }
+  
+  #sachini_member_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  #sachini_member_table th,
+  #sachini_member_table td {
+    border: 1px solid hsl(185, 8%, 70%);
+    padding: 8px;
+    text-align: left;
+  }
+  
+  #sachini_member_table th {
+    background-color: #dddcdc;
+  }
+
+  #sachini_member_table tbody tr:hover {
+    animation: twinkling 0.5s ease-in-out infinite alternate;
+  }
+  
+  @keyframes twinkling {
+    0% {
+      background-color: #fbffff; 
+    }
+    100% {
+      background-color: #ced3d4; 
+    }
+  }
+  
+  #sachini_contact_supervisors {
+    margin-top: 30px;
+  }
+  
+  #sachini_supervisor_table,
+  #sachini_co_supervisor_table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  #sachini_supervisor_table th,
+  #sachini_supervisor_table td,
+  #sachini_co_supervisor_table th,
+  #sachini_co_supervisor_table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  #sachini_supervisor_table th,
+  #sachini_co_supervisor_table th {
+    background-color: #dad8d8;
+  }
+  
+  #sachini_assignments_schedules {
+    background-color: #dad9d8; 
+    padding: 10px;
+    margin-top: 20px;
+    text-align: left;
+    font-size: 22px;
+    color: black;
+    font-weight: bold;
+  }
+
+#sachini_group_profile {
+  position: relative;
+}
+
+#sachini_settings_button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#sachini_settings_button:hover {
+  background-color: #45a049;
+}

@@ -11,4 +11,8 @@ router.route("/deleteGrp/:groupId").delete(studentCntrl.deleteGroup);
 
 router.route("/getOneGroup/:grpId").get(studentCntrl.getOneGroup);
 
+router.route("/loginGrp").post(studentCntrl.loginGroup);
+
+router.route("/updatePassword/:grpId").put(studentCntrl.updatePassword);
+
 module.exports = router;

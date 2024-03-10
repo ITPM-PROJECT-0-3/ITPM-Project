@@ -27,9 +27,11 @@ const memberSchema = new Schema({
     labGroup: {
         type: String
     },
-    password: {
-        type: String,
-    }
+});
+
+const counterSchema = new Schema({
+    _id: { type: String, required: true },
+    seq: { type: Number, default: 1 }
 });
 
 const groupSchema = new Schema({
@@ -50,24 +52,14 @@ const groupSchema = new Schema({
         required: true
     },
     members: [memberSchema],
+    username: {
+        type: String,
+        unique: true
+    },
+    password: {
+        type: String
+    },
 });
-
-/*
-groupSchema.pre('save', async function (next) {
-    try {
-        // Check the count of existing documents and increment by 1
-        const groupCount = await Group.countDocuments({});
-        const currentYear = new Date().getFullYear();
-        const groupNumber = (groupCount + 1).toString().padStart(2, '0');
-
-        // Generate the groupId
-        this.groupId = `SLIIT_RP_${currentYear}_${groupNumber}`;
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-*/
 
 const Group = mongoose.model("Group", groupSchema);
 

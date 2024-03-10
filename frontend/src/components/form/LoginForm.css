@@ -1,0 +1,50 @@
+#sachini_form {
+    width: 300px;
+    margin: 0 auto;
+    border: 1px solid #ccc; 
+    padding: 20px;
+    margin-top: 50px;
+    border-radius: 8px; 
+    background-color: #e4dfdf;
+  }
+  
+  #sachini_heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  #sachini_form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  #sachini_form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  #sachini_form button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    width: 60%;
+    margin: auto;
+  }
+  
+  #sachini_form button:hover {
+    background-color: #45a049;
+  }
+  
+  #sachini_error {
+    color: red;
+    margin-top: 10px;
+  }
+  
