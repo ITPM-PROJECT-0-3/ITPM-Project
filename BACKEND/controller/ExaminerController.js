@@ -1,3 +1,4 @@
+const json = require("body-parser/lib/types/json");
 const ExaminerUser = require("../model/ExaminerModel");
 const errorHandler = require("../utils/error");
 
@@ -9,6 +10,7 @@ const RegistraterExaminer = async (req, res, next) => {
       LastName,
       Univercity,
       Facalty,
+      OtherUniversity,
       Email,
       Password,
       UserType,
@@ -29,6 +31,7 @@ const RegistraterExaminer = async (req, res, next) => {
       LastName,
       Univercity,
       Facalty,
+      OtherUniversity,
       Email,
       Password,
       UserType,
@@ -38,7 +41,7 @@ const RegistraterExaminer = async (req, res, next) => {
 
     res.status(201).json({
       message: "Examiner created successfully",
-      newAdminUser,
+      newExaminer,
     });
   } catch (error) {
     // Handle errors gracefully
@@ -62,7 +65,7 @@ const fetchSingleExaminer = async (req, res, next) => {
     }
     res.status(200).json({
       status: "Examiner Details Fetched",
-      AdminAplication,
+      ExaminerProfile,
     });
   } catch (error) {
     // Handle errors gracefully
@@ -72,9 +75,25 @@ const fetchSingleExaminer = async (req, res, next) => {
   }
 };
 
-
+const fetchAllExaminers = async (req, res, next) => {
+  try {
+    const ExaminerUserAll = await ExaminerUser.find();
+    res, json(ExaminerUserAll);
+    res.status(200).json({
+      status: "fetch All Details",
+      ExaminerUserAll,
+    });
+  } catch (err) {
+    console.log(err);
+    next(errorHandler(err));
+    res
+      .status(500)
+      .send({ status: "Error fetching Aplications", error: err.message });
+  }
+};
 
 module.exports = {
   RegistraterExaminer,
   fetchSingleExaminer,
+  fetchAllExaminers,
 };

@@ -36,9 +36,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-
-
-
 function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
   const [isActive, setIsActive] = useState(sidebarActive);
 
@@ -50,8 +47,6 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
   useEffect(() => {
     setIsActive(sidebarActive);
   }, [sidebarActive]);
-
-
 
   //   function handleSignOut() {
   //     localStorage.removeItem('UserInfo');
@@ -77,23 +72,16 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
           </div>
 
           <ul className="nav_list">
-            <li>
-              <Link to="">
-                <i className="bx bx-grid-alt"></i>
-                <span className="link-name">Dashboard</span>
-              </Link>
-              <div className="tooltip">Dashboard</div>
-            </li>
-
-            {CustomTabs && CustomTabs.map((tab,index) => (
+            {CustomTabs &&
+              CustomTabs.map((tab, index) => (
                 <li key={index}>
-                    <Link to={tab.to}>
-                        <i className={tab.iconClass}></i>
-                        <span className="link-name">{tab.label}</span>
-                    </Link>
-                    <div className="tooltip">{tab.label}</div>
+                  <Link to={tab.to}>
+                    <i className={tab.iconClass}></i>
+                    <span className="link-name">{tab.label}</span>
+                  </Link>
+                  <div className="tooltip">{tab.label}</div>
                 </li>
-            ))}
+              ))}
           </ul>
           <Link to="/admin-nav/profile">
             <div className="profile_content">
