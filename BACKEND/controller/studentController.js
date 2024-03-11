@@ -47,7 +47,7 @@ const registerGroup = async (req, res) => {
         res.status(201).json({ status: "Group Registered", group: savedGroup });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ status: "Error", message: "Internal Server Error" });
+        res.status(500).json({ status: "Error", message: "There is already registered student" });
     }
 };
 
