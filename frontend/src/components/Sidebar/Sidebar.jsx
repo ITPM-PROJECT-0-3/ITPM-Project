@@ -58,7 +58,7 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
 
   function handleSignout() {
     localStorage.removeItem("UserInfo");
-    window.location.href = "/";
+    window.location.href = "/loginGrp";
   }
   return (
     <div id="SideNavigation">
