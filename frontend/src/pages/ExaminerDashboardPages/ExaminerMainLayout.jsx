@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 import { Outlet } from "react-router-dom";
 import styles from "../../styles/ExaminerMainLayout.module.css";
 import AdminSidebar from "../../components/Sidebar/Sidebar";
