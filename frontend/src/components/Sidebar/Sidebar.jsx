@@ -52,6 +52,14 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
   //     localStorage.removeItem('UserInfo');
   //     window.location.href = '/';
   //   }
+
+  const userInfoString = localStorage.getItem("UserInfo");
+  const storedUserInfo = JSON.parse(userInfoString);
+
+  function handleSignout() {
+    localStorage.removeItem("UserInfo");
+    window.location.href = "/";
+  }
   return (
     <div id="SideNavigation">
       <div className={`sidebar ${isActive ? "active" : ""}`}>
@@ -83,7 +91,7 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
                 </li>
               ))}
           </ul>
-          <Link to="/admin-nav/profile">
+          <Link to="/">
             <div className="profile_content">
               <div className="profile">
                 <div className="profile_details">
@@ -102,7 +110,12 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
                     <div className="">
                       <span style={{ color: "#7C7C7C" }}>
                         {" "}
-                        ResearchCordinetor SLIIT
+                        {storedUserInfo &&
+                          (storedUserInfo.UserType === "Examiner"
+                            ? "Research Examiner"
+                            : storedUserInfo.UserType === "Supervisor"
+                            ? "Supervisor at SLIIT"
+                            : "Research Coordinator")}
                       </span>
                     </div>
                   </div>
@@ -111,6 +124,7 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
                   className="bx bx-log-out"
                   id="log_out"
                   style={{ textDecoration: "none", color: "white" }}
+                  onClick={handleSignout}
                 ></i>
               </div>
             </div>
