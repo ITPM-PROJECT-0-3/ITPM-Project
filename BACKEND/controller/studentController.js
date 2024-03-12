@@ -262,13 +262,14 @@ const updatePassword = async (req, res) => {
 const RegisterExaminerAsStudentUser = async (req, res, next) => {
   try {
     const { username, password, UserType } = req.body;
-    console.log(username, password, UserType);
+    console.log(username, password, UserType , fullname);
 
 
     const newUser = new Group({
       username,
       password: await bcrypt.hash(password, 10),
       UserType,
+      fullname,
     });
 
     await newUser.save();
