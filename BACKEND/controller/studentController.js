@@ -219,6 +219,29 @@ const updatePassword = async (req, res) => {
     }
 };
 
+const updateFunction = async (req, res) => {
+    try {
+        const { grpId } = req.params;
+        const { memberIndex, functionDescription } = req.body;
+
+        const group = await Group.findOne({ groupId: grpId });
+
+        if (!group) {
+            return res.status(404).json({ status: "Error", message: "Group not found." });
+        }
+
+        group.members[memberIndex].function = functionDescription;
+        await group.save();
+
+        const updatedGroup = await Group.findOne({ groupId: grpId });
+
+        res.status(200).json({ status: "Function updated successfully", group: updatedGroup });
+    } catch (error) {
+        console.error('Error updating function:', error);
+        res.status(500).json({ status: "Error", message: "Internal Server Error" });
+    }
+};
+
 module.exports = {
     registerGroup,
     displayAllGroups,
@@ -227,4 +250,5 @@ module.exports = {
     getOneGroup,
     loginGroup,
     updatePassword,
+    updateFunction,
 };

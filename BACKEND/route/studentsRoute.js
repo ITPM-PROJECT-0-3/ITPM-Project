@@ -15,4 +15,6 @@ router.route("/loginGrp").post(studentCntrl.loginGroup);
 
 router.route("/updatePassword/:grpId").put(studentCntrl.updatePassword);
 
+router.route("/updateFunction/:grpId").post(studentCntrl.updateFunction);
+
 module.exports = router;

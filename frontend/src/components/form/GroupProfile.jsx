@@ -9,6 +9,8 @@ const GroupProfile = () => {
   const navigate = useNavigate();
   const [groupData, setGroupData] = useState(null);
   const [showUpdatePswrdForm, setShowUpdatePswrdForm] = useState(false);
+  const [functionDescription, setFunctionDescription] = useState('');
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
 
   const specializationAbbreviations = {
     'Computer Science and Network Engineering': 'CSNE',
@@ -30,6 +32,7 @@ const GroupProfile = () => {
     };
 
     fetchGroupData();
+
   }, [grpId]);
 
   const handleSettingsClick = () => {
@@ -37,6 +40,29 @@ const GroupProfile = () => {
     navigate(`/updatePassword/${grpId}`);
   };
   
+  const handleAddFunctionClick = (index) => {
+    setSelectedRowIndex(index);
+    setFunctionDescription('');
+  };
+
+  const handleSaveFunction = async () => {
+    try {
+      const response = await axios.post(`http://localhost:8000/student/updateFunction/${grpId}`, {
+        memberIndex: selectedRowIndex,
+        functionDescription: functionDescription,
+      });
+
+      if (response.status === 200) {
+        const updatedGroupData = { ...groupData };
+        updatedGroupData.members[selectedRowIndex].function = functionDescription;
+        setGroupData(updatedGroupData);
+      }
+    } catch (error) {
+      console.error('Error saving function:', error.message);
+    }
+
+    setSelectedRowIndex(null);
+  };
 
   return (
     <div id="sachini_group_profile">
@@ -62,6 +88,7 @@ const GroupProfile = () => {
                   <th>Phone</th>
                   <th>Specialization</th>
                   <th>Lab Group</th>
+                  <th>Function</th>
                 </tr>
               </thead>
               <tbody>
@@ -73,6 +100,23 @@ const GroupProfile = () => {
                     <td>{member.phone}</td>
                     <td>{member.specialization}</td>
                     <td>{`${specializationAbbreviations[member.specialization]}.${member.labGroup}`}</td>
+                    <td>
+                      {selectedRowIndex === index ? (
+                        <div>
+                          <input
+                            type="text"
+                            placeholder="Enter function description"
+                            value={functionDescription}
+                            onChange={(e) => setFunctionDescription(e.target.value)}
+                          />
+                          <button onClick={handleSaveFunction}>Save</button>
+                        </div>
+                      ) : (
+                        <button onClick={() => member.function ? setSelectedRowIndex(index) : handleAddFunctionClick(index)}>
+                          {member.function ? "View Function" : "Add Function"}
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

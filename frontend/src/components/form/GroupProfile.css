@@ -1,6 +1,6 @@
 #sachini_group_profile {
     max-width: 800px;
-    margin: 0 auto;
+    margin-left: 150px;
     padding: 20px;
   }
   
@@ -22,6 +22,7 @@
     padding: 10px; 
     display: block; 
     text-align: center; 
+    width: 900px;
   }
   
   #sachini_member_details {
