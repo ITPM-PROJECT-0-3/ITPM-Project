@@ -40,10 +40,17 @@ const GroupProfile = () => {
     navigate(`/updatePassword/${grpId}`);
   };
   
+  // const handleAddFunctionClick = (index) => {
+  //   setSelectedRowIndex(index);
+  //   setFunctionDescription('');
+  // };
+
   const handleAddFunctionClick = (index) => {
     setSelectedRowIndex(index);
-    setFunctionDescription('');
+    const existingFunction = groupData.members[index].function || ''; // Get the existing function
+    setFunctionDescription(existingFunction);
   };
+  
 
   const handleSaveFunction = async () => {
     try {
@@ -109,11 +116,14 @@ const GroupProfile = () => {
                             value={functionDescription}
                             onChange={(e) => setFunctionDescription(e.target.value)}
                           />
-                          <button onClick={handleSaveFunction}>Save</button>
+                          <button id="sachini-func-save-button" onClick={handleSaveFunction}>Save</button>
                         </div>
                       ) : (
-                        <button onClick={() => member.function ? setSelectedRowIndex(index) : handleAddFunctionClick(index)}>
-                          {member.function ? "View Function" : "Add Function"}
+                        // <button onClick={() => member.function ? setSelectedRowIndex(index) : handleAddFunctionClick(index)}>
+                        //   {member.function ? "View Function" : "Add Function"}
+                        // </button>
+                        <button id="sachini_add_func-button" onClick={() => selectedRowIndex === index ? setSelectedRowIndex(null) : handleAddFunctionClick(index)}>
+                          {functionDescription && selectedRowIndex === index ? "View Function" : "Function"}
                         </button>
                       )}
                     </td>
