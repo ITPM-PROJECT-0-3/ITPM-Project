@@ -82,6 +82,7 @@ export default function RegostrationFormExaminer() {
     }
   };
   const Navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -102,6 +103,22 @@ export default function RegostrationFormExaminer() {
         "http://localhost:8000/api/examiner/register",
         newExaminer
       );
+
+      if (ExaminerRegister.status === 201) {
+        const newUser = {
+          username: Email,
+          password: password,
+          UserType: "Examiner",
+        };
+        console.log(newUser);
+        const RegisterExaminer = await axios.post(
+          "http://localhost:8000/student/register-examiner",
+          newUser
+        );
+
+        console.log(RegisterExaminer);
+        console.log("hi");
+      }
 
       console.log(ExaminerRegister);
 

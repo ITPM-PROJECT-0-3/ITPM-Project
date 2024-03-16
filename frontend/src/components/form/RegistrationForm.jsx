@@ -54,6 +54,9 @@ const RegistrationForm = () => {
     }
   };
 
+  const specializations = ['Computer Science and Network Engineering', 'Cyber Security', 'Information Technology', 'Interactive Media', 'Software Engineering', 'System Engineering'];
+  const isValidLabGroup = (input) => /^[0-9.]*$/.test(input);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -85,26 +88,41 @@ const RegistrationForm = () => {
         console.log('Group Registered:', result);
         window.alert('Group registered successfully!');
       } else {
-        console.error('Error registering group:', response.status);
+          const errorData = await response.json();
+          if (errorData && errorData.message) {
+            window.alert('Error registering group: ' + errorData.message);
+          } else {
+            window.alert('Error registering group: ' + response.statusText);
+          }
       }
     } catch (error) {
       console.error('Error:', error.message);
+      window.alert('Error registering group: ' + error.message);
     }
   };
 
   return (
     <div>
-        <div id="sachini_formTitle" className="centeredTitle">
+    <form id="sachini_registrationform" onSubmit={handleSubmit}>
+    <div id="sachini_formTitle" className="centeredTitle">
              REGISTER GROUP HERE
         </div>
-    <form id="sachini_registrationform" onSubmit={handleSubmit}>
         <input
           type="text"
           name="topic"
           value={formData.topic}
-          onChange={handleChange}
+          onChange={(e) => {
+            const input = e.target.value;
+            if (/^[A-Za-z\s]*$/.test(input)) {
+              setFormData((prevData) => ({
+                ...prevData,
+                topic: input,
+              }));
+            }
+          }}
           placeholder='Topic'
         />
+
         <input
           type="text"
           name="supervisor"
@@ -122,7 +140,7 @@ const RegistrationForm = () => {
 
       {formData.members.map((member, memberIndex) => (
         <div key={memberIndex}>
-          <h3>Member {memberIndex + 1}</h3>
+          <h5>Member {memberIndex + 1}</h5>
             <input
               type="text"
               placeholder='Student Number'
@@ -131,16 +149,20 @@ const RegistrationForm = () => {
               onChange={(e) =>
                 handleMemberChange(memberIndex, 'ITNumber', e.target.value)
               }
-            />
+            /> 
             <input
               type="text"
               placeholder='Name'
               name={`members[${memberIndex}].nameAsRegistered`}
               value={member.nameAsRegistered}
-              onChange={(e) =>
-                handleMemberChange(memberIndex, 'nameAsRegistered', e.target.value)
-              }
-            />
+              onChange={(e) => {
+                const input = e.target.value;
+                if (/^[A-Za-z\s]*$/.test(input)) {
+                  handleMemberChange(memberIndex, 'nameAsRegistered', input);
+                }
+              }}
+            /> 
+
             <input
               type="text"
               placeholder='Email'
@@ -155,28 +177,43 @@ const RegistrationForm = () => {
               placeholder='Contact No'
               name={`members[${memberIndex}].phone`}
               value={member.phone}
-              onChange={(e) =>
-                handleMemberChange(memberIndex, 'phone', e.target.value)
-              }
+              onChange={(e) => {
+                const input = e.target.value;
+                const sanitizedInput = input.replace(/\D/g, ''); 
+                const formattedInput = sanitizedInput.slice(0, 10); 
+                handleMemberChange(memberIndex, 'phone', formattedInput);
+              }}
             />
-            <input
-              type="text"
-              placeholder='Specialization'
+
+            <select
+              id="sachini_specializationSelect"
               name={`members[${memberIndex}].specialization`}
               value={member.specialization}
               onChange={(e) =>
                 handleMemberChange(memberIndex, 'specialization', e.target.value)
               }
-            />
-            <input
-              type="text"
-              placeholder='Lab Group'
-              name={`members[${memberIndex}].labGroup`}
-              value={member.labGroup}
-              onChange={(e) =>
-                handleMemberChange(memberIndex, 'labGroup', e.target.value)
+            >
+              <option value="" disabled>Select Specialization</option>
+              {specializations.map((specialization, index) => (
+                <option key={index} value={specialization}>
+                  {specialization}
+                </option>
+              ))}
+            </select>
+                
+          <input
+            type="text"
+            placeholder='Lab Group'
+            name={`members[${memberIndex}].labGroup`}
+            value={member.labGroup}
+            onChange={(e) => {
+              const input = e.target.value;
+              if (isValidLabGroup(input)) {
+                handleMemberChange(memberIndex, 'labGroup', input);
               }
-            />
+            }}
+          />
+
         </div>
       ))}
 
@@ -185,7 +222,9 @@ const RegistrationForm = () => {
           Add Member
         </button>
       )}
-      <button type="submit">Register Group</button>
+      <div id="sachini_regButton">
+         <button type="submit">Register Group</button>
+      </div>
     </form>
     </div>
   );

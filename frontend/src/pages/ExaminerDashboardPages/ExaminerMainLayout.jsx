@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import AdminSidebar from "../components/Sidebar/Sidebar";
-import AdminHeader from "../components/SlideHeader/SlideHeader";
 import { Outlet } from "react-router-dom";
-import styles from "../styles/CordinaterAdminMainLayout.module.css";
+import styles from "../../styles/ExaminerMainLayout.module.css";
+import AdminSidebar from "../../components/Sidebar/Sidebar";
+import AdminHeader from "../../components/SlideHeader/SlideHeader";
 
-export default function CordinaterAdminMainLayout() {
+export default function ExaminerMainLayout() {
   const [sidebarActive, setSidebarActive] = useState(true);
 
   const toggleSidebar = () => {
@@ -13,25 +13,25 @@ export default function CordinaterAdminMainLayout() {
 
   const CustomTabs = [
     {
-      to: "/admin-nav",
+      to: "/examiner-nav",
       iconClass: "bx bx-grid-alt",
       label: "Dashboard",
     },
     {
-      to: "/admin-nav",
+      to: "/examiner-nav",
       iconClass: "bx bx-spreadsheet",
-      label: "Publication-Marks",
+      label: "Prasentatition-Shedule",
     },
     {
-      to: "/examiner-admin-table",
+      to: "/examiner-nav",
       iconClass: "bx bx-registered",
       label: "Examiners",
     },
   ];
 
   const customNavLinks = [
-    { href: "/admin-nav", label: "Home" },
-    { href: "/admin-nav", label: "Dashboard" },
+    { href: "/examiner-nav", label: "Home" },
+    { href: "/examiner-nav", label: "Dashboard" },
   ];
 
   return (

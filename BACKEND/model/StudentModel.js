@@ -1,65 +1,63 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const { type } = require("os");
 
 const Schema = mongoose.Schema;
 
 const memberSchema = new Schema({
-    ITNumber: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    nameAsRegistered: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    phone: {
-        type: String,
-        required: true
-    },
-    specialization: {
-        type: String,
-        required: true
-    },
-    labGroup: {
-        type: String
-    },
+  ITNumber: {
+    type: String,
+  },
+  nameAsRegistered: {
+    type: String,
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  specialization: {
+    type: String,
+  },
+  labGroup: {
+    type: String,
+  },
 });
 
-const counterSchema = new Schema({
-    _id: { type: String, required: true },
-    seq: { type: Number, default: 1 }
-});
+// const counterSchema = new Schema({
+//   _id: { type: String, required: true },
+//   seq: { type: Number, default: 1 },
+// });
 
-const groupSchema = new Schema({
+const groupSchema = new Schema(
+  {
     groupId: {
-        type: String,
-        unique: true
+      type: String,
     },
     topic: {
-        type: String,
-        required: true
+      type: String,
     },
     supervisor: {
-        type: String,
-        required: true
+      type: String,
     },
     coSupervisor: {
-        type: String,
-        required: true
+      type: String,
     },
     members: [memberSchema],
+
     username: {
-        type: String,
-        unique: true
+      type: String,
     },
     password: {
-        type: String
+      type: String,
     },
-});
+    UserType: {
+      type: String,
+      default: "Student",
+    },
+  },
+  { timestamps: true }
+);
 
 const Group = mongoose.model("Group", groupSchema);
 
