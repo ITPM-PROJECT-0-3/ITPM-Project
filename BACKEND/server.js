@@ -40,6 +40,9 @@ app.use("/student", studentRouter);
 const ExaminerRouter = require("./route/ExaminerRoute.js");
 app.use("/api/examiner", ExaminerRouter);
 
+const staffRouter = require("./route/staffRoute.js");
+app.use("/staff", staffRouter);
+
 app.listen(PORT, () => {
   console.log(`Server is up and running on port number: ${PORT}`);
 });
