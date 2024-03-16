@@ -10,6 +10,15 @@ const GroupProfile = () => {
   const [groupData, setGroupData] = useState(null);
   const [showUpdatePswrdForm, setShowUpdatePswrdForm] = useState(false);
 
+  const specializationAbbreviations = {
+    'Computer Science and Network Engineering': 'CSNE',
+    'Cyber Security': 'CS',
+    'Information Technology': 'IT',
+    'Interactive Media': 'IM',
+    'Software Engineering': 'SE',
+    'System Engineering': 'CSE',
+  };
+
   useEffect(() => {
     const fetchGroupData = async () => {
       try {
@@ -63,7 +72,7 @@ const GroupProfile = () => {
                     <td>{member.email}</td>
                     <td>{member.phone}</td>
                     <td>{member.specialization}</td>
-                    <td>{`${member.specialization}.${member.labGroup}`}</td>
+                    <td>{`${specializationAbbreviations[member.specialization]}.${member.labGroup}`}</td>
                   </tr>
                 ))}
               </tbody>

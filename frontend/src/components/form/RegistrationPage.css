@@ -1,15 +1,17 @@
 #sachini_registrationform {
-    max-width: 400px;
+    max-width: 800px;
     margin: 0 auto;
+    margin-top: 30px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
+    background-color: #e2e1e1;
   }
   
   #sachini_formTitle {
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-top: 0;
   }
   
   #sachini_registrationform label {
@@ -18,14 +20,15 @@
   }
   
   #sachini_registrationform input {
-    width: 100%;
+    width: 32%;
     padding: 8px;
     margin-bottom: 10px;
     box-sizing: border-box;
+    margin-right: 5px;
   }
   
   #sachini_registrationform h3 {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
   
   #sachini_registrationform button {
@@ -44,12 +47,21 @@
   #sachini_formTitle {
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
-    margin-top: 30px;
+    margin-bottom: 30px;
+    margin-top: 20px;
   }
   
   .centeredTitle {
     text-align: center; 
   }
   
+  #sachini_regButton {
+    text-align: center;
+    margin-top: 10px; 
+  }
   
+  #sachini_specializationSelect {
+    width: 240px;
+    height: 40px;
+    margin-right: 5px;
+  }
