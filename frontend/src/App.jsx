@@ -12,6 +12,8 @@ import AdminExaminerRegistration from "./pages/AdminExaminerRegistration";
 import AdminExaminerTable from "./pages/AdminExaminerTable";
 import GroupProfile from "./components/form/GroupProfile";
 import UpdatePswrdForm from "./components/form/UpdatePswrdForm";
+import ExaminerMainLayout from "./pages/ExaminerDashboardPages/ExaminerMainLayout";
+import ExaminerviewDashboard from "./pages/ExaminerDashboardPages/ExaminerviewDashboard";
 
 function App() {
   return (
@@ -39,6 +41,11 @@ function App() {
             path="/examiner-registration-admin"
             element={<AdminExaminerRegistration />}
           />
+
+          {/* examiner Route */}
+          <Route path="/examiner-nav" element={<ExaminerMainLayout />}>
+            <Route index={true} path="" element={<ExaminerviewDashboard />} />
+          </Route>
         </Routes>
       </Router>
     </div>

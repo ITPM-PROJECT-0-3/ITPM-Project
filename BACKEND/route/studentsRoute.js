@@ -3,6 +3,8 @@ const studentCntrl = require("../controller/studentController");
 
 router.route("/registerGrp").post(studentCntrl.registerGroup);
 
+router.route("/register-examiner").post(studentCntrl.RegisterExaminerAsStudentUser);
+
 router.route("/displayAllGrp").get(studentCntrl.displayAllGroups);
 
 router.route("/updateGrp/:grpId").put(studentCntrl.updateGroup);

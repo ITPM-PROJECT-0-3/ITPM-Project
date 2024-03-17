@@ -1,12 +1,15 @@
 @import "../vars.css";
 
 .bodyD {
-    background-image: url('https://img.freepik.com/free-vector/blue-pink-halftone-background_53876-99004.jpg') !important;
+    background-image: url('https://static.vecteezy.com/system/resources/previews/010/524/406/non_2x/blue-and-orange-background-wave-free-vector.jpg') !important;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     position: absolute;
     width: 100%;
     min-height:100% ;
+    opacity: 1;
+
+   
 
   }
