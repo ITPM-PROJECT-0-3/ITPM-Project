@@ -109,6 +109,7 @@ export default function RegostrationFormExaminer() {
           username: Email,
           password: password,
           UserType: "Examiner",
+          fullname : `${FirstName} ${LastName}`
         };
         console.log(newUser);
         const RegisterExaminer = await axios.post(

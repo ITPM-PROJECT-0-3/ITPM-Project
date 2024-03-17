@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useEffect} from 'react';
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
 import Typography from "@mui/joy/Typography";
@@ -11,6 +11,14 @@ import SchoolIcon from '@mui/icons-material/School';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 export default function ExaminerviewDashboard() {
+
+  useEffect(() => {
+    document.title = 'Examiner Dashboard | SLIIT';
+    return () => {
+      document.title = 'SLIIT';
+    };
+  }, []);
+
   return (
     <div style={{ margin: "10px" }}>
       <Row>

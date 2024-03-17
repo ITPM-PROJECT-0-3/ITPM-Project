@@ -26,6 +26,22 @@ const ExaminerSchema = new mongoose.Schema(
     Password: {
       type: String,
     },
+    StudentGropDetails: [
+      {
+        GrpmongoId : {
+          type : String,
+        } ,
+        groupId: {
+          type: String,
+        },
+        HeldingDate: {
+          type: String,
+        },
+        Time: {
+          type: String,
+        },
+      },
+    ],
     UserType: {
       type: String,
     },
