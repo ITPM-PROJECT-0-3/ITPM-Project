@@ -18,7 +18,7 @@ const RegistraterExaminer = async (req, res, next) => {
     } = req.body;
 
     const existingExaminer = await ExaminerUser.findOne({ Email });
-    console.log("hi")
+    console.log("hi");
     if (existingExaminer) {
       return res.status(400).json({
         status: "Examiner Already Exist",
@@ -37,7 +37,7 @@ const RegistraterExaminer = async (req, res, next) => {
       Password,
       UserType,
     });
-    
+
     await newExaminer.save();
 
     res.status(201).json({
@@ -188,6 +188,44 @@ const AsignproposalMarks = async (req, res, next) => {
   }
 };
 
+const fetchStudentGroupLessExaminers = async (req, res, next) => {
+  try {
+    // Fetch all groups where UserType is "Student"
+    const StudentGroups = await Group.find({ UserType: "Student" });
+
+    if (!StudentGroups || StudentGroups.length === 0) {
+      return res.status(404).json({
+        status: "Group Not Found",
+        message: "No groups found with UserType as Student",
+      });
+    }
+
+    // Filter groups where length of ExaminerDetails array is less than 3
+    const GroupsWithLessExaminers = StudentGroups.filter(
+      (group) => group.ExaminerDetails.length < 3
+    );
+
+    if (GroupsWithLessExaminers.length === 0) {
+      return res.status(404).json({
+        status: "Group Not Found",
+        message:
+          "No groups found with less than 3 Examiners and UserType as Student",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      message: "Groups fetched successfully.",
+      data: GroupsWithLessExaminers,
+    });
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
 module.exports = {
   RegistraterExaminer,
   fetchSingleExaminer,
@@ -195,4 +233,5 @@ module.exports = {
   AsignStudentGroup,
   AsignproposalMarks,
   deleteExaminer,
+  fetchStudentGroupLessExaminers,
 };
