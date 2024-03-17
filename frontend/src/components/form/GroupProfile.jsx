@@ -26,6 +26,10 @@ const GroupProfile = () => {
       try {
         const response = await axios.get(`http://localhost:8000/student/getOneGroup/${grpId}`);
         setGroupData(response.data.group);
+        const selectedMember = response.data.group.members[selectedRowIndex];
+        if (selectedMember && selectedMember.function) {
+          setFunctionDescription(selectedMember.function);
+      }
       } catch (error) {
         console.error('Error fetching group data:', error.message);
       }
@@ -34,6 +38,18 @@ const GroupProfile = () => {
     fetchGroupData();
 
   }, [grpId]);
+
+  useEffect(() => {
+    if (groupData && groupData.members && selectedRowIndex !== null) {
+      const selectedMember = groupData.members[selectedRowIndex];
+      if (selectedMember && selectedMember.function) {
+        setFunctionDescription(selectedMember.function);
+      } else {
+        // If the function is not available, reset the function description
+        setFunctionDescription('');
+      }
+    }
+  }, [groupData, selectedRowIndex]);
 
   const handleSettingsClick = () => {
     setShowUpdatePswrdForm(true);
@@ -45,11 +61,25 @@ const GroupProfile = () => {
   //   setFunctionDescription('');
   // };
 
+  // const handleAddFunctionClick = (index) => {
+  //   setSelectedRowIndex(index);
+  //   if (groupData && groupData.members && groupData.members[index]) {
+  //     const existingFunction = groupData.members[index].function || ''; 
+  //     setFunctionDescription(existingFunction);
+  //   }
+  // };
+
   const handleAddFunctionClick = (index) => {
     setSelectedRowIndex(index);
-    const existingFunction = groupData.members[index].function || ''; // Get the existing function
-    setFunctionDescription(existingFunction);
+    if (groupData && groupData.members && groupData.members[index]) {
+      const existingFunction = groupData.members[index].function || ''; 
+      setFunctionDescription(existingFunction);
+    } else {
+      // If the group data or member data is not available, reset the function description
+      setFunctionDescription('');
+    }
   };
+  
   
 
   const handleSaveFunction = async () => {

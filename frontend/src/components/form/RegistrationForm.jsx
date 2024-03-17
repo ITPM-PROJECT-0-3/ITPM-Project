@@ -85,8 +85,9 @@ const RegistrationForm = () => {
 
       if (response.ok) {
         const result = await response.json();
-        console.log('Group Registered:', result);
+        console.log('Group Registered:', result, result.groupId);
         window.alert(`YOUR GROUP NO IS ${result.groupId}`);
+
       } else {
           const errorData = await response.json();
           if (errorData && errorData.message) {

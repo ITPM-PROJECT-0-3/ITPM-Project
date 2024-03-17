@@ -22,6 +22,9 @@ const memberSchema = new Schema({
   labGroup: {
     type: String,
   },
+  functionDescription: {
+    type: String,
+  },
 });
 const proposalMarksSchema = new Schema({
   StudentID :String,
