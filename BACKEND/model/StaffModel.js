@@ -9,6 +9,9 @@ const staffSchema = new mongoose.Schema(
     lastName: {
       type: String,
     },
+    position: {
+      type: String,
+    },
     
     department: {
       type: String,
