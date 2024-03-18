@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Group = require("../model/StudentModel");
 const DeleteGroup = require("../model/DeleteGroupModel");
+const ExaminerUser = require("../model/ExaminerModel");
+const { group } = require("console");
 
 const registerGroup = async (req, res) => {
   console.log("Received request to /api/registerGrp");
@@ -42,7 +44,7 @@ const registerGroup = async (req, res) => {
     const newGroup = new Group(group);
     const savedGroup = await newGroup.save();
 
-    res.status(201).json({ status: "Group Registered", group: savedGroup });
+    res.status(201).json({ status: "Group Registered", groupId: savedGroup.groupId });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -53,7 +55,11 @@ const registerGroup = async (req, res) => {
 };
 
 async function generateGroupId() {
-  const latestGroup = await Group.findOne({}, {}, { sort: { groupId: -1 } });
+  const latestGroup = await Group.findOne(
+    { UserType: "Student" },
+    {},
+    { sort: { groupId: -1 } }
+  );
 
   const currentYear = new Date().getFullYear();
   const lastGroupYear = latestGroup
@@ -259,17 +265,66 @@ const updatePassword = async (req, res) => {
   }
 };
 
+// const updateFunction = async (req, res) => {
+//   try {
+//       const { grpId } = req.params;
+//       const { memberIndex, functionDescription } = req.body;
+
+//       const group = await Group.findOne({ groupId: grpId });
+
+//       if (!group) {
+//           return res.status(404).json({ status: "Error", message: "Group not found." });
+//       }
+
+//       group.members[memberIndex].function = functionDescription;
+//       await group.save();
+
+//       const updatedGroup = await Group.findOne({ groupId: grpId });
+
+//       res.status(200).json({ status: "Function updated successfully", group: updatedGroup });
+//   } catch (error) {
+//       console.error('Error updating function:', error);
+//       res.status(500).json({ status: "Error", message: "Internal Server Error" });
+//   }
+// };
+
+const updateFunction = async (req, res) => {
+  try {
+    const { grpId } = req.params;
+    const { memberIndex, functionDescription } = req.body;
+
+    const group = await Group.findOne({ groupId: grpId });
+
+    if (!group) {
+      return res.status(404).json({ status: "Error", message: "Group not found." });
+    }
+
+    if (memberIndex < 0 || memberIndex >= group.members.length) {
+      return res.status(400).json({ status: "Error", message: "Invalid member index." });
+    }
+
+    group.members[memberIndex].functionDescription = functionDescription; 
+    await group.save();
+
+    const updatedGroup = await Group.findOne({ groupId: grpId });
+
+    res.status(200).json({ status: "Function updated successfully", group: updatedGroup });
+  } catch (error) {
+    console.error('Error updating function:', error);
+    res.status(500).json({ status: "Error", message: "Internal Server Error" });
+  }
+};
+
 const RegisterExaminerAsStudentUser = async (req, res, next) => {
   try {
-    const { username, password, UserType } = req.body;
-    console.log(username, password, UserType , fullname);
-
+    const { username, password, UserType, fullname } = req.body;
+    console.log(username, password, UserType, fullname);
 
     const newUser = new Group({
       username,
       password: await bcrypt.hash(password, 10),
       UserType,
-      fullname,
+      groupId: fullname,
     });
 
     await newUser.save();
@@ -285,7 +340,6 @@ const RegisterExaminerAsStudentUser = async (req, res, next) => {
     next(error);
   }
 };
-
 module.exports = {
   registerGroup,
   displayAllGroups,
@@ -294,5 +348,6 @@ module.exports = {
   getOneGroup,
   loginGroup,
   updatePassword,
+  updateFunction,
   RegisterExaminerAsStudentUser,
 };

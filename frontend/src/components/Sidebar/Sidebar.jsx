@@ -101,12 +101,12 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
                     variant="dot"
                   >
                     <Avatar
-                      alt="Chanuka Devin"
+                      alt={storedUserInfo.groupId}
                       src="/static/images/avatar/1.jpg"
                     />
                   </StyledBadge>
                   <div className="name_job">
-                    <div className="name">Chanuka</div>
+                    <div className="name">{storedUserInfo.groupId}</div>
                     <div className="">
                       <span style={{ color: "#7C7C7C" }}>
                         {" "}

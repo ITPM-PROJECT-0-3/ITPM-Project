@@ -1,6 +1,7 @@
 const json = require("body-parser/lib/types/json");
 const ExaminerUser = require("../model/ExaminerModel");
 const errorHandler = require("../utils/error");
+const Group = require("../model/StudentModel");
 
 const RegistraterExaminer = async (req, res, next) => {
   try {
@@ -17,7 +18,7 @@ const RegistraterExaminer = async (req, res, next) => {
     } = req.body;
 
     const existingExaminer = await ExaminerUser.findOne({ Email });
-
+    console.log("hi");
     if (existingExaminer) {
       return res.status(400).json({
         status: "Examiner Already Exist",
@@ -92,8 +93,145 @@ const fetchAllExaminers = async (req, res, next) => {
   }
 };
 
+const AsignStudentGroup = async (req, res, next) => {
+  try {
+    const IndividualExaminer = req.params.id;
+    const { StudentGropDetails } = req.body;
+
+    const Examiner = await ExaminerUser.findById(IndividualExaminer);
+
+    if (!Examiner) {
+      return res.status(404).json({
+        status: "Examiner not found",
+        message: "No Examiner found with the specified ID.",
+      });
+    }
+
+    StudentGropDetails.forEach((newGroup) => {
+      Examiner.StudentGropDetails.push(newGroup);
+    });
+
+    const updatedExaminer = await Examiner.save();
+
+    res.status(200).json({
+      status: "Success",
+      message: "Examiners added successfully.",
+      updatedExaminer,
+    });
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
+const deleteExaminer = async (req, res, next) => {
+  try {
+    const ExaminerID = req.params.id;
+
+    const ExaminerFind = await ExaminerUser.findById(ExaminerID);
+    if (!ExaminerFind) {
+      return res.status(404).send({ status: "Examiner not found" });
+    }
+
+    await ExaminerUser.findByIdAndDelete(ExaminerID);
+
+    res.status(200).send({ status: "Examiner Deleted" });
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
+const AsignproposalMarks = async (req, res, next) => {
+  try {
+    const GroupId = req.params.id;
+    const ExaminerEmail = req.body.Email;
+    const { proposalMarks } = req.body;
+
+    const group = await Group.findById(GroupId);
+
+    if (!group) {
+      return res.status(404).json({
+        status: "Group not found",
+        message: "No group found with the specified ID.",
+      });
+    }
+
+    const examiner = group.ExaminerDetails.find(
+      (examiner) => examiner.Email === ExaminerEmail
+    );
+
+    if (!examiner) {
+      return res.status(404).json({
+        status: "Examiner not found",
+        message: "No examiner found with the specified email in the group.",
+      });
+    }
+
+    examiner.Marks.push({ proposalMarks });
+    const updatedGroup = await group.save();
+
+    res.status(200).json({
+      status: "Success",
+      message: "Examiners added successfully.",
+      updatedGroup,
+    });
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
+const fetchStudentGroupLessExaminers = async (req, res, next) => {
+  try {
+    // Fetch all groups where UserType is "Student"
+    const StudentGroups = await Group.find({ UserType: "Student" });
+
+    if (!StudentGroups || StudentGroups.length === 0) {
+      return res.status(404).json({
+        status: "Group Not Found",
+        message: "No groups found with UserType as Student",
+      });
+    }
+
+    // Filter groups where length of ExaminerDetails array is less than 3
+    const GroupsWithLessExaminers = StudentGroups.filter(
+      (group) => group.ExaminerDetails.length < 3
+    );
+
+    if (GroupsWithLessExaminers.length === 0) {
+      return res.status(404).json({
+        status: "Group Not Found",
+        message:
+          "No groups found with less than 3 Examiners and UserType as Student",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      message: "Groups fetched successfully.",
+      data: GroupsWithLessExaminers,
+    });
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
 module.exports = {
   RegistraterExaminer,
   fetchSingleExaminer,
   fetchAllExaminers,
+  AsignStudentGroup,
+  AsignproposalMarks,
+  deleteExaminer,
+  fetchStudentGroupLessExaminers,
 };

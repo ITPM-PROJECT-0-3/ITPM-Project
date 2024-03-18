@@ -9,6 +9,8 @@ const GroupProfile = () => {
   const navigate = useNavigate();
   const [groupData, setGroupData] = useState(null);
   const [showUpdatePswrdForm, setShowUpdatePswrdForm] = useState(false);
+  const [functionDescription, setFunctionDescription] = useState('');
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
 
   const specializationAbbreviations = {
     'Computer Science and Network Engineering': 'CSNE',
@@ -24,19 +26,80 @@ const GroupProfile = () => {
       try {
         const response = await axios.get(`http://localhost:8000/student/getOneGroup/${grpId}`);
         setGroupData(response.data.group);
+        const selectedMember = response.data.group.members[selectedRowIndex];
+        if (selectedMember && selectedMember.function) {
+          setFunctionDescription(selectedMember.function);
+      }
       } catch (error) {
         console.error('Error fetching group data:', error.message);
       }
     };
 
     fetchGroupData();
+
   }, [grpId]);
+
+  useEffect(() => {
+    if (groupData && groupData.members && selectedRowIndex !== null) {
+      const selectedMember = groupData.members[selectedRowIndex];
+      if (selectedMember && selectedMember.function) {
+        setFunctionDescription(selectedMember.function);
+      } else {
+        // If the function is not available, reset the function description
+        setFunctionDescription('');
+      }
+    }
+  }, [groupData, selectedRowIndex]);
 
   const handleSettingsClick = () => {
     setShowUpdatePswrdForm(true);
     navigate(`/updatePassword/${grpId}`);
   };
   
+  // const handleAddFunctionClick = (index) => {
+  //   setSelectedRowIndex(index);
+  //   setFunctionDescription('');
+  // };
+
+  // const handleAddFunctionClick = (index) => {
+  //   setSelectedRowIndex(index);
+  //   if (groupData && groupData.members && groupData.members[index]) {
+  //     const existingFunction = groupData.members[index].function || ''; 
+  //     setFunctionDescription(existingFunction);
+  //   }
+  // };
+
+  const handleAddFunctionClick = (index) => {
+    setSelectedRowIndex(index);
+    if (groupData && groupData.members && groupData.members[index]) {
+      const existingFunction = groupData.members[index].function || ''; 
+      setFunctionDescription(existingFunction);
+    } else {
+      // If the group data or member data is not available, reset the function description
+      setFunctionDescription('');
+    }
+  };
+  
+  
+
+  const handleSaveFunction = async () => {
+    try {
+      const response = await axios.post(`http://localhost:8000/student/updateFunction/${grpId}`, {
+        memberIndex: selectedRowIndex,
+        functionDescription: functionDescription,
+      });
+
+      if (response.status === 200) {
+        const updatedGroupData = { ...groupData };
+        updatedGroupData.members[selectedRowIndex].function = functionDescription;
+        setGroupData(updatedGroupData);
+      }
+    } catch (error) {
+      console.error('Error saving function:', error.message);
+    }
+
+    setSelectedRowIndex(null);
+  };
 
   return (
     <div id="sachini_group_profile">
@@ -62,6 +125,7 @@ const GroupProfile = () => {
                   <th>Phone</th>
                   <th>Specialization</th>
                   <th>Lab Group</th>
+                  <th>Function</th>
                 </tr>
               </thead>
               <tbody>
@@ -73,6 +137,26 @@ const GroupProfile = () => {
                     <td>{member.phone}</td>
                     <td>{member.specialization}</td>
                     <td>{`${specializationAbbreviations[member.specialization]}.${member.labGroup}`}</td>
+                    <td>
+                      {selectedRowIndex === index ? (
+                        <div>
+                          <input
+                            type="text"
+                            placeholder="Enter function description"
+                            value={functionDescription}
+                            onChange={(e) => setFunctionDescription(e.target.value)}
+                          />
+                          <button id="sachini-func-save-button" onClick={handleSaveFunction}>Save</button>
+                        </div>
+                      ) : (
+                        // <button onClick={() => member.function ? setSelectedRowIndex(index) : handleAddFunctionClick(index)}>
+                        //   {member.function ? "View Function" : "Add Function"}
+                        // </button>
+                        <button id="sachini_add_func-button" onClick={() => selectedRowIndex === index ? setSelectedRowIndex(null) : handleAddFunctionClick(index)}>
+                          {functionDescription && selectedRowIndex === index ? "View Function" : "Function"}
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

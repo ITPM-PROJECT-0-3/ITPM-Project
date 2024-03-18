@@ -14,6 +14,8 @@ import GroupProfile from "./components/form/GroupProfile";
 import UpdatePswrdForm from "./components/form/UpdatePswrdForm";
 import ExaminerMainLayout from "./pages/ExaminerDashboardPages/ExaminerMainLayout";
 import ExaminerviewDashboard from "./pages/ExaminerDashboardPages/ExaminerviewDashboard";
+import StudentListAdmin from "./components/StudentListTable-AdminAssignExaminers/StudentListAdmin";
+import AsignExaminerforGroup from "./pages/AsignExaminerforGroup";
 
 function App() {
   return (
@@ -31,11 +33,16 @@ function App() {
           </Route>
           <Route path="/registration" element={<RegistrationForm />} />
           <Route path="/loginGrp" element={<LoginForm />} />
+
           <Route path="/getOneGroup/:grpId" element={<GroupProfile />} />
           <Route path="/updatePassword/:grpId" element={<UpdatePswrdForm />} />
           <Route
             path="/examiner-admin-table"
             element={<AdminExaminerTable />}
+          />
+          <Route
+            path="/examiner-Asign-table"
+            element={<AsignExaminerforGroup />}
           />
           <Route
             path="/examiner-registration-admin"
