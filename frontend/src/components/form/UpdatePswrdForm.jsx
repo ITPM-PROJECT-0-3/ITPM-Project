@@ -48,7 +48,15 @@ const UpdatePswrdForm = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Clear authentication token from local storage
+    localStorage.removeItem('authToken');
+    // Navigate to login page
+    navigate('/loginGrp');
+  };
+
   return (
+    <div id="sachini_containerForm">
     <div id="sachini_form">
       <h2>Update Password</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -84,6 +92,8 @@ const UpdatePswrdForm = () => {
         <button type="submit">Update Password</button>
         </center>
       </form>
+    </div>
+    <button id="sachini_logoutButton" onClick={handleLogout}>Logout</button>
     </div>
   );
 };

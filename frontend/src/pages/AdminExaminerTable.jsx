@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../styles/AdminExaminerTable.module.css";
 import AdminSidebar from "../components/Sidebar/Sidebar";
 import AdminHeader from "../components/SlideHeader/SlideHeader";
 import ExaminerlistTable from "../components/ExaminerTable/ExaminerlistTable";
 
 export default function AdminExaminerTable() {
+  useEffect(() => {
+    document.title = "Admin Examiner Table | SLIIT";
+    return () => {
+      document.title = "SLIIT";
+    };
+  }, []);
+
   const [sidebarActive, setSidebarActive] = useState(true);
 
   const toggleSidebar = () => {
@@ -15,7 +22,7 @@ export default function AdminExaminerTable() {
     {
       to: "/admin-nav",
       iconClass: "bx bx-grid-alt",
-      label: "Dasshboard",
+      label: "Dashboard",
     },
     {
       to: "/admin-nav",
@@ -26,6 +33,11 @@ export default function AdminExaminerTable() {
       to: "/examiner-admin-table",
       iconClass: "bx bx-registered",
       label: "Examiners",
+    },
+    {
+      to: "/examiner-Asign-table",
+      iconClass: "bx bx-calendar",
+      label: "Schedule-Group",
     },
   ];
 

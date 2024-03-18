@@ -35,7 +35,7 @@ body.AllSupplier {
 #AllSupplier .table__header .input-group {
   width: 35%;
   height: 40px;
-  background-color: #17376e70;
+  background-color: rgba(210, 210, 210, 0.378);
   padding: 0 .8rem;
   border-radius: 05rem;
   display: flex;
@@ -47,7 +47,7 @@ body.AllSupplier {
 
 #AllSupplier .table__header .input-group:hover {
   width: 45%;
-  background-color: #17376e70;
+  background-color:  rgba(210, 210, 210, 0.378);
   box-shadow: 0 .1rem .4rem #0002;
 }
 

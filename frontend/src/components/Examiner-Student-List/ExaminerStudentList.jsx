@@ -2,68 +2,44 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { getImageUrl } from "../../utils";
-import "./ExaminerlistTable.css";
+import "./ExaminerStudentList.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
-import Swal from "sweetalert2";
 
-export default function ExaminerlistTable() {
-  const [search, setSearch] = useState("");
-  const [Users, setUsers] = useState([]);
 
-  const conponentPDF = useRef(null);
+export default function ExaminerStudentList() {
 
-  console.log(search);
+    const [search, setSearch] = useState("");
+    const [Users, setUsers] = useState([]);
 
-  useEffect(() => {
-    function getSystemUsers() {
-      axios
-        .get(
-          "http://localhost:8000/api/examiner/get-examiner-all",
-          getSystemUsers
-        )
-        .then((res) => {
-          console.log(res.data.ExaminerUserAll);
-          setUsers(res.data.ExaminerUserAll);
+    const conponentPDF = useRef(null);
 
-          toast.success("Data Fetched Successfully!", {
-            duration: 3000, // 3 seconds
-            position: "top-right", // You can change the position if needed
-          });
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
-    }
-    getSystemUsers();
-  }, []);
+    useEffect(() => {
+        function getSystemUsers() {
+          axios
+            .get(
+              "http://localhost:8000/api/examiner/get-examiner-all",
+              getSystemUsers
+            )
+            .then((res) => {
+              console.log(res.data.ExaminerUserAll);
+              setUsers(res.data.ExaminerUserAll);
+    
+              toast.success("Data Fetched Successfully!", {
+                duration: 3000, // 3 seconds
+                position: "top-right", // You can change the position if needed
+              });
+            })
+            .catch((err) => {
+              alert(err.message);
+            });
+        }
+        getSystemUsers();
+      }, []);
 
-  function DeleteExaminer(id) {
-    console.log(id);
-
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axios.delete(
-          "http://localhost:8000/api/examiner/delete-examiner/" + id
-        );
-
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
-
-        window.location.reload();
-      }
-    });
-  }
   return (
-    <div id="AllSupplier">
+     <div id="AllSupplier">
       <main className="table">
         <section className="table__header">
           <Link
@@ -113,6 +89,7 @@ export default function ExaminerlistTable() {
                 <tr>
                   <th>Examiner Name</th>
                   <th>Email</th>
+                  <th>UniverSity</th>
                   <th>Facalty</th>
                   <th>No Of Group</th>
                   <th>Option</th>
@@ -148,18 +125,19 @@ export default function ExaminerlistTable() {
                         {dataobj.FirstName} {dataobj.LastName}
                       </td>
                       <td>{dataobj.Email}</td>
+                      <td>{dataobj.Univercity}</td>
                       <td>{dataobj.Facalty} </td>
                       <td>{dataobj.AdminisrationPosition}</td>
                       <td style={{ marginLeft: "auto" }}>
                         <button
                           className="bx bx-trash bx-xs btn btn-outline-danger"
                           style={{ margin: "1px" }}
-                          onClick={() => DeleteExaminer(dataobj._id)}
                         ></button>
                         <Link to={`/Admin/Sup/Profile/${dataobj._id}`}>
                           <button
                             className="bx bx-info-circle bx-xs btn btn-outline-primary"
                             style={{ margin: "1px" }}
+                            //
                           ></button>
                         </Link>
                         <Link to={`/Admin/profile/update/${dataobj._id}`}>
@@ -190,5 +168,5 @@ export default function ExaminerlistTable() {
         </section>
       </main>
     </div>
-  );
+  )
 }
