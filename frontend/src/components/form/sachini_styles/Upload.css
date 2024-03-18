@@ -1,0 +1,60 @@
+#sachini_assignment_upload {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #b8b1b1;
+    border-radius: 10px;
+    margin-top: 150px; 
+    background-color: rgb(247, 250, 242);
+  }
+  
+  #sachini_assignment_upload h3 {
+    font-weight: bold;
+}
+  
+  #sachini_assignment_upload label {
+    font-weight: bold;
+    text-align: left; 
+    display: block; 
+    width: 100%; 
+    margin-top: 30px;
+}
+  
+#sachini_assignment_upload input[type="file"] {
+    margin-top: 10px;
+    width: 100%; 
+}
+  #sachini_assignment_upload progress {
+    width: 80%;
+    height: 20px;
+    margin-top: 10px;
+  }
+  
+  #sachini_assignment_upload .button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#sachini_assignment_upload button {
+    padding: 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px;
+    margin-bottom: 5px;
+}
+
+#sachini_assignment_upload button:hover {
+    background-color: #45a049;
+}
+
+#sachini-canclbtn {
+    background-color: #f44336 !important;
+}

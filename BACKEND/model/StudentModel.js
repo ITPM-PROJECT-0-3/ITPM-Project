@@ -116,6 +116,9 @@ const groupSchema = new Schema(
       type: String,
       default: "Student",
     },
+    downloadURLForDoc1: {
+      type: String
+    },
     ExaminerDetails: [examinerSchema],
   },
   { timestamps: true }

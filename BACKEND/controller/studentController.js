@@ -4,6 +4,8 @@ const Group = require("../model/StudentModel");
 const DeleteGroup = require("../model/DeleteGroupModel");
 const ExaminerUser = require("../model/ExaminerModel");
 const { group } = require("console");
+const router = require("express").Router();
+
 
 const registerGroup = async (req, res) => {
   console.log("Received request to /api/registerGrp");
@@ -340,6 +342,40 @@ const RegisterExaminerAsStudentUser = async (req, res, next) => {
     next(error);
   }
 };
+
+const saveDownloadURLForDoc1 = async (req, res) => {
+  try {
+      const { groupId } = req.params;
+      const { downloadURL } = req.body;
+
+      // Find the corresponding group record by groupId and update the document1 field
+      const updatedGroup = await Group.findOneAndUpdate(
+          { groupId },
+          { $set: { downloadURLForDoc1: downloadURL } },
+          { new: true }
+      );
+
+      if (updatedGroup) {
+        // Construct the response object including the downloadURL
+        const responseGroup = {
+          ...updatedGroup.toObject(),
+          downloadURL: downloadURL,
+        };
+  
+        return res
+          .status(200)
+          .json({ status: "Download URL saved successfully", group: responseGroup });
+      } else {
+          return res.status(404).json({ status: "Error", message: "Group not found" });
+      }
+  } catch (error) {
+      console.error('Error saving download URL:', error);
+      return res.status(500).json({ status: "Error", message: "Internal Server Error" });
+  }
+};
+
+
+
 module.exports = {
   registerGroup,
   displayAllGroups,
@@ -350,4 +386,5 @@ module.exports = {
   updatePassword,
   updateFunction,
   RegisterExaminerAsStudentUser,
+  saveDownloadURLForDoc1,
 };
