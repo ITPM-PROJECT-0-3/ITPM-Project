@@ -1,14 +1,12 @@
-
 const express = require("express");
 const router = express.Router();
-const supervisorController = require("../controller/supervisorController");
+const SupervisorController = require("../controller/SupervisorController");
 
-
-// Create a new supervisor
-router.route('/add').post(supervisorController.createSupervisor);
-router.route('/get/:name').get(supervisorController.getSupervisorGroups);
-
-router.route('/get').get(supervisorController.getSupervisors);
-
+router.route("/register").post(SupervisorController.createSupervisor);
+router.route("/get-supervisor/:id").get(SupervisorController.fetchSingleSupervisor);
+router.route("/get-all-supervisors").get(SupervisorController.fetchAllSupervisors);
+router.route("/assign-group/:id").put(SupervisorController.assignGroup);
+router.route("/delete-supervisor/:id").delete(SupervisorController.deleteSupervisor);
+router.route("/assign-status1-marks/:id").put(SupervisorController.assignMarks);
 
 module.exports = router;
