@@ -12,3 +12,4 @@ router.route('/delete/:id').delete(staffController.deleteStaffUserById);
 
 
 module.exports = router;
+ 

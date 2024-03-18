@@ -2,10 +2,11 @@ const StaffUser = require("../model/StaffModel");
 
 const createStaffUser = async (req, res) => {
   try {
-    const { firstName, lastName, department, email, phone } = req.body;
+    const { firstName, lastName,position, department, email, phone } = req.body;
     const staffUser = new StaffUser({
       firstName,
       lastName,
+      position,
       department,
       email,
       phone,
