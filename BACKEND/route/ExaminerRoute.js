@@ -8,4 +8,6 @@ router.route("/get-examiner-all").get(ExaminerUser.fetchAllExaminers);
 router.route("/Asigne-group/:id").put(ExaminerUser.AsignStudentGroup);
 router.route("/Asigne-proposal-marks/:id").put(ExaminerUser.AsignproposalMarks);
 router.route("/delete-examiner/:id").delete(ExaminerUser.deleteExaminer);
+router.route("/fetch-require-examiner-group").get(ExaminerUser.fetchStudentGroupLessExaminers);
+
 module.exports = router;

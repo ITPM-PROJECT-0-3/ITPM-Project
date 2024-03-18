@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./StudentListAdmin.css";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import { getImageUrl } from "../../utils";
 import axios from "axios";
 import toast from "react-hot-toast";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
-import Swal from "sweetalert2";
-
 
 export default function StudentListAdmin() {
   const [search, setSearch] = useState("");
   const [Users, setUsers] = useState([]);
-
-
 
   const conponentPDF = useRef(null);
 
@@ -23,12 +17,12 @@ export default function StudentListAdmin() {
     function getSystemUsers() {
       axios
         .get(
-          "http://localhost:8000/student/fetch-require-examiner-group",
+          "http://localhost:8000/api/examiner/fetch-require-examiner-group",
           getSystemUsers
         )
         .then((res) => {
-          console.log(res.data.groupsWithLessThanThreeExaminers);
-          setUsers(res.data.groupsWithLessThanThreeExaminers);
+          console.log(res.data.data);
+          setUsers(res.data.data);
 
           toast.success("Data Fetched Successfully!", {
             duration: 3000, // 3 seconds
@@ -41,30 +35,6 @@ export default function StudentListAdmin() {
     }
     getSystemUsers();
   }, []);
-
-  // function DeleteExaminer(id) {
-  //   console.log(id);
-
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       axios.delete(
-  //         "http://localhost:8000/api/examiner/delete-examiner/" + id
-  //       );
-
-  //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
-
-  //       window.location.reload();
-  //     }
-  //   });
-  // }
 
   return (
     <div id="AllSupplier">
