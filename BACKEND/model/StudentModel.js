@@ -85,6 +85,33 @@ const examinerSchema = new Schema({
   Marks: [marksSchema],
 });
 
+const supervisorSchema = new Schema({
+  SupervisorID: {
+    type: String,
+  },
+  FullName: {
+    type: String,
+  },
+  Email: {
+    type: String,
+  },
+  Marks: [marksSchema], 
+});
+
+
+const cosupervisorSchema = new Schema({
+  CoSupervisorID: {
+    type: String,
+  },
+  FullName: {
+    type: String,
+  },
+  Email: {
+    type: String,
+  },
+  Marks: [marksSchema], // Include marks for reports
+});
+
 // const counterSchema = new Schema({
 //   _id: { type: String, required: true },
 //   seq: { type: Number, default: 1 },
@@ -120,6 +147,8 @@ const groupSchema = new Schema(
       type: String
     },
     ExaminerDetails: [examinerSchema],
+    SupervisorDetails: [supervisorSchema],
+    CoSupervisorDetails: [cosupervisorSchema],
   },
   { timestamps: true }
 );
