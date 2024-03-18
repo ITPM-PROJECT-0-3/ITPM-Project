@@ -21,9 +21,8 @@ router.route("/updatePassword/:grpId").put(studentCntrl.updatePassword);
 
 router.route("/updateFunction/:grpId").post(studentCntrl.updateFunction);
 
-//router.route("/saveDownloadURLForDoc1/:groupId").post(studentCntrl.saveDownloadURLForDoc1);
-
 router.route("/saveDownloadURLForDoc1/:groupId").post(studentCntrl.saveDownloadURLForDoc1);
 
+router.route("/assignmentStatus/:groupId").get(studentCntrl.getAssignmentStatus);
 
 module.exports = router;
