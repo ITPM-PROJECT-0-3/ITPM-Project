@@ -374,6 +374,27 @@ const saveDownloadURLForDoc1 = async (req, res) => {
   }
 };
 
+const getAssignmentStatus = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const group = await Group.findOne({ groupId });
+
+    if (!group) {
+      return res.status(404).json({ status: "Error", message: "Group not found" });
+    }
+
+    const fileLink = group.downloadURLForDoc1;
+    const updatedAt = group.updatedAt;
+
+    const updatedDate = updatedAt.toDateString();
+    const updatedTime = updatedAt.toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' });
+
+    res.status(200).json({ status: "Success", groupId, fileLink, updatedDate, updatedTime });
+  } catch (error) {
+    console.error('Error fetching assignment status:', error);
+    res.status(500).json({ status: "Error", message: "Internal Server Error" });
+  }
+};
 
 
 module.exports = {
@@ -387,4 +408,5 @@ module.exports = {
   updateFunction,
   RegisterExaminerAsStudentUser,
   saveDownloadURLForDoc1,
+  getAssignmentStatus,
 };

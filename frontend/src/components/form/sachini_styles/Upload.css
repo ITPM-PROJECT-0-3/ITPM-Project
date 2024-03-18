@@ -16,31 +16,67 @@
     font-weight: bold;
 }
   
-  #sachini_assignment_upload label {
+/* #sachini_assignment_upload label {
+    
+    text-align: left; 
+    display: block; 
+    width: 100%; 
+    margin-top: 30px;
+} */
+
+#sachini-doc-lbl {
     font-weight: bold;
     text-align: left; 
     display: block; 
     width: 100%; 
     margin-top: 30px;
 }
+
+#sachini-doc-lbl2 {
+    margin-top: 30px;
+    margin-left: 0px;
+    margin-right: 5px;
+}
   
 #sachini_assignment_upload input[type="file"] {
     margin-top: 10px;
     width: 100%; 
 }
-  #sachini_assignment_upload progress {
+#sachini_assignment_upload progress {
     width: 80%;
     height: 20px;
     margin-top: 10px;
-  }
-  
-  #sachini_assignment_upload .button-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
 }
 
-#sachini_assignment_upload button {
+#sachini-save-changes-btn {
+    padding: 10px;
+    background-color: #e6e95a;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 180px; 
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+#sachini-save-changes-btn:hover {
+    background-color: #c4bb3f;
+}
+
+#sachini-canclbtn {
+    padding: 10px;
+    background-color: #f75555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100px; 
+    margin-bottom: 5px;
+}
+
+
+#sachini-ass-upload-btn {
     padding: 10px;
     background-color: #4caf50;
     color: #fff;
@@ -49,12 +85,17 @@
     cursor: pointer;
     width: 100px;
     margin-bottom: 5px;
+    font-size: 18px;
 }
 
-#sachini_assignment_upload button:hover {
+#sachini-ass-upload-btn:hover {
     background-color: #45a049;
 }
 
 #sachini-canclbtn {
     background-color: #f44336 !important;
+}
+
+#sachini-showchanges-btn {
+    background-color: #657566;
 }
