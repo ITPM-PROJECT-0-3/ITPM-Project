@@ -17,6 +17,8 @@ import ExaminerviewDashboard from "./pages/ExaminerDashboardPages/ExaminerviewDa
 import StudentListAdmin from "./components/StudentListTable-AdminAssignExaminers/StudentListAdmin";
 import AsignExaminerforGroup from "./pages/AsignExaminerforGroup";
 
+import HomePage from '../src/pages/HomePage/Home';
+
 function App() {
   return (
     <div className={styles.App}>
@@ -28,6 +30,10 @@ function App() {
         <ToastContainer position="top-right" autoClose={3000} />
 
         <Routes>
+
+          {/* Home Page route */}
+          <Route path="/" element={<HomePage />} />
+
           <Route path="/admin-nav" element={<CordinaterAdminMainLayout />}>
             <Route index={true} path="" element={<AdminHomePage />} />
           </Route>
