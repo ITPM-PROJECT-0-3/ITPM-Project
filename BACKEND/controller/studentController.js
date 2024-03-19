@@ -82,14 +82,37 @@ async function generateGroupId() {
   return newGroupId;
 }
 
-const displayAllGroups = (req, res) => {
-  Group.find()
-    .then((students) => {
-      res.json(students);
-    })
-    .catch((err) => {
-      console.log(err);
+const displayAllGroups = async (req, res) => {
+  try {
+    // Fetch all group details from the database
+    const groups = await Group.find({ UserType: 'Student' });
+
+    if (!groups || groups.length === 0) {
+      return res.status(404).json({ status: "Error", message: "No groups found" });
+    }
+
+    const groupDetails = groups.map(group => {
+      const { groupId, topic, supervisor, coSupervisor, members } = group;
+      const memberDetails = members.map(member => ({
+        studentID: member.ITNumber,
+        name: member.nameAsRegistered, 
+        specialization: member.specialization, 
+    }));
+    
+      return {
+        groupId,
+        topic,
+        supervisor,
+        coSupervisor,
+        members: memberDetails
+      };
     });
+
+    res.status(200).json({ status: "Success", groups: groupDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: "Error", message: "Internal Server Error" });
+  }
 };
 
 const updateGroup = async (req, res) => {

@@ -1,0 +1,57 @@
+@import "../../vars.css";
+
+#AllSupplier {
+  min-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #b0fbfbb5;
+}
+
+#AllSupplier .table {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.217);
+  backdrop-filter: blur(7px);
+  box-shadow: 0 .1rem .1rem 0.1rem rgba(159, 131, 131, 0.534);
+  border-radius: .6rem;
+  margin: 1%;
+  overflow: hidden;
+}
+
+#AllSupplier .table__header {
+  width: 100%;
+  height: 50%;
+  background-color: rgb(255, 255, 255);
+  padding: .8rem 1rem;
+  display: flex;
+  align-items: center;
+}
+
+#AllSupplier .table__body {
+  width: 95%;
+  max-height: calc(89% - 1.6rem);
+  background-color: rgba(255, 255, 255, 0.185);
+  margin: .8rem auto;
+  border-radius: .6rem;
+  overflow: auto;
+  overflow: overlay;
+}
+
+#sachini-admin-topic {
+    text-align: center;
+    margin-bottom: 0px;
+    margin-top: 10px;
+    background-color: #b0fbfbb5;
+}
+
+#sachini-admin-topic h1 {
+    font-size: 34px;
+    color: #333; 
+}
+
+#nested-table{
+    width: 20px;
+}
+
+  
