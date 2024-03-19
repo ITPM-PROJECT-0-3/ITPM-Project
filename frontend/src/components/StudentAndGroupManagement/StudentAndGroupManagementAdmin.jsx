@@ -22,15 +22,6 @@ const StudentAndGroupManagementAdmin = () => {
     }
   };
 
-// const downloadPDF = () => {
-//     const doc = new jsPDF();
-//     doc.autoTable({
-//       head: [['Group ID', 'Topic', 'Supervisor / Co-Supervisor', 'Members']],
-//       body: groups.map(group => [group.groupId, group.topic, `${group.supervisor} / ${group.coSupervisor}`, group.members.map(member => `${member.studentID}: ${member.name}`).join('\n')]),
-//     });
-//     doc.save('student_groups.pdf');
-//   };
-
 const downloadPDF = () => {
     const doc = new jsPDF();
     
@@ -79,6 +70,23 @@ const downloadPDF = () => {
     }
 };
 
+const editGroup = (groupId) => {
+    console.log('Edit group:', groupId);
+  };
+
+const deleteGroup = async (groupId) => {
+    try {
+        console.log(groupId);
+      const response = await axios.delete(`http://localhost:8000/student/deleteGrp/${groupId}`);
+      if (response.status === 200) {
+        setGroups(groups.filter(group => group.groupId !== groupId));
+        console.log('Group deleted successfully:', groupId);
+      }
+    } catch (error) {
+      console.error('Error deleting group:', error);
+    }
+  };
+
   return (
     <div>
         <div id="sachini-admin-topic">
@@ -92,6 +100,7 @@ const downloadPDF = () => {
             <th className="topic-column">Topic</th>
             <th>Supervisor <br></br> Co-Supervisor</th>
             <th>Members</th>
+            <th className="action-column">Actions</th> 
           </tr>
         </thead>
         <tbody>
@@ -120,6 +129,10 @@ const downloadPDF = () => {
                   </tbody>
                 </table>
               </td>
+              <td>
+                  <button id="sachini-admin-edit-btn" onClick={() => editGroup(group.groupId)}>Edit</button>
+                  <button id="sachini-admin-dlt-btn" onClick={() => deleteGroup(group.groupId)}>Delete</button>
+                </td>
             </tr>
           ))}
         </tbody>
