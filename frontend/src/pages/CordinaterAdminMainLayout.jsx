@@ -27,8 +27,12 @@ export default function CordinaterAdminMainLayout() {
       iconClass: "bx bx-registered",
       label: "Examiners",
     },
+    {
+      to: "/examiner-Asign-table",
+      iconClass: "bx bx-calendar",
+      label: "Schedule-Group",
+    },
   ];
-
   const customNavLinks = [
     { href: "/admin-nav", label: "Home" },
     { href: "/admin-nav", label: "Dashboard" },
