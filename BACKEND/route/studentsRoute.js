@@ -7,7 +7,9 @@ router
   .route("/register-examiner")
   .post(studentCntrl.RegisterExaminerAsStudentUser);
 
-router.route("/displayAllGrp").get(studentCntrl.displayAllGroups);
+//router.route("/displayAllGrp").get(studentCntrl.displayAllGroups);
+
+router.route("/groups").get(studentCntrl.displayAllGroups);
 
 router.route("/updateGrp/:grpId").put(studentCntrl.updateGroup);
 
