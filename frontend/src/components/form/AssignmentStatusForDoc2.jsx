@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './sachini_styles/Assignment.css';
 
-const AssignmentStatus = () => {
+const AssignmentStatusForDoc2 = () => {
     const { groupId } = useParams(); 
     const [assignmentStatus, setAssignmentStatus] = useState({
         
@@ -17,7 +17,7 @@ const AssignmentStatus = () => {
 
     useEffect(() => {
         
-        fetch(`http://localhost:8000/student/assignmentStatus/${groupId}`)
+        fetch(`http://localhost:8000/student/assignmentStatus2/${groupId}`)
             .then(response => response.json())
             .then(data => {
                 
@@ -54,7 +54,7 @@ const AssignmentStatus = () => {
     return (
         <div id="sachini-assignment-status">
           <form id="sachini-assignment-form">
-          <h2>Document 1 Assignment Status</h2>
+          <h2>Document 2 Assignment Status</h2>
             <table id="sachini-assignment-table">
               <tbody>
                 <tr>
@@ -98,7 +98,7 @@ const AssignmentStatus = () => {
       );      
 };
 
-export default AssignmentStatus;
+export default AssignmentStatusForDoc2;
 
 
 

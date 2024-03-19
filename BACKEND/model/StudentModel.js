@@ -146,6 +146,9 @@ const groupSchema = new Schema(
     downloadURLForDoc1: {
       type: String
     },
+    downloadURLForDoc2: {
+      type: String
+    },
     ExaminerDetails: [examinerSchema],
     SupervisorDetails: [supervisorSchema],
     CoSupervisorDetails: [cosupervisorSchema],
