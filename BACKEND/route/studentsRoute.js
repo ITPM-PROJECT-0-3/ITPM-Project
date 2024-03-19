@@ -25,4 +25,8 @@ router.route("/saveDownloadURLForDoc1/:groupId").post(studentCntrl.saveDownloadU
 
 router.route("/assignmentStatus/:groupId").get(studentCntrl.getAssignmentStatus);
 
+router.route("/saveDownloadURLForDoc2/:groupId").post(studentCntrl.saveDownloadURLForDoc2);
+
+router.route("/assignmentStatus2/:groupId").get(studentCntrl.getAssignmentStatus2);
+
 module.exports = router;
