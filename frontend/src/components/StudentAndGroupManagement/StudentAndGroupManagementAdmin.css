@@ -54,4 +54,36 @@
     width: 20px;
 }
 
+.table {
+    border-collapse: collapse;
+    border-spacing: 0; 
+  }
+  
+  .table th,
+  .table td {
+    padding: 6px; 
+    margin: 0; 
+  }
+  
+  .topic-column {
+    width: 130px; 
+  }
+  
+#sachini-admin-btn {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+  
+  #sachini-admin-btn:hover {
+    background-color: #45a049;
+  }
+  
+  
   
