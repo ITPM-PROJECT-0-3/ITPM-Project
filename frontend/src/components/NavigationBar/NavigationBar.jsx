@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,15 +8,21 @@ import Button from '@mui/material/Button';
 import LoginIcon from '@mui/icons-material/Login'; // Import the login icon
 
 export default function NavigationBar() {
+  const navigate = useNavigate();
+
   // Define the function to handle forgotten username/password clicks
   const handleForgotClick = () => {
     // Logic to navigate or open a dialog goes here
     console.log('Navigate to password recovery page');
   };
 
+  const handleLoginClick = () => {
+    navigate('/loginGrp'); // Navigate to /loginGrp route when login button is clicked
+  };
+
   // Custom styles
   const loginButtonStyle = { 
-    bgcolor: '#F2F2F2', // Background color
+    bgcolor: '#FFAE00', // Background color
     color: 'Black', // Text color
     alignItems: 'center',
     padding: '10px 40px', // Padding inside the button
@@ -23,7 +30,7 @@ export default function NavigationBar() {
     borderRadius: '0px', // Border radius for the button
     fontWeight: 'bold', // Make the text bold
     '&:hover': {
-      bgcolor: '#FFAE00', // Background color on hover
+      bgcolor: '#F2F2F2', // Background color on hover
     }
    };
   const loginText = { 
@@ -75,7 +82,7 @@ export default function NavigationBar() {
             <Typography variant="body2" sx={loginText}>
               LOG IN USING YOUR ACCOUNT ON:
             </Typography>
-            <Button startIcon={<LoginIcon />} sx={loginButtonStyle}>
+            <Button startIcon={<LoginIcon />} sx={loginButtonStyle} onClick={handleLoginClick}>
               SLIIT Login
             </Button>
             <Typography variant="body2" sx={forgetPasswordText} onClick={handleForgotClick}>
