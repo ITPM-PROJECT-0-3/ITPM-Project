@@ -17,7 +17,6 @@ import IconButton from "@mui/joy/IconButton";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "@mui/joy/Table";
-import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -27,6 +26,7 @@ import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import Button1 from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
+import toast from "react-hot-toast";
 
 const filter = createFilterOptions();
 
@@ -51,6 +51,10 @@ const StyledGridOverlay = styled("div")(({ theme }) => ({
   "& .ant-empty-img-5": {
     fillOpacity: theme.palette.mode === "light" ? "0.8" : "0.08",
     fill: theme.palette.mode === "light" ? "#f5f5f5" : "#fff",
+  },
+  color: "red", // Set color to red
+  "& svg": {
+    fill: "red", // Set SVG fill color to red
   },
 }));
 
@@ -106,7 +110,7 @@ function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>No Examiners Add Yet....</Box>
+      <Box sx={{ mt: 3 }}>No Examiners Add Yet....</Box>
     </StyledGridOverlay>
   );
 }
@@ -120,19 +124,9 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-];
-
 export default function AssignExaminer() {
   const [users, setUsers] = useState("");
+  const [examiners, setExaminers] = useState("");
   const classes = useStyles();
   const [value, setValue] = React.useState(null);
 
@@ -146,6 +140,11 @@ export default function AssignExaminer() {
         );
         console.log(response.data.group);
         setUsers(response.data.group);
+
+        toast.success("Group Detail's Fetched Successfully!", {
+          duration: 2000, // 3 seconds
+          position: "top-right", // You can change the position if needed
+        });
       } catch (error) {
         console.error("Error fetching group data:", error.message);
       }
@@ -153,341 +152,445 @@ export default function AssignExaminer() {
 
     fetchGroupData();
   }, [groupId]);
+
+  useEffect(() => {
+    function getExaminers() {
+      axios
+        .get(
+          "http://localhost:8000/api/examiner/get-examiner-all",
+          getExaminers
+        )
+        .then((res) => {
+          console.log("Examiners", res.data.ExaminerUserAll);
+          setExaminers(res.data.ExaminerUserAll);
+
+          toast.success("Examiner Name's Fetched Successfully!", {
+            duration: 3000, // 3 seconds
+            position: "top-right", // You can change the position if needed
+          });
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    }
+    getExaminers();
+  }, []);
+
+  console.log(value);
+
+  const AllExaminers =
+    examiners &&
+    examiners.map((dataobj) => ({
+      title: `${dataobj.TagName} ${dataobj.FirstName} ${dataobj.LastName}`,
+      email: dataobj.Email,
+      mongoId: dataobj._id,
+      facalty: dataobj.Facalty,
+    }));
+
+  const scrollToAssign = () => {
+    const assignSection = document.getElementById("Assign");
+    if (assignSection) {
+      assignSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleAssign = () => {
+    const examinerDetails = [
+      {
+        ExaminerID: value.mongoId, // Assuming value.ExaminerID contains the examiner's ID
+        FullName: value.title, // Assuming value.FullName contains the examiner's full name
+        Email: value.email, // Assuming value.Email contains the examiner's email
+        HeldingDate: value.facalty,
+        Time: "10:00 AM",
+      },
+    ];
+
+    const Id = users._id; // Assuming users._id contains the group's ID
+    console.log(Id);
+
+    axios
+      .put(
+        `http://localhost:8000/api/examiner/Asigne-Examiner/${Id}`, // Adjusted the URL path
+        { ExaminerDetails: examinerDetails } // Sending ExaminerDetails as part of the request body
+      )
+      .then((res) => {
+        console.log(res.data);
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert("Error updating data: " + err.message);
+      });
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }} margin={2}>
-      <Grid container spacing={1}>
-        <Grid item xs={6} md={6}>
-          <Item>
-            {" "}
-            <Box
-              sx={{
-                width: "100%",
-                position: "relative",
-                alignItems: "center",
-                overflow: { xs: "auto", sm: "initial" },
-              }}
-            >
-              <Card
-                orientation="horizontal"
+      <h4
+        style={{
+          padding: "10px",
+          fontFamily: "monospace",
+          backgroundColor: "#17376e",
+          color: "white",
+          fontWeight: "600",
+          borderEndEndRadius: "40px",
+        }}
+      >
+        Group Details...
+      </h4>
+      {users && (
+        <Grid container spacing={1}>
+          <Grid item xs={6} md={6}>
+            <Item>
+              {" "}
+              <Box
                 sx={{
                   width: "100%",
-                  height: "270px",
-                  flexWrap: "wrap",
-                  [`& > *`]: {
-                    "--stack-point": "500px",
-                    minWidth:
-                      "clamp(0px, (calc(var(--stack-point) - 2 * var(--Card-padding) - 2 * var(--variant-borderWidth, 0px)) + 1px - 100%) * 999, 100%)",
-                  },
-                  // make the card resizable for demo
-                  overflow: "auto",
-                  resize: "horizontal",
+                  position: "relative",
+                  alignItems: "center",
+                  overflow: { xs: "auto", sm: "initial" },
                 }}
               >
-                <AspectRatio
-                  flex
-                  ratio="1"
-                  maxHeight={182}
-                  sx={{ minWidth: 182 }}
+                <Card
+                  orientation="horizontal"
+                  sx={{
+                    width: "100%",
+                    height: "270px",
+                    flexWrap: "wrap",
+                    [`& > *`]: {
+                      "--stack-point": "500px",
+                      minWidth:
+                        "clamp(0px, (calc(var(--stack-point) - 2 * var(--Card-padding) - 2 * var(--variant-borderWidth, 0px)) + 1px - 100%) * 999, 100%)",
+                    },
+                    // make the card resizable for demo
+                    overflow: "auto",
+                    resize: "horizontal",
+                  }}
                 >
-                  <img
-                    src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
-                    srcSet="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286&dpr=2 2x"
-                    loading="lazy"
-                    alt=""
-                  />
-                </AspectRatio>
-                <CardContent>
-                  <Typography fontSize="xl" fontWeight="lg" textAlign="left">
-                    Alex Morrison
-                  </Typography>
-                  <Typography
-                    level="body-sm"
-                    fontWeight="lg"
-                    textColor="gray"
-                    textAlign="left"
+                  <AspectRatio
+                    flex
+                    ratio="1"
+                    maxHeight={182}
+                    sx={{ minWidth: 182 }}
                   >
-                    Senior Journalist
-                  </Typography>
-                  <br />
-
-                  <Sheet
-                    sx={{
-                      bgcolor: "background.level1",
-                      borderRadius: "sm",
-                      p: 1.5,
-                      my: 1.5,
-                      display: "flex",
-                      gap: 2,
-                      "& > div": { flex: 1 },
-                    }}
-                  >
-                    <div>
-                      <Typography level="body-xs" fontWeight="lg">
-                        Assign Examiners
-                      </Typography>
-                      <Typography fontWeight="lg">1</Typography>
-                    </div>
-                    <div>
-                      <Typography level="body-xs" fontWeight="lg">
-                        Members
-                      </Typography>
-                      <Typography fontWeight="lg">4</Typography>
-                    </div>
-                  </Sheet>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: 1.5,
-                      "& > button": { flex: 1 },
-                    }}
-                  >
+                    <img
+                      src="https://i.pinimg.com/736x/3e/ba/d4/3ebad4031309a789e2c2e047eda0d010.jpg"
+                      srcSet="https://i.pinimg.com/736x/3e/ba/d4/3ebad4031309a789e2c2e047eda0d010.jpg"
+                      loading="lazy"
+                      alt=""
+                    />
+                  </AspectRatio>
+                  <CardContent>
+                    <Typography fontSize="xl" fontWeight="lg" textAlign="left">
+                      {users.groupId}
+                    </Typography>
+                    <Typography
+                      level="body-sm"
+                      fontWeight="lg"
+                      textColor="gray"
+                      textAlign="left"
+                    >
+                      {users.topic}
+                    </Typography>
                     <br />
 
-                    <Button variant="outlined" color="neutral">
-                      Contact
-                    </Button>
-                    <Button variant="solid" color="primary">
-                      Assign
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Box>
-          </Item>
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <Item>
-            {" "}
-            <Row>
-              <Col>
-                <Card
-                  sx={{
-                    width: 320,
-                    maxWidth: "100%",
-                    boxShadow: "lg",
-                  }}
-                >
-                  <CardContent
-                    sx={{ alignItems: "center", textAlign: "center" }}
-                  >
-                    <Avatar
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ "--Avatar-size": "4rem" }}
-                    />
-                    <Chip
-                      size="sm"
-                      variant="soft"
-                      color="primary"
+                    <Sheet
                       sx={{
-                        mt: -1,
-                        mb: 1,
-                        border: "3px solid",
-                        borderColor: "background.surface",
+                        bgcolor: "background.level1",
+                        borderRadius: "sm",
+                        p: 1.5,
+                        my: 1.5,
+                        display: "flex",
+                        gap: 2,
+                        "& > div": { flex: 1 },
                       }}
                     >
-                      Superviser
-                    </Chip>
-                    <Typography level="title-lg">Josephine Blanton</Typography>
-                    <Typography level="body-sm" sx={{ maxWidth: "24ch" }}>
-                      Hello, this is my bio and I am a PRO member of MUI. I am a
-                      developer and I love to code.
-                    </Typography>
+                      <div>
+                        <Typography level="body-xs" fontWeight="lg">
+                          Assign Examiners
+                        </Typography>
+                        <Typography fontWeight="lg">
+                          {users.ExaminerDetails.length}
+                        </Typography>
+                      </div>
+                      <div>
+                        <Typography level="body-xs" fontWeight="lg">
+                          Members
+                        </Typography>
+                        <Typography fontWeight="lg">
+                          {users.members.length}
+                        </Typography>
+                      </div>
+                    </Sheet>
                     <Box
                       sx={{
                         display: "flex",
-                        gap: 2,
-                        mt: 2,
-                        "& > button": { borderRadius: "2rem" },
+                        gap: 1.5,
+                        "& > button": { flex: 1 },
                       }}
                     >
-                      <IconButton size="sm" variant="plain" color="neutral">
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5Z"
-                            />
-                          </svg>
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton size="sm" variant="plain" color="neutral">
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M12 6.865A5.135 5.135 0 1 0 17.135 12A5.135 5.135 0 0 0 12 6.865Zm0 8.469A3.334 3.334 0 1 1 15.334 12A3.333 3.333 0 0 1 12 15.334Z"
-                            />
-                            <path
-                              fill="currentColor"
-                              d="M21.94 7.877a7.333 7.333 0 0 0-.465-2.427a4.918 4.918 0 0 0-1.153-1.772a4.894 4.894 0 0 0-1.77-1.153a7.323 7.323 0 0 0-2.428-.464C15.058 2.012 14.717 2 12.001 2s-3.057.011-4.123.06a7.333 7.333 0 0 0-2.428.465a4.905 4.905 0 0 0-1.77 1.153A4.886 4.886 0 0 0 2.525 5.45a7.333 7.333 0 0 0-.464 2.427c-.05 1.066-.06 1.407-.06 4.123s.01 3.057.06 4.123a7.334 7.334 0 0 0 .464 2.427a4.888 4.888 0 0 0 1.154 1.772a4.917 4.917 0 0 0 1.771 1.153a7.338 7.338 0 0 0 2.428.464C8.944 21.988 9.285 22 12 22s3.057-.011 4.123-.06a7.333 7.333 0 0 0 2.427-.465a5.113 5.113 0 0 0 2.925-2.925a7.316 7.316 0 0 0 .465-2.427c.048-1.067.06-1.407.06-4.123s-.012-3.057-.06-4.123Zm-1.8 8.164a5.549 5.549 0 0 1-.343 1.857a3.311 3.311 0 0 1-1.898 1.898a5.522 5.522 0 0 1-1.857.344c-1.055.048-1.371.058-4.042.058s-2.986-.01-4.04-.058a5.526 5.526 0 0 1-1.857-.344a3.108 3.108 0 0 1-1.15-.748a3.085 3.085 0 0 1-.748-1.15a5.521 5.521 0 0 1-.344-1.857c-.048-1.054-.058-1.37-.058-4.04s.01-2.987.058-4.042a5.563 5.563 0 0 1 .344-1.857a3.107 3.107 0 0 1 .748-1.15a3.082 3.082 0 0 1 1.15-.748A5.523 5.523 0 0 1 7.96 3.86C9.014 3.81 9.331 3.8 12 3.8s2.987.011 4.042.059a5.564 5.564 0 0 1 1.857.344a3.31 3.31 0 0 1 1.898 1.898a5.523 5.523 0 0 1 .344 1.857c.048 1.055.058 1.37.058 4.041s-.01 2.986-.058 4.041ZM17.339 5.462Z"
-                            />
-                          </svg>
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton size="sm" variant="plain" color="neutral">
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M22.212 5.656a8.384 8.384 0 0 1-2.401.658A4.195 4.195 0 0 0 21.649 4c-.82.488-1.719.83-2.655 1.015a4.182 4.182 0 0 0-7.126 3.814a11.874 11.874 0 0 1-8.621-4.37a4.168 4.168 0 0 0-.566 2.103c0 1.45.739 2.731 1.86 3.481a4.169 4.169 0 0 1-1.894-.523v.051a4.185 4.185 0 0 0 3.355 4.102a4.205 4.205 0 0 1-1.89.072A4.185 4.185 0 0 0 8.02 16.65a8.394 8.394 0 0 1-6.192 1.732a11.831 11.831 0 0 0 6.41 1.88c7.694 0 11.9-6.373 11.9-11.9c0-.18-.004-.362-.012-.541a8.497 8.497 0 0 0 2.086-2.164Z"
-                            />
-                          </svg>
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton size="sm" variant="plain" color="neutral">
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M19.989 11.572a7.96 7.96 0 0 0-1.573-4.351a9.757 9.757 0 0 1-.92.87a13.156 13.156 0 0 1-3.313 2.01c.167.35.32.689.455 1.009v.003c.027.061.05.118.094.229l.017.04c1.513-.17 3.109-.107 4.656.103c.206.027.4.056.584.087Zm-9.385-7.45a46.15 46.15 0 0 1 2.692 4.27c1.223-.482 2.234-1.09 3.048-1.767c.33-.274.594-.532.796-.755A7.968 7.968 0 0 0 12 4c-.476 0-.942.042-1.396.121ZM4.253 9.997a29.21 29.21 0 0 0 2.04-.123a31.53 31.53 0 0 0 4.862-.822a54.36 54.36 0 0 0-2.7-4.227a8.018 8.018 0 0 0-4.202 5.172Zm1.53 7.038a14.21 14.21 0 0 1 1.575-1.899c1.454-1.49 3.17-2.65 5.156-3.29l.062-.018c-.165-.364-.32-.689-.476-.995c-1.836.535-3.77.869-5.697 1.042c-.94.085-1.783.122-2.403.128a7.966 7.966 0 0 0 1.784 5.032Zm9.221 2.38a35.951 35.951 0 0 0-1.632-5.709c-2 .727-3.596 1.79-4.829 3.058a9.77 9.77 0 0 0-1.317 1.655A7.964 7.964 0 0 0 12 20a7.977 7.977 0 0 0 3.005-.583Zm1.874-1.075a7.998 7.998 0 0 0 2.987-4.87c-.34-.085-.771-.17-1.245-.236a12.025 12.025 0 0 0-3.18-.033a39.39 39.39 0 0 1 1.438 5.14ZM12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10Z"
-                            />
-                          </svg>
-                        </SvgIcon>
-                      </IconButton>
+                      <br />
+
+                      <Button variant="outlined" color="neutral">
+                        Contact
+                      </Button>
+                      <Button
+                        onClick={scrollToAssign}
+                        variant="solid"
+                        color="primary"
+                      >
+                        Assign
+                      </Button>
                     </Box>
                   </CardContent>
                 </Card>
-              </Col>
-            </Row>
-          </Item>
-        </Grid>
-        <Grid item xs={6} md={3}>
-          <Item>
-            {" "}
-            <Row>
-              <Col>
-                <Card
-                  sx={{
-                    width: 320,
-                    maxWidth: "100%",
-                    boxShadow: "lg",
-                  }}
-                >
-                  <CardContent
-                    sx={{ alignItems: "center", textAlign: "center" }}
+              </Box>
+            </Item>
+          </Grid>
+          <Grid item xs={6} md={3}>
+            <Item>
+              {" "}
+              <Row>
+                <Col>
+                  <Card
+                    sx={{
+                      width: 320,
+                      maxWidth: "100%",
+                      boxShadow: "lg",
+                    }}
                   >
-                    <Avatar
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ "--Avatar-size": "4rem" }}
-                    />
-                    <Chip
-                      size="sm"
-                      variant="soft"
-                      color="primary"
-                      sx={{
-                        mt: -1,
-                        mb: 1,
-                        border: "3px solid",
-                        borderColor: "background.surface",
-                      }}
+                    <CardContent
+                      sx={{ alignItems: "center", textAlign: "center" }}
                     >
-                      Co-Superviser
-                    </Chip>
-                    <Typography level="title-lg">Josephine Blanton</Typography>
-                    <Typography level="body-sm" sx={{ maxWidth: "24ch" }}>
-                      Hello, this is my bio and I am a PRO member of MUI. I am a
-                      developer and I love to code.
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        mt: 2,
-                        "& > button": { borderRadius: "2rem" },
-                      }}
+                      <Avatar
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ "--Avatar-size": "4rem" }}
+                      />
+                      <Chip
+                        size="sm"
+                        variant="soft"
+                        color="primary"
+                        sx={{
+                          mt: -1,
+                          mb: 1,
+                          border: "3px solid",
+                          borderColor: "background.surface",
+                        }}
+                      >
+                        Superviser
+                      </Chip>
+                      <Typography level="title-lg">
+                        {users.SupervisorDetails.FullName}
+                      </Typography>
+                      <Typography level="title-lg">
+                        {users.SupervisorDetails.Email}
+                      </Typography>
+                      <Typography level="body-sm" sx={{ maxWidth: "24ch" }}>
+                        Hello,As a Seasoned leader, adept at guiding teams to
+                        success. Detail-oriented with strategic mindset.
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 2,
+                          mt: 2,
+                          "& > button": { borderRadius: "2rem" },
+                        }}
+                      >
+                        <IconButton size="sm" variant="plain" color="neutral">
+                          <SvgIcon>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5Z"
+                              />
+                            </svg>
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton size="sm" variant="plain" color="neutral">
+                          <SvgIcon>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M12 6.865A5.135 5.135 0 1 0 17.135 12A5.135 5.135 0 0 0 12 6.865Zm0 8.469A3.334 3.334 0 1 1 15.334 12A3.333 3.333 0 0 1 12 15.334Z"
+                              />
+                              <path
+                                fill="currentColor"
+                                d="M21.94 7.877a7.333 7.333 0 0 0-.465-2.427a4.918 4.918 0 0 0-1.153-1.772a4.894 4.894 0 0 0-1.77-1.153a7.323 7.323 0 0 0-2.428-.464C15.058 2.012 14.717 2 12.001 2s-3.057.011-4.123.06a7.333 7.333 0 0 0-2.428.465a4.905 4.905 0 0 0-1.77 1.153A4.886 4.886 0 0 0 2.525 5.45a7.333 7.333 0 0 0-.464 2.427c-.05 1.066-.06 1.407-.06 4.123s.01 3.057.06 4.123a7.334 7.334 0 0 0 .464 2.427a4.888 4.888 0 0 0 1.154 1.772a4.917 4.917 0 0 0 1.771 1.153a7.338 7.338 0 0 0 2.428.464C8.944 21.988 9.285 22 12 22s3.057-.011 4.123-.06a7.333 7.333 0 0 0 2.427-.465a5.113 5.113 0 0 0 2.925-2.925a7.316 7.316 0 0 0 .465-2.427c.048-1.067.06-1.407.06-4.123s-.012-3.057-.06-4.123Zm-1.8 8.164a5.549 5.549 0 0 1-.343 1.857a3.311 3.311 0 0 1-1.898 1.898a5.522 5.522 0 0 1-1.857.344c-1.055.048-1.371.058-4.042.058s-2.986-.01-4.04-.058a5.526 5.526 0 0 1-1.857-.344a3.108 3.108 0 0 1-1.15-.748a3.085 3.085 0 0 1-.748-1.15a5.521 5.521 0 0 1-.344-1.857c-.048-1.054-.058-1.37-.058-4.04s.01-2.987.058-4.042a5.563 5.563 0 0 1 .344-1.857a3.107 3.107 0 0 1 .748-1.15a3.082 3.082 0 0 1 1.15-.748A5.523 5.523 0 0 1 7.96 3.86C9.014 3.81 9.331 3.8 12 3.8s2.987.011 4.042.059a5.564 5.564 0 0 1 1.857.344a3.31 3.31 0 0 1 1.898 1.898a5.523 5.523 0 0 1 .344 1.857c.048 1.055.058 1.37.058 4.041s-.01 2.986-.058 4.041ZM17.339 5.462Z"
+                              />
+                            </svg>
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton size="sm" variant="plain" color="neutral">
+                          <SvgIcon>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M22.212 5.656a8.384 8.384 0 0 1-2.401.658A4.195 4.195 0 0 0 21.649 4c-.82.488-1.719.83-2.655 1.015a4.182 4.182 0 0 0-7.126 3.814a11.874 11.874 0 0 1-8.621-4.37a4.168 4.168 0 0 0-.566 2.103c0 1.45.739 2.731 1.86 3.481a4.169 4.169 0 0 1-1.894-.523v.051a4.185 4.185 0 0 0 3.355 4.102a4.205 4.205 0 0 1-1.89.072A4.185 4.185 0 0 0 8.02 16.65a8.394 8.394 0 0 1-6.192 1.732a11.831 11.831 0 0 0 6.41 1.88c7.694 0 11.9-6.373 11.9-11.9c0-.18-.004-.362-.012-.541a8.497 8.497 0 0 0 2.086-2.164Z"
+                              />
+                            </svg>
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton size="sm" variant="plain" color="neutral">
+                          <SvgIcon>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M19.989 11.572a7.96 7.96 0 0 0-1.573-4.351a9.757 9.757 0 0 1-.92.87a13.156 13.156 0 0 1-3.313 2.01c.167.35.32.689.455 1.009v.003c.027.061.05.118.094.229l.017.04c1.513-.17 3.109-.107 4.656.103c.206.027.4.056.584.087Zm-9.385-7.45a46.15 46.15 0 0 1 2.692 4.27c1.223-.482 2.234-1.09 3.048-1.767c.33-.274.594-.532.796-.755A7.968 7.968 0 0 0 12 4c-.476 0-.942.042-1.396.121ZM4.253 9.997a29.21 29.21 0 0 0 2.04-.123a31.53 31.53 0 0 0 4.862-.822a54.36 54.36 0 0 0-2.7-4.227a8.018 8.018 0 0 0-4.202 5.172Zm1.53 7.038a14.21 14.21 0 0 1 1.575-1.899c1.454-1.49 3.17-2.65 5.156-3.29l.062-.018c-.165-.364-.32-.689-.476-.995c-1.836.535-3.77.869-5.697 1.042c-.94.085-1.783.122-2.403.128a7.966 7.966 0 0 0 1.784 5.032Zm9.221 2.38a35.951 35.951 0 0 0-1.632-5.709c-2 .727-3.596 1.79-4.829 3.058a9.77 9.77 0 0 0-1.317 1.655A7.964 7.964 0 0 0 12 20a7.977 7.977 0 0 0 3.005-.583Zm1.874-1.075a7.998 7.998 0 0 0 2.987-4.87c-.34-.085-.771-.17-1.245-.236a12.025 12.025 0 0 0-3.18-.033a39.39 39.39 0 0 1 1.438 5.14ZM12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10Z"
+                              />
+                            </svg>
+                          </SvgIcon>
+                        </IconButton>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Col>
+              </Row>
+            </Item>
+          </Grid>
+          <Grid item xs={6} md={3}>
+            <Item>
+              {" "}
+              <Row>
+                <Col>
+                  <Card
+                    sx={{
+                      width: 320,
+                      maxWidth: "100%",
+                      boxShadow: "lg",
+                    }}
+                  >
+                    <CardContent
+                      sx={{ alignItems: "center", textAlign: "center" }}
                     >
-                      <IconButton size="sm" variant="plain" color="neutral">
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5Z"
-                            />
-                          </svg>
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton size="sm" variant="plain" color="neutral">
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M12 6.865A5.135 5.135 0 1 0 17.135 12A5.135 5.135 0 0 0 12 6.865Zm0 8.469A3.334 3.334 0 1 1 15.334 12A3.333 3.333 0 0 1 12 15.334Z"
-                            />
-                            <path
-                              fill="currentColor"
-                              d="M21.94 7.877a7.333 7.333 0 0 0-.465-2.427a4.918 4.918 0 0 0-1.153-1.772a4.894 4.894 0 0 0-1.77-1.153a7.323 7.323 0 0 0-2.428-.464C15.058 2.012 14.717 2 12.001 2s-3.057.011-4.123.06a7.333 7.333 0 0 0-2.428.465a4.905 4.905 0 0 0-1.77 1.153A4.886 4.886 0 0 0 2.525 5.45a7.333 7.333 0 0 0-.464 2.427c-.05 1.066-.06 1.407-.06 4.123s.01 3.057.06 4.123a7.334 7.334 0 0 0 .464 2.427a4.888 4.888 0 0 0 1.154 1.772a4.917 4.917 0 0 0 1.771 1.153a7.338 7.338 0 0 0 2.428.464C8.944 21.988 9.285 22 12 22s3.057-.011 4.123-.06a7.333 7.333 0 0 0 2.427-.465a5.113 5.113 0 0 0 2.925-2.925a7.316 7.316 0 0 0 .465-2.427c.048-1.067.06-1.407.06-4.123s-.012-3.057-.06-4.123Zm-1.8 8.164a5.549 5.549 0 0 1-.343 1.857a3.311 3.311 0 0 1-1.898 1.898a5.522 5.522 0 0 1-1.857.344c-1.055.048-1.371.058-4.042.058s-2.986-.01-4.04-.058a5.526 5.526 0 0 1-1.857-.344a3.108 3.108 0 0 1-1.15-.748a3.085 3.085 0 0 1-.748-1.15a5.521 5.521 0 0 1-.344-1.857c-.048-1.054-.058-1.37-.058-4.04s.01-2.987.058-4.042a5.563 5.563 0 0 1 .344-1.857a3.107 3.107 0 0 1 .748-1.15a3.082 3.082 0 0 1 1.15-.748A5.523 5.523 0 0 1 7.96 3.86C9.014 3.81 9.331 3.8 12 3.8s2.987.011 4.042.059a5.564 5.564 0 0 1 1.857.344a3.31 3.31 0 0 1 1.898 1.898a5.523 5.523 0 0 1 .344 1.857c.048 1.055.058 1.37.058 4.041s-.01 2.986-.058 4.041ZM17.339 5.462Z"
-                            />
-                          </svg>
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton size="sm" variant="plain" color="neutral">
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M22.212 5.656a8.384 8.384 0 0 1-2.401.658A4.195 4.195 0 0 0 21.649 4c-.82.488-1.719.83-2.655 1.015a4.182 4.182 0 0 0-7.126 3.814a11.874 11.874 0 0 1-8.621-4.37a4.168 4.168 0 0 0-.566 2.103c0 1.45.739 2.731 1.86 3.481a4.169 4.169 0 0 1-1.894-.523v.051a4.185 4.185 0 0 0 3.355 4.102a4.205 4.205 0 0 1-1.89.072A4.185 4.185 0 0 0 8.02 16.65a8.394 8.394 0 0 1-6.192 1.732a11.831 11.831 0 0 0 6.41 1.88c7.694 0 11.9-6.373 11.9-11.9c0-.18-.004-.362-.012-.541a8.497 8.497 0 0 0 2.086-2.164Z"
-                            />
-                          </svg>
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton size="sm" variant="plain" color="neutral">
-                        <SvgIcon>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M19.989 11.572a7.96 7.96 0 0 0-1.573-4.351a9.757 9.757 0 0 1-.92.87a13.156 13.156 0 0 1-3.313 2.01c.167.35.32.689.455 1.009v.003c.027.061.05.118.094.229l.017.04c1.513-.17 3.109-.107 4.656.103c.206.027.4.056.584.087Zm-9.385-7.45a46.15 46.15 0 0 1 2.692 4.27c1.223-.482 2.234-1.09 3.048-1.767c.33-.274.594-.532.796-.755A7.968 7.968 0 0 0 12 4c-.476 0-.942.042-1.396.121ZM4.253 9.997a29.21 29.21 0 0 0 2.04-.123a31.53 31.53 0 0 0 4.862-.822a54.36 54.36 0 0 0-2.7-4.227a8.018 8.018 0 0 0-4.202 5.172Zm1.53 7.038a14.21 14.21 0 0 1 1.575-1.899c1.454-1.49 3.17-2.65 5.156-3.29l.062-.018c-.165-.364-.32-.689-.476-.995c-1.836.535-3.77.869-5.697 1.042c-.94.085-1.783.122-2.403.128a7.966 7.966 0 0 0 1.784 5.032Zm9.221 2.38a35.951 35.951 0 0 0-1.632-5.709c-2 .727-3.596 1.79-4.829 3.058a9.77 9.77 0 0 0-1.317 1.655A7.964 7.964 0 0 0 12 20a7.977 7.977 0 0 0 3.005-.583Zm1.874-1.075a7.998 7.998 0 0 0 2.987-4.87c-.34-.085-.771-.17-1.245-.236a12.025 12.025 0 0 0-3.18-.033a39.39 39.39 0 0 1 1.438 5.14ZM12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10Z"
-                            />
-                          </svg>
-                        </SvgIcon>
-                      </IconButton>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Col>
-            </Row>
-          </Item>
+                      <Avatar
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ "--Avatar-size": "4rem" }}
+                      />
+                      <Chip
+                        size="sm"
+                        variant="soft"
+                        color="primary"
+                        sx={{
+                          mt: -1,
+                          mb: 1,
+                          border: "3px solid",
+                          borderColor: "background.surface",
+                        }}
+                      >
+                        Co-Superviser
+                      </Chip>
+                      <Typography level="title-lg">
+                        {users.CoSupervisorDetails.FullName}
+                      </Typography>
+                      <Typography level="title-lg">
+                        {users.CoSupervisorDetails.Email}
+                      </Typography>
+
+                      <Typography level="body-sm" sx={{ maxWidth: "24ch" }}>
+                        Hello,Project management expert, thrives in teamwork.
+                        Facilitates productivity with problem-solving skills.
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 2,
+                          mt: 2,
+                          "& > button": { borderRadius: "2rem" },
+                        }}
+                      >
+                        <IconButton size="sm" variant="plain" color="neutral">
+                          <SvgIcon>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5Z"
+                              />
+                            </svg>
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton size="sm" variant="plain" color="neutral">
+                          <SvgIcon>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M12 6.865A5.135 5.135 0 1 0 17.135 12A5.135 5.135 0 0 0 12 6.865Zm0 8.469A3.334 3.334 0 1 1 15.334 12A3.333 3.333 0 0 1 12 15.334Z"
+                              />
+                              <path
+                                fill="currentColor"
+                                d="M21.94 7.877a7.333 7.333 0 0 0-.465-2.427a4.918 4.918 0 0 0-1.153-1.772a4.894 4.894 0 0 0-1.77-1.153a7.323 7.323 0 0 0-2.428-.464C15.058 2.012 14.717 2 12.001 2s-3.057.011-4.123.06a7.333 7.333 0 0 0-2.428.465a4.905 4.905 0 0 0-1.77 1.153A4.886 4.886 0 0 0 2.525 5.45a7.333 7.333 0 0 0-.464 2.427c-.05 1.066-.06 1.407-.06 4.123s.01 3.057.06 4.123a7.334 7.334 0 0 0 .464 2.427a4.888 4.888 0 0 0 1.154 1.772a4.917 4.917 0 0 0 1.771 1.153a7.338 7.338 0 0 0 2.428.464C8.944 21.988 9.285 22 12 22s3.057-.011 4.123-.06a7.333 7.333 0 0 0 2.427-.465a5.113 5.113 0 0 0 2.925-2.925a7.316 7.316 0 0 0 .465-2.427c.048-1.067.06-1.407.06-4.123s-.012-3.057-.06-4.123Zm-1.8 8.164a5.549 5.549 0 0 1-.343 1.857a3.311 3.311 0 0 1-1.898 1.898a5.522 5.522 0 0 1-1.857.344c-1.055.048-1.371.058-4.042.058s-2.986-.01-4.04-.058a5.526 5.526 0 0 1-1.857-.344a3.108 3.108 0 0 1-1.15-.748a3.085 3.085 0 0 1-.748-1.15a5.521 5.521 0 0 1-.344-1.857c-.048-1.054-.058-1.37-.058-4.04s.01-2.987.058-4.042a5.563 5.563 0 0 1 .344-1.857a3.107 3.107 0 0 1 .748-1.15a3.082 3.082 0 0 1 1.15-.748A5.523 5.523 0 0 1 7.96 3.86C9.014 3.81 9.331 3.8 12 3.8s2.987.011 4.042.059a5.564 5.564 0 0 1 1.857.344a3.31 3.31 0 0 1 1.898 1.898a5.523 5.523 0 0 1 .344 1.857c.048 1.055.058 1.37.058 4.041s-.01 2.986-.058 4.041ZM17.339 5.462Z"
+                              />
+                            </svg>
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton size="sm" variant="plain" color="neutral">
+                          <SvgIcon>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M22.212 5.656a8.384 8.384 0 0 1-2.401.658A4.195 4.195 0 0 0 21.649 4c-.82.488-1.719.83-2.655 1.015a4.182 4.182 0 0 0-7.126 3.814a11.874 11.874 0 0 1-8.621-4.37a4.168 4.168 0 0 0-.566 2.103c0 1.45.739 2.731 1.86 3.481a4.169 4.169 0 0 1-1.894-.523v.051a4.185 4.185 0 0 0 3.355 4.102a4.205 4.205 0 0 1-1.89.072A4.185 4.185 0 0 0 8.02 16.65a8.394 8.394 0 0 1-6.192 1.732a11.831 11.831 0 0 0 6.41 1.88c7.694 0 11.9-6.373 11.9-11.9c0-.18-.004-.362-.012-.541a8.497 8.497 0 0 0 2.086-2.164Z"
+                              />
+                            </svg>
+                          </SvgIcon>
+                        </IconButton>
+                        <IconButton size="sm" variant="plain" color="neutral">
+                          <SvgIcon>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M19.989 11.572a7.96 7.96 0 0 0-1.573-4.351a9.757 9.757 0 0 1-.92.87a13.156 13.156 0 0 1-3.313 2.01c.167.35.32.689.455 1.009v.003c.027.061.05.118.094.229l.017.04c1.513-.17 3.109-.107 4.656.103c.206.027.4.056.584.087Zm-9.385-7.45a46.15 46.15 0 0 1 2.692 4.27c1.223-.482 2.234-1.09 3.048-1.767c.33-.274.594-.532.796-.755A7.968 7.968 0 0 0 12 4c-.476 0-.942.042-1.396.121ZM4.253 9.997a29.21 29.21 0 0 0 2.04-.123a31.53 31.53 0 0 0 4.862-.822a54.36 54.36 0 0 0-2.7-4.227a8.018 8.018 0 0 0-4.202 5.172Zm1.53 7.038a14.21 14.21 0 0 1 1.575-1.899c1.454-1.49 3.17-2.65 5.156-3.29l.062-.018c-.165-.364-.32-.689-.476-.995c-1.836.535-3.77.869-5.697 1.042c-.94.085-1.783.122-2.403.128a7.966 7.966 0 0 0 1.784 5.032Zm9.221 2.38a35.951 35.951 0 0 0-1.632-5.709c-2 .727-3.596 1.79-4.829 3.058a9.77 9.77 0 0 0-1.317 1.655A7.964 7.964 0 0 0 12 20a7.977 7.977 0 0 0 3.005-.583Zm1.874-1.075a7.998 7.998 0 0 0 2.987-4.87c-.34-.085-.771-.17-1.245-.236a12.025 12.025 0 0 0-3.18-.033a39.39 39.39 0 0 1 1.438 5.14ZM12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10Z"
+                              />
+                            </svg>
+                          </SvgIcon>
+                        </IconButton>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Col>
+              </Row>
+            </Item>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
+
       <br />
 
       <h4
@@ -507,26 +610,31 @@ export default function AssignExaminer() {
           <thead>
             <tr>
               <th style={{ width: "25%" }}>Full Name</th>
-              <th>Email</th>
-              <th>Specialization</th>
-              <th>Phone&nbsp;(+94)</th>
+              <th style={{ width: "25%" }}>Registration Number</th>
+              <th style={{ width: "25%" }}>Email</th>
+              <th style={{ width: "25%" }}>Specialization</th>
+              <th style={{ width: "25%" }}>Phone&nbsp;(+94)</th>
               <th style={{ width: "30%" }}>Function Description</th>
             </tr>
           </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.name}>
-                <td>{row.name}</td>
-                <td>{row.calories}</td>
-                <td>{row.fat}</td>
-                <td>{row.carbs}</td>
-                <td>{row.protein}</td>
-              </tr>
-            ))}
+          <tbody style={{ textAlign: "left" }}>
+            {users.members &&
+              users.members.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.nameAsRegistered}</td>
+                  <td>{row.ITNumber}</td>
+                  <td>{row.email}</td>
+                  <td>{row.specialization}</td>
+                  <td>{row.phone}</td>
+                  <td>{row.functionDescription}</td>
+                </tr>
+              ))}
           </tbody>
         </Table>
       </Item>
+
       <br />
+
       <h4
         style={{
           padding: "10px",
@@ -542,35 +650,49 @@ export default function AssignExaminer() {
 
       <Row>
         <Col>
-          <Item>
-            {" "}
-            <List className={classes.root}>
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar
-                    alt="Remy Sharp"
-                    src="https://img.freepik.com/free-photo/portrait-handsome-man-with-dark-hairstyle-bristle-toothy-smile-dressed-white-sweatshirt-feels-very-glad-poses-indoor-pleased-european-guy-being-good-mood-smiles-positively-emotions-concept_273609-61405.jpg"
-                  />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Mr Perera"
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                      >
-                        Assitent Lectrurer
-                      </Typography>
-                      {" — I'll be in your neighborhood doing errands this…"}
-                    </React.Fragment>
-                  }
-                />
+          <Item id="Assign">
+            {users.ExaminerDetails && users.ExaminerDetails.length > 0 ? (
+              users.ExaminerDetails.map((examiner, index) => (
+                <React.Fragment key={index}>
+                  <ListItem alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar
+                        alt="Examiner Avatar"
+                        src="https://img.freepik.com/free-photo/portrait-handsome-man-with-dark-hairstyle-bristle-toothy-smile-dressed-white-sweatshirt-feels-very-glad-poses-indoor-pleased-european-guy-being-good-mood-smiles-positively-emotions-concept_273609-61405.jpg"
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={examiner.FullName}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            className={classes.inline}
+                            color="textPrimary"
+                          >
+                            {examiner.Email}
+                          </Typography>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            className={classes.inline}
+                            color="textPrimary"
+                          >
+                            Examiner
+                          </Typography>
+                        </React.Fragment>
+                      }
+                    />
+                  </ListItem>
+                  <Divider variant="inset" component="li" />
+                </React.Fragment>
+              ))
+            ) : (
+              <ListItem style={{ marginLeft: "175px" }}>
+                <CustomNoRowsOverlay />
               </ListItem>
-              <Divider variant="inset" component="li" />
-            </List>
+            )}
           </Item>
         </Col>
 
@@ -585,6 +707,7 @@ export default function AssignExaminer() {
                     if (typeof newValue === "string") {
                       setValue({
                         title: newValue,
+                        year: newValue,
                       });
                     } else if (newValue && newValue.inputValue) {
                       // Create a new value from the user input
@@ -616,7 +739,7 @@ export default function AssignExaminer() {
                   clearOnBlur
                   handleHomeEndKeys
                   id="free-solo-with-text-demo"
-                  options={top100Films}
+                  options={AllExaminers}
                   getOptionLabel={(option) => {
                     // Value selected with enter, right from the input
                     if (typeof option === "string") {
@@ -641,10 +764,15 @@ export default function AssignExaminer() {
               </Col>
               <Col>
                 {" "}
+                {}
                 <Button1
                   variant="contained"
                   endIcon={<SendIcon />}
                   size="large"
+                  onClick={handleAssign}
+                  disabled={
+                    users.ExaminerDetails && users.ExaminerDetails.length >= 3
+                  }
                 >
                   Assign
                 </Button1>
@@ -656,8 +784,3 @@ export default function AssignExaminer() {
     </Box>
   );
 }
-
-const top100Films = [
-  { title: "The Shawshank Redemption", year: 1994 },
-  { title: "The Godfather", year: 1972 },
-];

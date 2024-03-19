@@ -17,7 +17,7 @@ import ExaminerviewDashboard from "./pages/ExaminerDashboardPages/ExaminerviewDa
 import AsignExaminerforGroup from "./pages/AsignExaminerforGroup";
 import AsignExaminerIndividual from "./pages/AsignExaminerIndividual";
 
-import HomePage from '../src/pages/HomePage/Home';
+import HomePage from "../src/pages/HomePage/Home";
 
 function App() {
   return (
@@ -30,7 +30,6 @@ function App() {
         <ToastContainer position="top-right" autoClose={3000} />
 
         <Routes>
-
           {/* Home Page route */}
           <Route path="/" element={<HomePage />} />
 
@@ -50,10 +49,7 @@ function App() {
             path="/examiner-Asign-table"
             element={<AsignExaminerforGroup />}
           />
-            <Route
-            path="/examiner-Asign"
-            element={<AsignExaminerIndividual />}
-          />
+          <Route path="/examiner-Asign" element={<AsignExaminerIndividual />} />
           <Route
             path="/examiner-registration-admin"
             element={<AdminExaminerRegistration />}
