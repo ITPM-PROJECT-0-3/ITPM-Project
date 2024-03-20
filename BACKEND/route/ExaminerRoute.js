@@ -11,5 +11,7 @@ router.route("/delete-examiner/:id").delete(ExaminerUser.deleteExaminer);
 router
   .route("/fetch-require-examiner-group")
   .get(ExaminerUser.fetchStudentGroupLessExaminers);
+
+  router.route("/CheckAssignStatus/:id").post(ExaminerUser.CheckAssignExaminerInGroup);
 router.route("/Asigne-Examiner/:id").put(ExaminerUser.AsignExaminerforGroup);
 module.exports = router;

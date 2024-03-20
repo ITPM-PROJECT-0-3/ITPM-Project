@@ -159,6 +159,35 @@ const AsignExaminerforGroup = async (req, res, next) => {
   }
 };
 
+const CheckAssignExaminerInGroup = async (req, res, next) => {
+  try {
+    const groupId = req.params.id;
+    const examinerEmail = req.body; // Assuming examinerId is provided in the request body
+    console.log(examinerEmail);
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      return res.status(404).json({ message: "Group not found" });
+    }
+
+    const examinerAssigned = group.ExaminerDetails.find(
+      (examiner) => examiner.Email === examinerEmail
+    );
+
+    if (!examinerAssigned) {
+      return res.status(200).json({ message: "Can Assign" });
+    } else {
+      return res
+        .status(400)
+        .json({ message: "Examiner is already assigned to this group" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
 const deleteExaminer = async (req, res, next) => {
   try {
     const ExaminerID = req.params.id;
@@ -268,4 +297,5 @@ module.exports = {
   deleteExaminer,
   fetchStudentGroupLessExaminers,
   AsignExaminerforGroup,
+  CheckAssignExaminerInGroup,
 };

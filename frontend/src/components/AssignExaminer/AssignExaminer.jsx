@@ -197,28 +197,72 @@ export default function AssignExaminer() {
   const handleAssign = () => {
     const examinerDetails = [
       {
-        ExaminerID: value.mongoId, // Assuming value.ExaminerID contains the examiner's ID
-        FullName: value.title, // Assuming value.FullName contains the examiner's full name
-        Email: value.email, // Assuming value.Email contains the examiner's email
+        ExaminerID: value.mongoId,
+        FullName: value.title,
+        Email: value.email,
         HeldingDate: value.facalty,
         Time: "10:00 AM",
       },
     ];
 
-    const Id = users._id; // Assuming users._id contains the group's ID
+    const groupDetails = [
+      {
+        GrpmongoId: users._id,
+        groupId: groupId,
+        topic: users.topic,
+        supervisor: users.supervisor,
+        coSupervisor: users.coSupervisor,
+      },
+    ];
+
+    const Id = users._id;
     console.log(Id);
 
+    const examinerID = value.mongoId;
+    console.log(examinerID);
+
+    const examinerEmail = value.email
+
+    // Check if examiner is already assigned
     axios
-      .put(
-        `http://localhost:8000/api/examiner/Asigne-Examiner/${Id}`, // Adjusted the URL path
-        { ExaminerDetails: examinerDetails } // Sending ExaminerDetails as part of the request body
-      )
-      .then((res) => {
-        console.log(res.data);
-        window.location.reload();
+      .post(`http://localhost:8000/api/examiner/CheckAssignStatus/${Id}`, {
+        examinerEmail,
+      })
+      .then((response) => {
+        console.log(response.status);
+        if (response.status=== 400) {
+          alert("Examiner is already assigned.");
+        } else {
+          console.log(response);
+          axios
+            .put(`http://localhost:8000/api/examiner/Asigne-Examiner/${Id}`, {
+              ExaminerDetails: examinerDetails,
+            })
+            .then((res) => {
+              console.log(res);
+              axios
+                .put(
+                  `http://localhost:8000/api/examiner/Asigne-group/${examinerID}`,
+                  { StudentGropDetails: groupDetails }
+                )
+                .then((res) => {
+                  console.log(res.data);
+                  // window.location.reload();
+                })
+                .catch((err) => {
+                  alert(
+                    "Error updating student group details in examiner model: " +
+                      err.message
+                  );
+                });
+            })
+            .catch((err) => {
+              alert("Error assigning examiner: " + err.message);
+            });
+        }
       })
       .catch((err) => {
-        alert("Error updating data: " + err.message);
+        alert("Error checking examiner assignment status: " + err.message);
       });
   };
 
@@ -609,24 +653,24 @@ export default function AssignExaminer() {
         <Table hoverRow>
           <thead>
             <tr>
-              <th style={{ width: "25%" }}>Full Name</th>
+              <th style={{ width: "20%" }}>Full Name</th>
               <th style={{ width: "25%" }}>Registration Number</th>
-              <th style={{ width: "25%" }}>Email</th>
+              <th style={{ width: "25%" }}>Email&nbsp;(.com)</th>
               <th style={{ width: "25%" }}>Specialization</th>
               <th style={{ width: "25%" }}>Phone&nbsp;(+94)</th>
-              <th style={{ width: "30%" }}>Function Description</th>
+              <th style={{ width: "15%" }}>Function Description</th>
             </tr>
           </thead>
           <tbody style={{ textAlign: "left" }}>
             {users.members &&
               users.members.map((row, index) => (
                 <tr key={index}>
-                  <td>{row.nameAsRegistered}</td>
-                  <td>{row.ITNumber}</td>
-                  <td>{row.email}</td>
-                  <td>{row.specialization}</td>
-                  <td>{row.phone}</td>
-                  <td>{row.functionDescription}</td>
+                  <td style={{ width: "25%" }}>{row.nameAsRegistered}</td>
+                  <td style={{ width: "25%" }}>{row.ITNumber}</td>
+                  <td style={{ width: "25%" }}>{row.email.slice(0, 20)}</td>
+                  <td style={{ width: "25%" }}>{row.specialization}</td>
+                  <td style={{ width: "25%" }}>{row.phone}</td>
+                  <td style={{ width: "25%" }}>{row.functionDescription}</td>
                 </tr>
               ))}
           </tbody>
