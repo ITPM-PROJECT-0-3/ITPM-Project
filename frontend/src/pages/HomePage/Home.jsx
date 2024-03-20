@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import NavigationBar from '../../components/NavigationBar/NavigationBar';
 import Footer from '../../components/Footer/Footer';
 import Slider from 'react-slick'; // Import the Slider component
@@ -14,6 +14,14 @@ import backgroundImage from '../../../assets/NAV/sliit_bg.jpg';
 
 function HomePage() {
   // Settings for the slider
+
+  useEffect(() => {
+    document.title = "Corse Module - HOME | SLIIT";
+    return () => {
+      document.title = "SLIIT";
+    };
+  }, []);
+
   const sliderSettings = {
     infinite: true,
     speed: 1000,
