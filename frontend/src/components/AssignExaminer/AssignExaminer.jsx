@@ -221,19 +221,17 @@ export default function AssignExaminer() {
     const examinerID = value.mongoId;
     console.log(examinerID);
 
-    const examinerEmail = value.email
+    const examinerEmail = value.email;
 
     // Check if examiner is already assigned
     axios
       .post(`http://localhost:8000/api/examiner/CheckAssignStatus/${Id}`, {
-        examinerEmail,
+        examinerEmail: examinerEmail,
       })
       .then((response) => {
-        console.log(response.status);
-        if (response.status=== 400) {
+        if (response.status === 400) {
           alert("Examiner is already assigned.");
-        } else {
-          console.log(response);
+        } else if (response.status === 200) {
           axios
             .put(`http://localhost:8000/api/examiner/Asigne-Examiner/${Id}`, {
               ExaminerDetails: examinerDetails,
@@ -247,7 +245,7 @@ export default function AssignExaminer() {
                 )
                 .then((res) => {
                   console.log(res.data);
-                  // window.location.reload();
+                  window.location.reload();
                 })
                 .catch((err) => {
                   alert(
@@ -262,7 +260,11 @@ export default function AssignExaminer() {
         }
       })
       .catch((err) => {
-        alert("Error checking examiner assignment status: " + err.message);
+        console.log(err);
+        toast.error("Examiner is Already Assign!", {
+          duration: 3000, // 3 seconds
+          position: "top-right", // You can change the position if needed
+        });
       });
   };
 

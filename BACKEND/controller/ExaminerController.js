@@ -162,7 +162,7 @@ const AsignExaminerforGroup = async (req, res, next) => {
 const CheckAssignExaminerInGroup = async (req, res, next) => {
   try {
     const groupId = req.params.id;
-    const examinerEmail = req.body; // Assuming examinerId is provided in the request body
+    const examinerEmail = req.body.examinerEmail; // Assuming examinerId is provided in the request body
     console.log(examinerEmail);
     const group = await Group.findById(groupId);
 
@@ -170,17 +170,15 @@ const CheckAssignExaminerInGroup = async (req, res, next) => {
       return res.status(404).json({ message: "Group not found" });
     }
 
-    const examinerAssigned = group.ExaminerDetails.find(
-      (examiner) => examiner.Email === examinerEmail
-    );
+    for (let i = 0; i < group.ExaminerDetails.length; i++) {
+      const checkEmail = group.ExaminerDetails[i].Email;
 
-    if (!examinerAssigned) {
-      return res.status(200).json({ message: "Can Assign" });
-    } else {
-      return res
-        .status(400)
-        .json({ message: "Examiner is already assigned to this group" });
+      if (checkEmail === examinerEmail) {
+        return res.status(400).json({ message: "Matched" });
+      }
     }
+
+    return res.status(200).json({ message: "Not matched" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
