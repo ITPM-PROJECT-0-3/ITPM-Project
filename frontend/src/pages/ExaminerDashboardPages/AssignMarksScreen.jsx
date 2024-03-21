@@ -1,15 +1,22 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import styles from "../../styles/ExaminerMainLayout.module.css";
+import React, { useState, useEffect } from "react";
+import styles from "../../styles/AssignMarksScreen.module.css";
 import AdminSidebar from "../../components/Sidebar/Sidebar";
 import AdminHeader from "../../components/SlideHeader/SlideHeader";
+import AssignMarks from "../../components/AssignMarks-Examiner/AssignMarks";
 
-export default function ExaminerMainLayout() {
+export default function AssignMarksScreen() {
   const [sidebarActive, setSidebarActive] = useState(true);
 
   const toggleSidebar = () => {
     setSidebarActive(!sidebarActive);
   };
+
+  useEffect(() => {
+    document.title = "Examiner Assign Marks | SLIIT";
+    return () => {
+      document.title = "SLIIT";
+    };
+  }, []);
 
   const CustomTabs = [
     {
@@ -32,6 +39,8 @@ export default function ExaminerMainLayout() {
   const customNavLinks = [
     { href: "/examiner-nav", label: "Home" },
     { href: "/examiner-nav", label: "Dashboard" },
+    { href: "/examiner-Group-List", label: "Group-List" },
+    { href: "/examiner-Asign-marks", label: "Assign-Marks" },
   ];
 
   return (
@@ -53,7 +62,7 @@ export default function ExaminerMainLayout() {
       >
         <AdminHeader customNavLinks={customNavLinks} />
         <br />
-        <Outlet />
+        <AssignMarks />
       </div>
     </div>
   );

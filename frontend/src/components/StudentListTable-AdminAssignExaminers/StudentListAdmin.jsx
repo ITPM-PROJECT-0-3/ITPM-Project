@@ -36,6 +36,11 @@ export default function StudentListAdmin() {
     getSystemUsers();
   }, []);
 
+  function MovetoAssign(id) {
+    const groupId = id;
+    localStorage.setItem("userid", groupId);
+    window.location.replace("/examiner-Asign");
+  }
   return (
     <div id="AllSupplier">
       <main className="table">
@@ -96,19 +101,19 @@ export default function StudentListAdmin() {
                             key={index}
                             style={{
                               fontSize: "18px",
-                              border: "0.5px solid", // Adding solid border
+                              border: "0px solid", // Adding solid border
                               padding: "5px",
                               borderEndStartRadius: "6px",
                               borderEndEndRadius: "5px",
                               margin: "5px",
                               backgroundColor:
                                 index % 4 === 0
-                                  ? "#2196f3"
+                                  ? "#26c6da"
                                   : index % 4 === 1
-                                  ? "#cddc39"
+                                  ? "#ffeb3b"
                                   : index % 4 === 2
-                                  ? "#43a047"
-                                  : "#ff9800", // Assigning different colors based on index
+                                  ? "#8c9eff"
+                                  : "#64b5f6", // Assigning different colors based on index
                             }}
                           >
                             {member.ITNumber}
@@ -142,6 +147,7 @@ export default function StudentListAdmin() {
                       <td style={{ marginLeft: "auto" }}>
                         <Link to="">
                           <button
+                            onClick={() => MovetoAssign(dataobj.groupId)}
                             className="bx bx-chevrons-right bx btn btn-outline-primary bx-fade-left-hover"
                             style={{
                               textAlign: "center",

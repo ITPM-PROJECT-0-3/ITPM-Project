@@ -15,7 +15,7 @@ export default function AdminExaminerRegistration() {
     {
       to: "/admin-nav",
       iconClass: "bx bx-grid-alt",
-      label: "Dasshboard",
+      label: "Dashboard",
     },
     {
       to: "/admin-nav",
@@ -26,6 +26,11 @@ export default function AdminExaminerRegistration() {
       to: "/examiner-admin-table",
       iconClass: "bx bx-registered",
       label: "Examiners",
+    },
+    {
+      to: "/examiner-Asign-table",
+      iconClass: "bx bx-calendar",
+      label: "Schedule-Group",
     },
   ];
 

@@ -14,8 +14,11 @@ import GroupProfile from "./components/form/GroupProfile";
 import UpdatePswrdForm from "./components/form/UpdatePswrdForm";
 import ExaminerMainLayout from "./pages/ExaminerDashboardPages/ExaminerMainLayout";
 import ExaminerviewDashboard from "./pages/ExaminerDashboardPages/ExaminerviewDashboard";
-import StudentListAdmin from "./components/StudentListTable-AdminAssignExaminers/StudentListAdmin";
 import AsignExaminerforGroup from "./pages/AsignExaminerforGroup";
+import AsignExaminerIndividual from "./pages/AsignExaminerIndividual";
+import HomePage from "../src/pages/HomePage/Home";
+import ExaminerGroupList from "./pages/ExaminerDashboardPages/ExaminerGroupList";
+import AssignMarksScreen from "./pages/ExaminerDashboardPages/AssignMarksScreen";
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
         <ToastContainer position="top-right" autoClose={3000} />
 
         <Routes>
+          {/* Home Page route */}
+          <Route path="/" element={<HomePage />} />
+
           <Route path="/admin-nav" element={<CordinaterAdminMainLayout />}>
             <Route index={true} path="" element={<AdminHomePage />} />
           </Route>
@@ -44,6 +50,7 @@ function App() {
             path="/examiner-Asign-table"
             element={<AsignExaminerforGroup />}
           />
+          <Route path="/examiner-Asign" element={<AsignExaminerIndividual />} />
           <Route
             path="/examiner-registration-admin"
             element={<AdminExaminerRegistration />}
@@ -53,6 +60,8 @@ function App() {
           <Route path="/examiner-nav" element={<ExaminerMainLayout />}>
             <Route index={true} path="" element={<ExaminerviewDashboard />} />
           </Route>
+          <Route path="/examiner-Group-List" element={<ExaminerGroupList />} />
+          <Route path="/examiner-Asign-marks" element={<AssignMarksScreen />} />
         </Routes>
       </Router>
     </div>
