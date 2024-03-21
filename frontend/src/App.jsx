@@ -19,6 +19,17 @@ import AsignExaminerforGroup from "./pages/AsignExaminerforGroup";
 
 import HomePage from '../src/pages/HomePage/Home';
 
+import AsignExaminerIndividual from "./pages/AsignExaminerIndividual";
+import HomePage from "../src/pages/HomePage/Home";
+import ExaminerGroupList from "./pages/ExaminerDashboardPages/ExaminerGroupList";
+import AssignMarksScreen from "./pages/ExaminerDashboardPages/AssignMarksScreen";
+import Upload from "./components/form/Upload";
+import AssignmentStatus from "./components/form/AssignmentStatus";
+import UploadDoc2 from "./components/form/UploadDoc2";
+import AssignmentStatusForDoc2 from "./components/form/AssignmentStatusForDoc2";
+import StudentAndGroupManagementAdmin from "./components/StudentAndGroupManagement/StudentAndGroupManagementAdmin";
+
+
 function App() {
   return (
     <div className={styles.App}>
@@ -30,7 +41,6 @@ function App() {
         <ToastContainer position="top-right" autoClose={3000} />
 
         <Routes>
-
           {/* Home Page route */}
           <Route path="/" element={<HomePage />} />
 
@@ -50,6 +60,10 @@ function App() {
             path="/examiner-Asign-table"
             element={<AsignExaminerforGroup />}
           />
+
+
+          <Route path="/examiner-Asign" element={<AsignExaminerIndividual />} />
+
           <Route
             path="/examiner-registration-admin"
             element={<AdminExaminerRegistration />}
@@ -59,6 +73,26 @@ function App() {
           <Route path="/examiner-nav" element={<ExaminerMainLayout />}>
             <Route index={true} path="" element={<ExaminerviewDashboard />} />
           </Route>
+          <Route path="/examiner-Group-List" element={<ExaminerGroupList />} />
+          <Route path="/examiner-Asign-marks" element={<AssignMarksScreen />} />
+
+          {/* Sachini */}
+
+          <Route path="/Upload/:groupId" element={<Upload />} />
+          <Route
+            path="/AssignmentStatus/:groupId"
+            element={<AssignmentStatus />}
+          />
+          <Route path="/UploadDoc2/:groupId" element={<UploadDoc2 />} />
+          <Route
+            path="/AssignmentStatusForDoc2/:groupId"
+            element={<AssignmentStatusForDoc2 />}
+          />
+
+          <Route
+            path="/student-group-management"
+            element={<StudentAndGroupManagementAdmin />}
+          />
         </Routes>
       </Router>
     </div>
