@@ -14,7 +14,11 @@ import GroupProfile from "./components/form/GroupProfile";
 import UpdatePswrdForm from "./components/form/UpdatePswrdForm";
 import ExaminerMainLayout from "./pages/ExaminerDashboardPages/ExaminerMainLayout";
 import ExaminerviewDashboard from "./pages/ExaminerDashboardPages/ExaminerviewDashboard";
+import StudentListAdmin from "./components/StudentListTable-AdminAssignExaminers/StudentListAdmin";
 import AsignExaminerforGroup from "./pages/AsignExaminerforGroup";
+
+import HomePage from '../src/pages/HomePage/Home';
+
 import AsignExaminerIndividual from "./pages/AsignExaminerIndividual";
 import HomePage from "../src/pages/HomePage/Home";
 import ExaminerGroupList from "./pages/ExaminerDashboardPages/ExaminerGroupList";
@@ -24,6 +28,7 @@ import AssignmentStatus from "./components/form/AssignmentStatus";
 import UploadDoc2 from "./components/form/UploadDoc2";
 import AssignmentStatusForDoc2 from "./components/form/AssignmentStatusForDoc2";
 import StudentAndGroupManagementAdmin from "./components/StudentAndGroupManagement/StudentAndGroupManagementAdmin";
+
 
 function App() {
   return (
@@ -55,7 +60,10 @@ function App() {
             path="/examiner-Asign-table"
             element={<AsignExaminerforGroup />}
           />
+
+
           <Route path="/examiner-Asign" element={<AsignExaminerIndividual />} />
+
           <Route
             path="/examiner-registration-admin"
             element={<AdminExaminerRegistration />}
