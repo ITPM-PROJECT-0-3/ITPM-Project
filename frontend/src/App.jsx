@@ -19,6 +19,11 @@ import AsignExaminerIndividual from "./pages/AsignExaminerIndividual";
 import HomePage from "../src/pages/HomePage/Home";
 import ExaminerGroupList from "./pages/ExaminerDashboardPages/ExaminerGroupList";
 import AssignMarksScreen from "./pages/ExaminerDashboardPages/AssignMarksScreen";
+import Upload from "./components/form/Upload";
+import AssignmentStatus from "./components/form/AssignmentStatus";
+import UploadDoc2 from "./components/form/UploadDoc2";
+import AssignmentStatusForDoc2 from "./components/form/AssignmentStatusForDoc2";
+import StudentAndGroupManagementAdmin from "./components/StudentAndGroupManagement/StudentAndGroupManagementAdmin";
 
 function App() {
   return (
@@ -62,6 +67,24 @@ function App() {
           </Route>
           <Route path="/examiner-Group-List" element={<ExaminerGroupList />} />
           <Route path="/examiner-Asign-marks" element={<AssignMarksScreen />} />
+
+          {/* Sachini */}
+
+          <Route path="/Upload/:groupId" element={<Upload />} />
+          <Route
+            path="/AssignmentStatus/:groupId"
+            element={<AssignmentStatus />}
+          />
+          <Route path="/UploadDoc2/:groupId" element={<UploadDoc2 />} />
+          <Route
+            path="/AssignmentStatusForDoc2/:groupId"
+            element={<AssignmentStatusForDoc2 />}
+          />
+
+          <Route
+            path="/student-group-management"
+            element={<StudentAndGroupManagementAdmin />}
+          />
         </Routes>
       </Router>
     </div>
