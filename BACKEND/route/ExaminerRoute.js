@@ -12,6 +12,12 @@ router
   .route("/fetch-require-examiner-group")
   .get(ExaminerUser.fetchStudentGroupLessExaminers);
 
-  router.route("/CheckAssignStatus/:id").post(ExaminerUser.CheckAssignExaminerInGroup);
+router
+  .route("/CheckAssignStatus/:id")
+  .post(ExaminerUser.CheckAssignExaminerInGroup);
 router.route("/Asigne-Examiner/:id").put(ExaminerUser.AsignExaminerforGroup);
+router
+  .route("/fetch-group/:id")
+  .get(ExaminerUser.fetchGrouplistUnderExaminerEmail);
+
 module.exports = router;

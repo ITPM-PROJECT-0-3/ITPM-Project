@@ -25,15 +25,14 @@ const LoginForm = () => {
       const userData = JSON.stringify(response.data.group);
       localStorage.setItem("UserInfo", userData);
 
-      console.log(response.data.group.UserType)
+      console.log(response.data.group.UserType);
 
       if (response.data.group.UserType === "Examiner") {
+        localStorage.setItem("UserEmail", response.data.group.username);
         navigate("/examiner-nav");
-       
-      }else{
+      } else {
         navigate(`/getOneGroup/${username}`);
       }
-     
     } catch (err) {
       setError("Invalid username or password.");
       console.error(err);

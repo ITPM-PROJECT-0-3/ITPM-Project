@@ -16,8 +16,9 @@ import ExaminerMainLayout from "./pages/ExaminerDashboardPages/ExaminerMainLayou
 import ExaminerviewDashboard from "./pages/ExaminerDashboardPages/ExaminerviewDashboard";
 import AsignExaminerforGroup from "./pages/AsignExaminerforGroup";
 import AsignExaminerIndividual from "./pages/AsignExaminerIndividual";
-
 import HomePage from "../src/pages/HomePage/Home";
+import ExaminerGroupList from "./pages/ExaminerDashboardPages/ExaminerGroupList";
+import AssignMarksScreen from "./pages/ExaminerDashboardPages/AssignMarksScreen";
 
 function App() {
   return (
@@ -59,6 +60,8 @@ function App() {
           <Route path="/examiner-nav" element={<ExaminerMainLayout />}>
             <Route index={true} path="" element={<ExaminerviewDashboard />} />
           </Route>
+          <Route path="/examiner-Group-List" element={<ExaminerGroupList />} />
+          <Route path="/examiner-Asign-marks" element={<AssignMarksScreen />} />
         </Routes>
       </Router>
     </div>
