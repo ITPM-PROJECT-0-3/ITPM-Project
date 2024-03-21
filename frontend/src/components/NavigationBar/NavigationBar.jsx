@@ -36,7 +36,7 @@ export default function NavigationBar() {
   const loginText = { 
     color: 'black', // Text color
     textTransform: 'none',
-    fontWeight: 'normal',
+    
     padding: '0px 0px 5px 0px',
     fontWeight: 'Bold'
     
