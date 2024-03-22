@@ -164,7 +164,7 @@ export default function ExaminerStudentList() {
                         {dataobj.topic}{" "}
                       </td>
 
-                      <td style={{ marginLeft: "auto" }}>
+                      <td style={{ marginLeft: "auto", padding: "20px" }}>
                         <Link to="">
                           <button
                             onClick={() => MovetoAssign(dataobj.groupId)}
@@ -176,7 +176,7 @@ export default function ExaminerStudentList() {
                               fontSize: "18px",
                             }}
                           >
-                          AssignMarks
+                            AssignMarks
                           </button>
                         </Link>
                       </td>
