@@ -1,77 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Typography, Button, Grid, Card, CardContent, CardActions, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import GroupIcon from '@mui/icons-material/Group';
 import Sidebar from '../../components/ProjectCoordinator/SideBar/SideBar';
 import AppBarComponent from '../../components/ProjectCoordinator/NavBar/NavBar';
 
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import ProjectSummaryWidget from '../../components/ProjectCoordinator/Widgets/ProjectSummaryWidget'; // Placeholder for your project summary widget
-import TeamOverviewWidget from '../../components/ProjectCoordinator/Widgets/TeamOverviewWidget'; // Placeholder for your team overview widget
-import UpcomingDeadlinesWidget from '../../components/ProjectCoordinator/Widgets/UpcomingDeadlinesWidget'; // Placeholder for upcoming deadlines widget
+// Placeholder data for teams
+const initialTeams = [
+  { id: 1, name: 'Development Team', memberCount: 5 },
+  { id: 2, name: 'Design Team', memberCount: 3 },
+  // Add more teams as needed
+];
 
+const TeamsPage = () => {
+  const [teams, setTeams] = useState(initialTeams);
+  const navigate = useNavigate();
 
-const ProjectCoordinatorDashboard = () => {
-    const navigate = useNavigate();
+  const handleAddTeam = () => navigate('/teams/new');
+  const handleEditTeam = (id) => navigate(`/teams/edit/${id}`);
+  const handleDeleteTeam = (id) => setTeams(teams.filter(team => team.id !== id));
+  const handleViewTeam = (id) => navigate(`/teams/${id}`);
 
-    const handleNavigation = (path) => {
-        navigate(path);
-    };
-
-    // Mock data, replace with actual data fetching logic
-    const projects = [
-        { name: 'Project A', status: 'Active' },
-        // ... other projects
-    ];
-
-    const teams = [
-        { name: 'Team Alpha', project: 'Project A' },
-        // ... other teams
-    ];
-
-    const deadlines = [
-        { project: 'Project A', deadline: '2023-05-30' },
-        // ... other deadlines
-    ];
-
-    return (
-        <Box sx={{ display: 'flex', backgroundColor: '#FAF9F6', paddingTop: '100px' }}>
-            <AppBarComponent />
-            <Sidebar handleNavigation={handleNavigation} />
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Typography variant="h4" gutterBottom>
-                            Project Coordinator Dashboard
-                        </Typography>
-                    </Grid>
-                    
-                    {/* Project Summary */}
-                    <Grid item xs={12} md={6}>
-                        <ProjectSummaryWidget projects={projects} />
-                    </Grid>
-
-                    {/* Team Overview */}
-                    <Grid item xs={12} md={6}>
-                        <TeamOverviewWidget teams={teams} />
-                    </Grid>
-
-                    {/* Upcoming Deadlines */}
-                    <Grid item xs={12}>
-                        <UpcomingDeadlinesWidget deadlines={deadlines} />
-                    </Grid>
-
-                    {/* Additional widgets or components */}
-                    {/* <Grid item xs={12} md={6}>
-                        <Paper>
-                            <Typography variant="h6" gutterBottom>
-                                Additional Widget
-                            </Typography>
-                            {/* Widget Content }
-                        </Paper>
-                    </Grid> */}
-                </Grid>
-            </Box>
-        </Box>
-    );
+  return (
+    <>
+      <AppBarComponent />
+      <Sidebar handleNavigation={(path) => navigate(path)} />
+      <Container maxWidth="lg" sx={{ mt: 15 }}>
+        <Typography variant="h4" sx={{ mb: 4 }}>Teams</Typography>
+        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleAddTeam} sx={{ mb: 2 }}>
+          Add Team
+        </Button>
+        <Grid container spacing={3}>
+          {teams.map((team) => (
+            <Grid item xs={12} sm={6} md={4} key={team.id}>
+              <Card>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {team.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Members: {team.memberCount}
+                  </Typography>
+                </CardContent>
+                <CardActions disableSpacing>
+                  <IconButton aria-label="edit team" onClick={() => handleEditTeam(team.id)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton aria-label="delete team" onClick={() => handleDeleteTeam(team.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                  <IconButton aria-label="view team" onClick={() => handleViewTeam(team.id)}>
+                    <GroupIcon />
+                  </IconButton>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </>
+  );
 };
 
-export default ProjectCoordinatorDashboard;
+export default TeamsPage;

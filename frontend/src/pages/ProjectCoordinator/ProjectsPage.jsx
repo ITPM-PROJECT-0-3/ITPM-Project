@@ -1,77 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Sidebar from '../../components/ProjectCoordinator/SideBar/SideBar';
 import AppBarComponent from '../../components/ProjectCoordinator/NavBar/NavBar';
 
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import ProjectSummaryWidget from '../../components/ProjectCoordinator/Widgets/ProjectSummaryWidget'; // Placeholder for your project summary widget
-import TeamOverviewWidget from '../../components/ProjectCoordinator/Widgets/TeamOverviewWidget'; // Placeholder for your team overview widget
-import UpcomingDeadlinesWidget from '../../components/ProjectCoordinator/Widgets/UpcomingDeadlinesWidget'; // Placeholder for upcoming deadlines widget
+// Placeholder data for projects
+const initialProjects = [
+  { id: 1, name: 'Project Alpha', description: 'A project about...', status: 'Active' },
+  { id: 2, name: 'Project Beta', description: 'The project focuses on...', status: 'Completed' },
+  // Add more projects as needed
+];
 
+const ProjectPage = () => {
+  const [projects, setProjects] = useState(initialProjects);
+  const navigate = useNavigate();
 
-const ProjectCoordinatorDashboard = () => {
-    const navigate = useNavigate();
+  // Functions to handle project actions
+  const handleAddProject = () => navigate('/projects/new');
+  const handleViewProject = (id) => navigate(`/projects/${id}`);
+  const handleEditProject = (id) => navigate(`/projects/edit/${id}`);
+  const handleDeleteProject = (id) => setProjects(projects.filter(project => project.id !== id));
 
-    const handleNavigation = (path) => {
-        navigate(path);
-    };
-
-    // Mock data, replace with actual data fetching logic
-    const projects = [
-        { name: 'Project A', status: 'Active' },
-        // ... other projects
-    ];
-
-    const teams = [
-        { name: 'Team Alpha', project: 'Project A' },
-        // ... other teams
-    ];
-
-    const deadlines = [
-        { project: 'Project A', deadline: '2023-05-30' },
-        // ... other deadlines
-    ];
-
-    return (
-        <Box sx={{ display: 'flex', backgroundColor: '#FAF9F6', paddingTop: '100px' }}>
-            <AppBarComponent />
-            <Sidebar handleNavigation={handleNavigation} />
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Typography variant="h4" gutterBottom>
-                            Project Coordinator Dashboard
-                        </Typography>
-                    </Grid>
-                    
-                    {/* Project Summary */}
-                    <Grid item xs={12} md={6}>
-                        <ProjectSummaryWidget projects={projects} />
-                    </Grid>
-
-                    {/* Team Overview */}
-                    <Grid item xs={12} md={6}>
-                        <TeamOverviewWidget teams={teams} />
-                    </Grid>
-
-                    {/* Upcoming Deadlines */}
-                    <Grid item xs={12}>
-                        <UpcomingDeadlinesWidget deadlines={deadlines} />
-                    </Grid>
-
-                    {/* Additional widgets or components */}
-                    {/* <Grid item xs={12} md={6}>
-                        <Paper>
-                            <Typography variant="h6" gutterBottom>
-                                Additional Widget
-                            </Typography>
-                            {/* Widget Content }
-                        </Paper>
-                    </Grid> */}
-                </Grid>
-            </Box>
-        </Box>
-    );
+  return (
+    <>
+      <AppBarComponent />
+      <Sidebar handleNavigation={(path) => navigate(path)} />
+      <Container maxWidth="lg" sx={{ mt: 15 }}>
+        <Typography variant="h4" sx={{ mb: 4 }}>Projects</Typography>
+        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleAddProject} sx={{ mb: 2 }}>
+          Add Project
+        </Button>
+        <TableContainer component={Paper}>
+          <Table aria-label="Project table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {projects.map((project) => (
+                <TableRow key={project.id}>
+                  <TableCell>{project.name}</TableCell>
+                  <TableCell>{project.description}</TableCell>
+                  <TableCell>{project.status}</TableCell>
+                  <TableCell align="center">
+                    <IconButton onClick={() => handleViewProject(project.id)}><VisibilityIcon /></IconButton>
+                    <IconButton onClick={() => handleEditProject(project.id)} color="primary"><EditIcon /></IconButton>
+                    <IconButton onClick={() => handleDeleteProject(project.id)} color="secondary"><DeleteIcon /></IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+    </>
+  );
 };
 
-export default ProjectCoordinatorDashboard;
+export default ProjectPage;
