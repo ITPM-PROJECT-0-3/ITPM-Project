@@ -45,20 +45,11 @@ const ProjectCoordinatorDashboard = () => {
                     </Grid>
                     
                     {/* Project Summary */}
-                    <Grid item xs={12} md={4}>
-                        <ProjectSummaryWidget projects={projects} />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                        <ProjectSummaryWidget projects={projects} />
-                    </Grid>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={6}>
                         <ProjectSummaryWidget projects={projects} />
                     </Grid>
 
                     {/* Team Overview */}
-                    <Grid item xs={12} md={6}>
-                        <TeamOverviewWidget teams={teams} />
-                    </Grid>
                     <Grid item xs={12} md={6}>
                         <TeamOverviewWidget teams={teams} />
                     </Grid>
@@ -67,6 +58,16 @@ const ProjectCoordinatorDashboard = () => {
                     <Grid item xs={12}>
                         <UpcomingDeadlinesWidget deadlines={deadlines} />
                     </Grid>
+
+                    {/* Additional widgets or components */}
+                    {/* <Grid item xs={12} md={6}>
+                        <Paper>
+                            <Typography variant="h6" gutterBottom>
+                                Additional Widget
+                            </Typography>
+                            {/* Widget Content }
+                        </Paper>
+                    </Grid> */}
                 </Grid>
             </Box>
         </Box>

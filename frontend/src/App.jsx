@@ -18,6 +18,20 @@ import StudentListAdmin from "./components/StudentListTable-AdminAssignExaminers
 import AsignExaminerforGroup from "./pages/AsignExaminerforGroup";
 
 import HomePage from '../src/pages/HomePage/Home';
+import LoginCoordinator from '../src/components/form/ProjectCoordinatorLogin';
+import CoodinatorDashboard from '../src/pages/ProjectCoordinator/DashboardPage';
+import Assessments from '../src/pages/ProjectCoordinator/AssessmentsPage';
+import MarkSheet from '../src/pages/ProjectCoordinator/MarkSheetPage';
+import Presentations from '../src/pages/ProjectCoordinator/PresentationsPage';
+import Projects from '../src/pages/ProjectCoordinator/ProjectsPage';
+import Reports from '../src/pages/ProjectCoordinator/ReportsPage';
+import ResearchPapers from '../src/pages/ProjectCoordinator/ResearchPaperPage';
+import Rubric from '../src/pages/ProjectCoordinator/RubricPage';
+import Teams from '../src/pages/ProjectCoordinator/TeamsPage';
+
+
+
+
 
 import AsignExaminerIndividual from "./pages/AsignExaminerIndividual";
 import HomePage from "../src/pages/HomePage/Home";
@@ -49,6 +63,22 @@ function App() {
           </Route>
           <Route path="/registration" element={<RegistrationForm />} />
           <Route path="/loginGrp" element={<LoginForm />} />
+
+          <Route path="/loginCoordinator" element={<LoginCoordinator />} />
+          
+
+          {/* Side Bar Project Coordinator */}
+        
+           <Route path="/coodinatorDashboard" element={<CoodinatorDashboard />} />
+           <Route path="/Assessments" element={<Assessments />} />
+           <Route path="/MarkSheet" element={<MarkSheet />} />
+           <Route path="/Presentations" element={<Presentations />} />
+           <Route path="/Projects" element={<Projects />} />
+           <Route path="/Reports" element={<Reports />} />
+           <Route path="/ResearchPapers" element={<ResearchPapers />} />
+           <Route path="/Rubric" element={<Rubric />} />
+           <Route path="/Teams" element={<Teams />} />
+
 
           <Route path="/getOneGroup/:grpId" element={<GroupProfile />} />
           <Route path="/updatePassword/:grpId" element={<UpdatePswrdForm />} />
