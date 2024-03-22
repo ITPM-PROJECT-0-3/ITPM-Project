@@ -22,34 +22,7 @@ export default function NavigationBar() {
 
   // Custom styles
 
-  const loginButtonStyle = { 
-    bgcolor: '#FFAE00', // Background color
-    color: 'Black', // Text color
-    alignItems: 'center',
-    padding: '10px 40px', // Padding inside the button
-    textTransform: 'none', // Prevent uppercase transform
-    borderRadius: '0px', // Border radius for the button
-    fontWeight: 'bold', // Make the text bold
-    '&:hover': {
-      bgcolor: '#F2F2F2', // Background color on hover
-    }
-   };
-  const loginText = { 
-    color: 'black', // Text color
-    textTransform: 'none',
-    
-    padding: '0px 0px 5px 0px',
-    fontWeight: 'Bold'
-    
-   };
-  const forgetPasswordText = { 
-    mt: 1, 
-    cursor: 'pointer', 
-    color: '#FFAE00',
-    '&:hover': {
-        color: 'black', // Background color on hover
-      },
-   };
+  
 
   const loginButtonStyle = {
     bgcolor: "#FFAE00", // Background color
