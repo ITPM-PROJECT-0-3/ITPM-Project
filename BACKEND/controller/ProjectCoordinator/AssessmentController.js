@@ -1,4 +1,4 @@
-const Assessment = require('../models/Assessment');
+const Assessment = require('../../model/ProjectCoordinator/Assessment');
 const fs = require('fs'); // For file operations, like deleting files on update/delete
 
 // Create a new assessment with optional PDF file upload
