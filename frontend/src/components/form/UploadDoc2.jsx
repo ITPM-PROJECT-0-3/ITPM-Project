@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'; 
-import app from '../../firebase';
+//import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'; 
+//import app from '../../firebase';
 import './sachini_styles/Upload.css';
 
 const UploadDoc2 = () => {

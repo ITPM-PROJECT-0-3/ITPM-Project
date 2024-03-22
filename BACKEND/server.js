@@ -14,6 +14,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(helmet());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const URL = process.env.MONGODB_URL;
 

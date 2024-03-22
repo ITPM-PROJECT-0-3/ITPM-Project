@@ -34,7 +34,7 @@ import Teams from '../src/pages/ProjectCoordinator/TeamsPage';
 
 
 import AsignExaminerIndividual from "./pages/AsignExaminerIndividual";
-import HomePage from "../src/pages/HomePage/Home";
+
 import ExaminerGroupList from "./pages/ExaminerDashboardPages/ExaminerGroupList";
 import AssignMarksScreen from "./pages/ExaminerDashboardPages/AssignMarksScreen";
 import Upload from "./components/form/Upload";

@@ -1,77 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Sidebar from '../../components/ProjectCoordinator/SideBar/SideBar';
 import AppBarComponent from '../../components/ProjectCoordinator/NavBar/NavBar';
 
-import { Box, Grid, Paper, Typography } from '@mui/material';
-import ProjectSummaryWidget from '../../components/ProjectCoordinator/Widgets/ProjectSummaryWidget'; // Placeholder for your project summary widget
-import TeamOverviewWidget from '../../components/ProjectCoordinator/Widgets/TeamOverviewWidget'; // Placeholder for your team overview widget
-import UpcomingDeadlinesWidget from '../../components/ProjectCoordinator/Widgets/UpcomingDeadlinesWidget'; // Placeholder for upcoming deadlines widget
+// Placeholder data for rubrics
+const initialRubrics = [
+  { id: 1, title: 'Rubric A', description: 'Description for Rubric A', criteriaCount: 5 },
+  { id: 2, title: 'Rubric B', description: 'Description for Rubric B', criteriaCount: 4 },
+  // Add more rubrics as needed
+];
 
+const RubricPage = () => {
+  const [rubrics, setRubrics] = useState(initialRubrics);
+  const navigate = useNavigate();
 
-const ProjectCoordinatorDashboard = () => {
-    const navigate = useNavigate();
+  const handleAddRubric = () => navigate('/rubrics/new');
+  const handleViewRubric = (id) => navigate(`/rubrics/${id}`);
+  const handleEditRubric = (id) => navigate(`/rubrics/edit/${id}`);
+  const handleDeleteRubric = (id) => setRubrics(rubrics.filter(rubric => rubric.id !== id));
 
-    const handleNavigation = (path) => {
-        navigate(path);
-    };
-
-    // Mock data, replace with actual data fetching logic
-    const projects = [
-        { name: 'Project A', status: 'Active' },
-        // ... other projects
-    ];
-
-    const teams = [
-        { name: 'Team Alpha', project: 'Project A' },
-        // ... other teams
-    ];
-
-    const deadlines = [
-        { project: 'Project A', deadline: '2023-05-30' },
-        // ... other deadlines
-    ];
-
-    return (
-        <Box sx={{ display: 'flex', backgroundColor: '#FAF9F6', paddingTop: '100px' }}>
-            <AppBarComponent />
-            <Sidebar handleNavigation={handleNavigation} />
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <Typography variant="h4" gutterBottom>
-                            Project Coordinator Dashboard
-                        </Typography>
-                    </Grid>
-                    
-                    {/* Project Summary */}
-                    <Grid item xs={12} md={6}>
-                        <ProjectSummaryWidget projects={projects} />
-                    </Grid>
-
-                    {/* Team Overview */}
-                    <Grid item xs={12} md={6}>
-                        <TeamOverviewWidget teams={teams} />
-                    </Grid>
-
-                    {/* Upcoming Deadlines */}
-                    <Grid item xs={12}>
-                        <UpcomingDeadlinesWidget deadlines={deadlines} />
-                    </Grid>
-
-                    {/* Additional widgets or components */}
-                    {/* <Grid item xs={12} md={6}>
-                        <Paper>
-                            <Typography variant="h6" gutterBottom>
-                                Additional Widget
-                            </Typography>
-                            {/* Widget Content }
-                        </Paper>
-                    </Grid> */}
-                </Grid>
-            </Box>
-        </Box>
-    );
+  return (
+    <>
+      <AppBarComponent />
+      <Sidebar handleNavigation={(path) => navigate(path)} />
+      <Container maxWidth="lg" sx={{ mt: 15 }}>
+        <Typography variant="h4" sx={{ mb: 4 }}>Rubrics</Typography>
+        <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleAddRubric} sx={{ mb: 2 }}>
+          Add Rubric
+        </Button>
+        <TableContainer component={Paper}>
+          <Table aria-label="Rubric table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Title</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell align="right">Criteria Count</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rubrics.map((rubric) => (
+                <TableRow key={rubric.id}>
+                  <TableCell>{rubric.title}</TableCell>
+                  <TableCell>{rubric.description}</TableCell>
+                  <TableCell align="right">{rubric.criteriaCount}</TableCell>
+                  <TableCell align="center">
+                    <IconButton onClick={() => handleViewRubric(rubric.id)}><VisibilityIcon /></IconButton>
+                    <IconButton onClick={() => handleEditRubric(rubric.id)} color="primary"><EditIcon /></IconButton>
+                    <IconButton onClick={() => handleDeleteRubric(rubric.id)} color="secondary"><DeleteIcon /></IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+    </>
+  );
 };
 
-export default ProjectCoordinatorDashboard;
+export default RubricPage;

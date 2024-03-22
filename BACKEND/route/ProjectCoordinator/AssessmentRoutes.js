@@ -1,22 +1,21 @@
 const express = require('express');
-const authenticate = require('../middlewares/authenticate'); // Adjust path as necessary
-const AssessmentController = require('../controllers/AssessmentController'); // Adjust path as necessary
-
 const router = express.Router();
+const assessmentController = require('../controllers/assessmentController');
+const upload = require('../config/multerConfig');
 
-// Create a new assessment (Protected route)
-router.post('/', authenticate, AssessmentController.createAssessment);
+// Create a new assessment with optional PDF file upload
+router.post('/assessments', upload.single('pdfFile'), assessmentController.createAssessment);
 
-// Get all assessments (Protected route)
-router.get('/', authenticate, AssessmentController.getAllAssessments);
+// Get all assessments
+router.get('/assessments', assessmentController.getAllAssessments);
 
-// Get a single assessment by ID (Protected route)
-router.get('/:id', authenticate, AssessmentController.getAssessmentById);
+// Get a single assessment by ID
+router.get('/assessments/:id', assessmentController.getAssessmentById);
 
-// Update an assessment (Protected route)
-router.put('/:id', authenticate, AssessmentController.updateAssessment);
+// Update an assessment, potentially with a new PDF file
+router.put('/assessments/:id', upload.single('pdfFile'), assessmentController.updateAssessment);
 
-// Delete an assessment (Protected route)
-router.delete('/:id', authenticate, AssessmentController.deleteAssessment);
+// Delete an assessment
+router.delete('/assessments/:id', assessmentController.deleteAssessment);
 
 module.exports = router;

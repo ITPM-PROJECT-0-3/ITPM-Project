@@ -1,52 +1,57 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Typography, IconButton } from '@mui/material';
+import { Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Typography, IconButton, Dialog, DialogContent } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Sidebar from '../../components/ProjectCoordinator/SideBar/SideBar';
 import AppBarComponent from '../../components/ProjectCoordinator/NavBar/NavBar';
-
-// Mock API call for fetching assessments
-const fetchAssessments = async () => {
-    // This would be replaced with a real API call
-    return Promise.resolve([
-        { id: 1, title: 'Assessment 1', score: 85, description: 'Description for Assessment 1' },
-        { id: 2, title: 'Assessment 2', score: 75, description: 'Description for Assessment 2' },
-    ]);
-};
-
-// Mock API call for deleting an assessment
-const deleteAssessmentApi = async (assessmentId) => {
-    // This would be replaced with a real API call
-    console.log(`Deleting assessment with ID: ${assessmentId}`);
-    return Promise.resolve();
-};
+import axios from 'axios';
+import AssessmentForm from './Forms/AssessmentForm'; // Assume this component exists
 
 const AssessmentPage = () => {
     const [assessments, setAssessments] = useState([]);
+    const [openForm, setOpenForm] = useState(false); // State to control popup form visibility
     const navigate = useNavigate();
-
 
     const handleNavigation = (path) => {
         navigate(path);
     };
 
     useEffect(() => {
-        fetchAssessments().then(setAssessments);
+        axios.get('/api/assessments')
+    .then(response => {
+        if (Array.isArray(response.data)) {
+            // Directly an array
+            setAssessments(response.data);
+        } else if (Array.isArray(response.data.data)) {
+            // Nested array
+            setAssessments(response.data.data);
+        } else {
+            console.error('Unexpected response format:', response.data);
+            setAssessments([]); // Setting to empty array as a fallback
+        }
+    })
+    .catch(error => {
+        console.error('Failed to fetch assessments:', error);
+        setAssessments([]); // Handling error by setting to empty array
+    });
+
     }, []);
 
     const handleEdit = (assessmentId) => {
-        // Navigate to the edit page with the assessmentId
         navigate(`/assessments/edit/${assessmentId}`);
     };
 
     const handleDelete = (assessmentId) => {
-        deleteAssessmentApi(assessmentId).then(() => {
-            setAssessments(assessments.filter(assessment => assessment.id !== assessmentId));
-        }).catch(error => {
-            console.error('Failed to delete assessment:', error);
-        });
+        // Replace with your actual endpoint URL
+        axios.delete(`/api/assessments/${assessmentId}`)
+            .then(() => setAssessments(assessments.filter(assessment => assessment.id !== assessmentId)))
+            .catch(error => console.error('Failed to delete assessment:', error));
+    };
+
+    const toggleForm = () => {
+        setOpenForm(!openForm);
     };
 
     return (
@@ -62,7 +67,7 @@ const AssessmentPage = () => {
                     color="primary"
                     startIcon={<AddCircleOutlineIcon />}
                     sx={{ marginBottom: 2 }}
-                    onClick={() => navigate('/assessments/new')}
+                    onClick={toggleForm}
                 >
                     Add New Assessment
                 </Button>
@@ -71,21 +76,26 @@ const AssessmentPage = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Title</TableCell>
-                                <TableCell align="right">Score</TableCell>
                                 <TableCell align="right">Description</TableCell>
+                                <TableCell align="right">Deadline</TableCell>
+                                <TableCell align="right">Total Marks</TableCell>
+                                <TableCell align="right">Rubric</TableCell>
+                                <TableCell align="right">PDF</TableCell>
+                                <TableCell align="right">Upload Link</TableCell>
+                                
                                 <TableCell align="right">Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {assessments.map((assessment) => (
-                                <TableRow
-                                    key={assessment.id}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {assessment.title}
-                                    </TableCell>
-                                    <TableCell align="right">{assessment.score}</TableCell>
+                                <TableRow key={assessment.id}>
+                                    <TableCell>{assessment.title}</TableCell>
                                     <TableCell align="right">{assessment.description}</TableCell>
+                                    <TableCell align="right">{assessment.dueDate}</TableCell>
+                                    <TableCell align="right">{assessment.totalMarks}</TableCell>
+                                    <TableCell align="right">{assessment.rubric}</TableCell>
+                                    <TableCell align="right">{assessment.pdfUrl}</TableCell>
+                                    <TableCell align="right">{assessment.assignmentUploadLink}</TableCell>
                                     <TableCell align="right">
                                         <IconButton onClick={() => handleEdit(assessment.id)}><EditIcon /></IconButton>
                                         <IconButton onClick={() => handleDelete(assessment.id)}><DeleteIcon /></IconButton>
@@ -96,6 +106,12 @@ const AssessmentPage = () => {
                     </Table>
                 </TableContainer>
             </Container>
+            {/* Popup Form for Adding New Assessment */}
+            <Dialog open={openForm} onClose={toggleForm} fullWidth maxWidth="sm">
+                <DialogContent>
+                    <AssessmentForm closeForm={toggleForm} setAssessments={setAssessments} />
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
