@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -7,7 +8,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import LoginIcon from '@mui/icons-material/Login'; // Import the login icon
 
-export default function NavigationBar() {
+const AppBarComponent = () => {
+    
   const navigate = useNavigate();
 
   // Define the function to handle forgotten username/password clicks
@@ -49,33 +51,15 @@ export default function NavigationBar() {
         color: 'black', // Background color on hover
       },
    };
-  const menuRowStyle = {
-    display: 'flex',
-    background: '#BDC3C2', // Assuming a grey background for the menu row
-    padding: '10px 20px', // Adjust padding as necessary
-    height: "60px"
-  };
-  const menuItemStyle = {
-    marginRight: '15px', // Space between menu items
-    color: 'black', // Color of the menu text
-    textTransform: 'none',
-    fontWeight: 'normal',
-    fontSize: '1rem',
-    padding: '30px 40px 30px 40px',
-    margin: '-10px 0px -10px 0px',
-    '&:hover': {
-        bgcolor: '#FFAE00', // Background color on hover
-      },
-    borderRadius: '0px'  
-  };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="default" elevation={0} sx={{ bgcolor: 'white' }}>
+    <Box sx={{ flexGrow: 1  }}>
+    
+      <AppBar position="fixed" color="default" elevation={0} sx={{ bgcolor: 'white',zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar sx={{ minHeight: '120px', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
           {/* Logo container */}
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
-            <img src="../../../assets/NAV/ProMarks.png" alt="Logo" style={{ height: '120px', marginLeft: '-30px' }} />
+            <img src="../../../assets/NAV/ProMarks.png" alt="Logo" style={{ height: '110px', marginLeft: '-30px' }} />
           </Box>
           {/* Login text, button, and forgot password link */}
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
@@ -90,16 +74,10 @@ export default function NavigationBar() {
             </Typography>
           </Box>
         </Toolbar>
-        {/* Menu items row */}
-        <Box sx={menuRowStyle}>
-          <Button sx={menuItemStyle}>Home</Button>
-          <Button sx={menuItemStyle}>Programmes</Button>
-          <Button sx={menuItemStyle}>Support</Button>
-          <Button sx={menuItemStyle}>Resources</Button>
-          <Button sx={menuItemStyle}>Libraries</Button>
-          <Button sx={menuItemStyle}>Email</Button>
-        </Box>
+
       </AppBar>
     </Box>
   );
 }
+
+export default AppBarComponent;
