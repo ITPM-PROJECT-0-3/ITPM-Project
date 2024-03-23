@@ -245,8 +245,9 @@ const RegistrationForm = () => {
       if (response.ok) {
         const result = await response.json();
         console.log('Group Registered:', result, result.groupId);
+        window.alert(`As First Time Login You Must Use The Group ID And Leader's Student ID`);
         window.alert(`YOUR GROUP NO IS ${result.groupId}`);
-        navigate('/loginGrp');
+        navigate('/');
 
       } else {
           const errorData = await response.json();
