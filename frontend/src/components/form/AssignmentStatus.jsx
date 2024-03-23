@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './sachini_styles/Assignment.css';
+import Footer from '../../components/Footer/Footer'; 
+import NavigationBar from '../../components/NavigationBar/NavigationBar'; 
 
 const AssignmentStatus = () => {
     const { groupId } = useParams(); 
@@ -52,6 +54,8 @@ const AssignmentStatus = () => {
     };
 
     return (
+        <div>
+          <NavigationBar />
         <div id="sachini-assignment-status">
           <form id="sachini-assignment-form">
           <h2>Document 1 Assignment Status</h2>
@@ -94,6 +98,8 @@ const AssignmentStatus = () => {
               </tbody>
             </table>
           </form>
+        </div>
+        <Footer />
         </div>
       );      
 };

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'; // Import Firebase Storage functions
 import app from '../../firebase';
 import './sachini_styles/Upload.css';
+import Footer from '../../components/Footer/Footer'; 
+import NavigationBar from '../../components/NavigationBar/NavigationBar'; 
 
 const Upload = () => {
     const { groupId } = useParams(); // Extract groupId from URL params
@@ -85,6 +87,8 @@ const Upload = () => {
     };
 
     return (
+        <div>
+            <NavigationBar />
         <div id="sachini_assignment_upload">
             <div>
                 <h3>UPLOAD YOUR ASSIGNMENT HERE</h3>
@@ -114,6 +118,8 @@ const Upload = () => {
             <button id="sachini-ass-upload-btn" onClick={handleUpload}>Upload</button>
             {doc && <button id="sachini-canclbtn" onClick={handleCancel}>Cancel</button>}
             <button id="sachini-save-changes-btn" onClick={handleShowChanges}>Show changes</button>
+        </div>
+        <Footer />
         </div>
     );
 };

@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './GroupProfile.css';
 import UpdatePswrdForm from './UpdatePswrdForm';
+import Footer from '../../components/Footer/Footer'; 
+import NavigationBar from '../../components/NavigationBar/NavigationBar'; 
 
 const GroupProfile = () => {
   const { grpId } = useParams();
@@ -102,6 +104,8 @@ const GroupProfile = () => {
   };
 
   return (
+    <div>
+      <NavigationBar />
     <div id="sachini_group_profile">
       <button id="sachini_settings_button" onClick={handleSettingsClick}>
         Settings
@@ -184,10 +188,19 @@ const GroupProfile = () => {
           <div id="sachini_assignments_schedules">
             ASSIGNMENTS AND SCHEDULES
           </div>
+          <br></br>
+          <div id="sachini_assignments_schedules">
+            <a href={`/UploadDoc2/${grpId}`}>Report Upload Document 1</a>
+          </div>
+          <div id="sachini_assignments_schedules">
+            <a href={`/Upload/${grpId}`}>Report Upload Document 2</a>
+          </div>
         </div>
       ) : (
         <p>Loading group data...</p>
       )}
+    </div>
+    <Footer />
     </div>
   );
 };
