@@ -21,6 +21,9 @@ export default function NavigationBar() {
   };
 
   // Custom styles
+
+  
+
   const loginButtonStyle = {
     bgcolor: "#FFAE00", // Background color
     color: "Black", // Text color
@@ -47,6 +50,7 @@ export default function NavigationBar() {
       color: "black", // Background color on hover
     },
   };
+
   const menuRowStyle = {
     display: "flex",
     background: "#BDC3C2", // Assuming a grey background for the menu row

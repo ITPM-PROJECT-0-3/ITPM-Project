@@ -12,7 +12,7 @@ export default function AssignMarksScreen() {
   };
 
   useEffect(() => {
-    document.title = "Examiner Assign Marks | SLIIT";
+    document.title = "Assign Marks | SLIIT";
     return () => {
       document.title = "SLIIT";
     };
