@@ -2,13 +2,16 @@
     display: flex;
     justify-content: center; 
     margin-top: 200px !important; 
+    margin-top: 50px;
   }
   
   #sachini-assignment-form {
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #d6d1d1;
     width: 80%; 
     max-width: 800px; 
+    margin-bottom: 100px;
+    margin-top: 20px !important;
   }
   
   

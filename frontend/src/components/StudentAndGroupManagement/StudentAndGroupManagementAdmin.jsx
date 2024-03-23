@@ -74,18 +74,31 @@ const editGroup = (groupId) => {
     console.log('Edit group:', groupId);
   };
 
+// const deleteGroup = async (groupId) => {
+//     try {
+//         console.log(groupId);
+//       const response = await axios.delete(`http://localhost:8000/student/deleteGrp/${groupId}`);
+//       if (response.status === 200) {
+//         setGroups(groups.filter(group => group.groupId !== groupId));
+//         console.log('Group deleted successfully:', groupId);
+//       }
+//     } catch (error) {
+//       console.error('Error deleting group:', error);
+//     }
+//   };
+
 const deleteGroup = async (groupId) => {
-    try {
-        console.log(groupId);
+  try {
+      console.log('Deleting group:', groupId); // Log the group ID before making the API call
       const response = await axios.delete(`http://localhost:8000/student/deleteGrp/${groupId}`);
       if (response.status === 200) {
-        setGroups(groups.filter(group => group.groupId !== groupId));
-        console.log('Group deleted successfully:', groupId);
+          setGroups(groups.filter(group => group.groupId !== groupId));
+          console.log('Group deleted successfully:', groupId);
       }
-    } catch (error) {
+  } catch (error) {
       console.error('Error deleting group:', error);
-    }
-  };
+  }
+};
 
   return (
     <div>

@@ -6,6 +6,7 @@
     margin-top: 50px;
     border-radius: 8px; 
     background-color: #e4dfdf;
+    margin-bottom: 60px;
   }
   
   #sachini_heading {
@@ -37,6 +38,8 @@
     cursor: pointer;
     width: 60%;
     margin: auto;
+    margin-bottom: 30px;
+    margin-top: 50px;
   }
   
   #sachini_form button:hover {
@@ -63,5 +66,6 @@
   
   #sachini_logoutButton:hover {
     background-color: #45a049;
-
+    margin-bottom: 70px;
+    margin-top: 100px;
   }
