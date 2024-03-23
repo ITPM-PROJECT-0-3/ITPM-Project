@@ -131,6 +131,7 @@ const RegistrationForm = () => {
   });
 
   const [supervisors, setSupervisors] = useState([]); 
+  const [coSupervisorOptions, setCoSupervisorOptions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -153,6 +154,28 @@ const RegistrationForm = () => {
 
     fetchSupervisors(); // Call the function to fetch supervisors when the component mounts
   }, []);
+
+  useEffect(() => {
+    // Fetch co-supervisor names from the backend
+    const fetchCosupervisors = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/cosupervisor/get-all-cosupervisors');
+        if (response.ok) {
+          const data = await response.json();
+          // Extract co-supervisor names from the response and set the state
+          const cosupervisorNames = data.allCoSupervisors.map(cosupervisor => cosupervisor.name);
+          setCoSupervisors(cosupervisorNames);
+        } else {
+          console.error('Failed to fetch co-supervisors');
+        }
+      } catch (error) {
+        console.error('Error fetching co-supervisors:', error);
+      }
+    };
+
+    fetchCosupervisors(); // Call the function to fetch co-supervisors when the component mounts
+  }, []);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -294,20 +317,20 @@ const RegistrationForm = () => {
           onChange={handleChange}
         /> */}
 
-        <select
-            id="reg-selection"
-            name="supervisor"
-            value={formData.supervisor}
-            onChange={handleChange}
-            placeholder='Supervisor'
-          >
-            <option value="" disabled>Select Supervisor</option>
-            {supervisors.map((supervisor, index) => (
-              <option key={index} value={supervisor}>
-                {supervisor}
-              </option>
-            ))}
-          </select>
+      <select
+        id="reg-selection"
+        name="coSupervisor"
+        value={formData.coSupervisor}
+        onChange={handleChange}
+        placeholder='Co-Supervisor'
+      >
+        <option value="" disabled>Select Co-Supervisor</option>
+        {supervisors.map((cosupervisor, index) => (
+          <option key={index} value={cosupervisor}>
+            {cosupervisor}
+          </option>
+        ))}
+      </select>
 
       {formData.members.map((member, memberIndex) => (
         <div key={memberIndex}>
