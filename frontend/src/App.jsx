@@ -29,6 +29,8 @@ import ResearchPapers from '../src/pages/ProjectCoordinator/ResearchPaperPage';
 import Rubric from '../src/pages/ProjectCoordinator/RubricPage';
 import Teams from '../src/pages/ProjectCoordinator/TeamsPage';
 
+import AddAssessment from '../src/pages/ProjectCoordinator/Forms/AssessmentForm';
+
 
 
 
@@ -78,6 +80,8 @@ function App() {
            <Route path="/ResearchPapers" element={<ResearchPapers />} />
            <Route path="/Rubric" element={<Rubric />} />
            <Route path="/Teams" element={<Teams />} />
+
+           <Route path="/AddAssessment" element={<AddAssessment />} />
 
 
           <Route path="/getOneGroup/:grpId" element={<GroupProfile />} />

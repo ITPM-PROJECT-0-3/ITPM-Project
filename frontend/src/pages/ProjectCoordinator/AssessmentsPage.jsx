@@ -1,67 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Typography, IconButton, Dialog, DialogContent } from '@mui/material';
+import {
+  Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead,
+  TableRow, Button, Typography, IconButton, Dialog, DialogContent
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import Sidebar from '../../components/ProjectCoordinator/SideBar/SideBar';
-import AppBarComponent from '../../components/ProjectCoordinator/NavBar/NavBar';
 import axios from 'axios';
-import AssessmentForm from './Forms/AssessmentForm'; // Assume this component exists
+import Swal from 'sweetalert2';
+import AssessmentForm from './Forms/AssessmentForm';
+import AssessmentUpdateForm from './Forms/UpdateAssessment' // Ensure this component is correctly implemented
+import Sidebar from '../../components/ProjectCoordinator/SideBar/SideBar'; // Placeholder, ensure the correct import path
+import AppBarComponent from '../../components/ProjectCoordinator/NavBar/NavBar'; // Placeholder, ensure the correct import path
 
 const AssessmentPage = () => {
     const [assessments, setAssessments] = useState([]);
-    const [openForm, setOpenForm] = useState(false); // State to control popup form visibility
+    const [openForm, setOpenForm] = useState(false);
+    const [openUpdateForm, setOpenUpdateForm] = useState(false);
     const navigate = useNavigate();
+    const [currentAssessment, setCurrentAssessment] = useState(null);
 
-    const handleNavigation = (path) => {
-        navigate(path);
-    };
 
     useEffect(() => {
-        axios.get('/api/assessments')
-    .then(response => {
-        if (Array.isArray(response.data)) {
-            // Directly an array
-            setAssessments(response.data);
-        } else if (Array.isArray(response.data.data)) {
-            // Nested array
-            setAssessments(response.data.data);
-        } else {
-            console.error('Unexpected response format:', response.data);
-            setAssessments([]); // Setting to empty array as a fallback
-        }
-    })
-    .catch(error => {
-        console.error('Failed to fetch assessments:', error);
-        setAssessments([]); // Handling error by setting to empty array
-    });
-
+        fetchAssessments();
     }, []);
 
-    const handleEdit = (assessmentId) => {
-        navigate(`/assessments/edit/${assessmentId}`);
+    const fetchAssessments = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/assessments/get-all');
+            setAssessments(response.data);
+        } catch (error) {
+            console.error('Failed to fetch assessments:', error);
+            setAssessments([]);
+        }
     };
 
-    const handleDelete = (assessmentId) => {
-        // Replace with your actual endpoint URL
-        axios.delete(`/api/assessments/${assessmentId}`)
-            .then(() => setAssessments(assessments.filter(assessment => assessment.id !== assessmentId)))
-            .catch(error => console.error('Failed to delete assessment:', error));
+    const DeleteAssessment = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:8000/api/assessments/delete-assessment/${id}`)
+                    .then(() => {
+                        Swal.fire('Deleted!', 'The assessment has been deleted.', 'success');
+                        fetchAssessments(); // Refetch the list after deletion
+                    })
+                    .catch(error => {
+                        console.error('Failed to delete assessment:', error);
+                        Swal.fire('Error!', 'Failed to delete the assessment.', 'error');
+                    });
+            }
+        });
     };
 
-    const toggleForm = () => {
-        setOpenForm(!openForm);
+    const toggleForm = () => setOpenForm(!openForm);
+
+    const toggleUpdateForm = (assessment) => {
+        setCurrentAssessment(assessment);
+        setOpenUpdateForm(!openUpdateForm);
     };
+    
 
     return (
         <>
+            {/* AppBarComponent and Sidebar components would go here */}
             <AppBarComponent />
-            <Sidebar handleNavigation={handleNavigation} />
+            <Sidebar handleNavigation={navigate} />
             <Container sx={{ paddingTop: '100px' }}>
-                <Typography variant="h4" sx={{ margin: '20px 0' }}>
-                    Assessments
-                </Typography>
+                <Typography variant="h4" sx={{ margin: '20px 0' }}>Assessments</Typography>
                 <Button
                     variant="contained"
                     color="primary"
@@ -72,33 +85,33 @@ const AssessmentPage = () => {
                     Add New Assessment
                 </Button>
                 <TableContainer component={Paper}>
-                    <Table aria-label="simple table">
+                    <Table aria-label="Assessment Table">
                         <TableHead>
                             <TableRow>
                                 <TableCell>Title</TableCell>
-                                <TableCell align="right">Description</TableCell>
-                                <TableCell align="right">Deadline</TableCell>
-                                <TableCell align="right">Total Marks</TableCell>
-                                <TableCell align="right">Rubric</TableCell>
-                                <TableCell align="right">PDF</TableCell>
-                                <TableCell align="right">Upload Link</TableCell>
-                                
-                                <TableCell align="right">Actions</TableCell>
+                                <TableCell>Description</TableCell>
+                                <TableCell>Deadline</TableCell>
+                                <TableCell>Total Marks</TableCell>
+                                <TableCell>Upload Link</TableCell>
+                                <TableCell>Actions</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {assessments.map((assessment) => (
-                                <TableRow key={assessment.id}>
+                                <TableRow key={assessment._id}>
                                     <TableCell>{assessment.title}</TableCell>
-                                    <TableCell align="right">{assessment.description}</TableCell>
-                                    <TableCell align="right">{assessment.dueDate}</TableCell>
-                                    <TableCell align="right">{assessment.totalMarks}</TableCell>
-                                    <TableCell align="right">{assessment.rubric}</TableCell>
-                                    <TableCell align="right">{assessment.pdfUrl}</TableCell>
-                                    <TableCell align="right">{assessment.assignmentUploadLink}</TableCell>
-                                    <TableCell align="right">
-                                        <IconButton onClick={() => handleEdit(assessment.id)}><EditIcon /></IconButton>
-                                        <IconButton onClick={() => handleDelete(assessment.id)}><DeleteIcon /></IconButton>
+                                    <TableCell>{assessment.description}</TableCell>
+                                    <TableCell>{new Date(assessment.dueDate).toLocaleDateString()}</TableCell>
+                                    <TableCell>{assessment.totalMarks}</TableCell>
+                                    <TableCell>
+                                        <a href={assessment.assignmentUploadLink} target="_blank" rel="noopener noreferrer">Upload Link</a>
+                                    </TableCell>
+                                    <TableCell>
+                                    
+                                    
+                                        <IconButton onClick={() => toggleUpdateForm(assessment)}><EditIcon /></IconButton>
+
+                                        <IconButton onClick={() => DeleteAssessment(assessment._id)}><DeleteIcon /></IconButton>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -106,12 +119,17 @@ const AssessmentPage = () => {
                     </Table>
                 </TableContainer>
             </Container>
-            {/* Popup Form for Adding New Assessment */}
             <Dialog open={openForm} onClose={toggleForm} fullWidth maxWidth="sm">
                 <DialogContent>
                     <AssessmentForm closeForm={toggleForm} setAssessments={setAssessments} />
                 </DialogContent>
             </Dialog>
+            <Dialog open={openUpdateForm} onClose={toggleUpdateForm} fullWidth maxWidth="sm">
+                <DialogContent>
+                    {currentAssessment && <AssessmentUpdateForm assessmentToUpdate={currentAssessment} closeForm={toggleUpdateForm} refreshAssessments={fetchAssessments} />}
+                </DialogContent>
+            </Dialog>
+
         </>
     );
 };
