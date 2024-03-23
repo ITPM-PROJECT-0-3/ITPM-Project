@@ -5,11 +5,6 @@ const assessmentSchema = new mongoose.Schema({
     description: { type: String, trim: true },
     dueDate: { type: Date, required: true },
     totalMarks: { type: Number, required: true },
-    rubric: [{
-        criterion: String,
-        maxScore: Number
-    }],
-    pdfUrl: { type: String, trim: true }, // URL or path to the PDF file
     assignmentUploadLink: { type: String, trim: true }, // External link for assignment uploads
 }, {
     timestamps: true
