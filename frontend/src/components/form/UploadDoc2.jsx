@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-//import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'; 
-//import app from '../../firebase';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'; 
+import app from '../../firebase';
 import './sachini_styles/Upload.css';
+import Footer from '../../components/Footer/Footer'; 
+import NavigationBar from '../../components/NavigationBar/NavigationBar'; 
 
 const UploadDoc2 = () => {
     const { groupId } = useParams(); 
@@ -93,6 +95,8 @@ const UploadDoc2 = () => {
     };
 
     return (
+        <div>
+            <NavigationBar />
         <div id="sachini_assignment_upload">
             <div>
                 <h3>UPLOAD YOUR ASSIGNMENT HERE</h3>
@@ -123,6 +127,8 @@ const UploadDoc2 = () => {
             <button id="sachini-ass-upload-btn" onClick={handleUpload}>Upload</button>
             {doc && uploadProgress === 0 && <button id="sachini-canclbtn" onClick={handleCancel}>Cancel</button>}
             <button id="sachini-save-changes-btn" onClick={handleShowChanges}>Show changes</button>
+        </div>
+        <Footer />
         </div>
     );
 };
