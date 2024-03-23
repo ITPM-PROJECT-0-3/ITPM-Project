@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import './LoginForm.css';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../../components/Footer/Footer'; 
+import NavigationBar from '../../components/NavigationBar/NavigationBar'; 
 
 const UpdatePswrdForm = () => {
   const { grpId } = useParams();
@@ -56,6 +58,8 @@ const UpdatePswrdForm = () => {
   };
 
   return (
+    <div>
+      <NavigationBar /> 
     <div id="sachini_containerForm">
     <div id="sachini_form">
       <h2>Update Password</h2>
@@ -93,7 +97,11 @@ const UpdatePswrdForm = () => {
         </center>
       </form>
     </div>
+    <div>
     <button id="sachini_logoutButton" onClick={handleLogout}>Logout</button>
+    </div>
+    </div>
+    <Footer /> 
     </div>
   );
 };

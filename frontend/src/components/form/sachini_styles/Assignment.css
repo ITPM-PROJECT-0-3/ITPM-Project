@@ -1,0 +1,39 @@
+#sachini-assignment-status {
+    display: flex;
+    justify-content: center; 
+    margin-top: 200px !important; 
+    margin-top: 50px;
+  }
+  
+  #sachini-assignment-form {
+    padding: 20px;
+    background-color: #d6d1d1;
+    width: 80%; 
+    max-width: 800px; 
+    margin-bottom: 100px;
+    margin-top: 20px !important;
+  }
+  
+  
+  #sachini-assignment-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #sachini-assignment-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  #sachini-assignment-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  #sachini-assignment-table tr:hover {
+    background-color: #ddd;
+  }
+  
+.remain-days {
+    background-color: #ffb4ae;
+}

@@ -28,16 +28,19 @@ const ExaminerSchema = new mongoose.Schema(
     },
     StudentGropDetails: [
       {
-        GrpmongoId : {
-          type : String,
-        } ,
+        GrpmongoId: {
+          type: String,
+        },
         groupId: {
           type: String,
         },
-        HeldingDate: {
+        topic: {
           type: String,
         },
-        Time: {
+        supervisor: {
+          type: String,
+        },
+        coSupervisor: {
           type: String,
         },
       },

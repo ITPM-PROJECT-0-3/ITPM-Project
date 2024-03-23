@@ -82,14 +82,37 @@ async function generateGroupId() {
   return newGroupId;
 }
 
-const displayAllGroups = (req, res) => {
-  Group.find()
-    .then((students) => {
-      res.json(students);
-    })
-    .catch((err) => {
-      console.log(err);
+const displayAllGroups = async (req, res) => {
+  try {
+    // Fetch all group details from the database
+    const groups = await Group.find({ UserType: 'Student' });
+
+    if (!groups || groups.length === 0) {
+      return res.status(404).json({ status: "Error", message: "No groups found" });
+    }
+
+    const groupDetails = groups.map(group => {
+      const { groupId, topic, supervisor, coSupervisor, members } = group;
+      const memberDetails = members.map(member => ({
+        studentID: member.ITNumber,
+        name: member.nameAsRegistered, 
+        specialization: member.specialization, 
+    }));
+    
+      return {
+        groupId,
+        topic,
+        supervisor,
+        coSupervisor,
+        members: memberDetails
+      };
     });
+
+    res.status(200).json({ status: "Success", groups: groupDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: "Error", message: "Internal Server Error" });
+  }
 };
 
 const updateGroup = async (req, res) => {
@@ -374,6 +397,80 @@ const saveDownloadURLForDoc1 = async (req, res) => {
   }
 };
 
+const saveDownloadURLForDoc2 = async (req, res) => {
+  try {
+      const { groupId } = req.params;
+      const { downloadURL } = req.body;
+
+      // Find the corresponding group record by groupId and update the document1 field
+      const updatedGroup = await Group.findOneAndUpdate(
+          { groupId },
+          { $set: { downloadURLForDoc2: downloadURL } },
+          { new: true }
+      );
+
+      if (updatedGroup) {
+        // Construct the response object including the downloadURL
+        const responseGroup = {
+          ...updatedGroup.toObject(),
+          downloadURL: downloadURL,
+        };
+  
+        return res
+          .status(200)
+          .json({ status: "Download URL saved successfully", group: responseGroup });
+      } else {
+          return res.status(404).json({ status: "Error", message: "Group not found" });
+      }
+  } catch (error) {
+      console.error('Error saving download URL:', error);
+      return res.status(500).json({ status: "Error", message: "Internal Server Error" });
+  }
+};
+
+const getAssignmentStatus = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const group = await Group.findOne({ groupId });
+
+    if (!group) {
+      return res.status(404).json({ status: "Error", message: "Group not found" });
+    }
+
+    const fileLink = group.downloadURLForDoc1;
+    const updatedAt = group.updatedAt;
+
+    const updatedDate = updatedAt.toDateString();
+    const updatedTime = updatedAt.toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' });
+
+    res.status(200).json({ status: "Success", groupId, fileLink, updatedDate, updatedTime });
+  } catch (error) {
+    console.error('Error fetching assignment status:', error);
+    res.status(500).json({ status: "Error", message: "Internal Server Error" });
+  }
+};
+
+const getAssignmentStatus2 = async (req, res) => {
+  try {
+    const { groupId } = req.params;
+    const group = await Group.findOne({ groupId });
+
+    if (!group) {
+      return res.status(404).json({ status: "Error", message: "Group not found" });
+    }
+
+    const fileLink = group.downloadURLForDoc2;
+    const updatedAt = group.updatedAt;
+
+    const updatedDate = updatedAt.toDateString();
+    const updatedTime = updatedAt.toLocaleTimeString([], { hour12: true, hour: '2-digit', minute: '2-digit' });
+
+    res.status(200).json({ status: "Success", groupId, fileLink, updatedDate, updatedTime });
+  } catch (error) {
+    console.error('Error fetching assignment status:', error);
+    res.status(500).json({ status: "Error", message: "Internal Server Error" });
+  }
+};
 
 
 module.exports = {
@@ -387,4 +484,7 @@ module.exports = {
   updateFunction,
   RegisterExaminerAsStudentUser,
   saveDownloadURLForDoc1,
+  saveDownloadURLForDoc2,
+  getAssignmentStatus,
+  getAssignmentStatus2,
 };

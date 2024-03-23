@@ -23,9 +23,9 @@ export default function ExaminerMainLayout() {
       label: "Prasentatition-Shedule",
     },
     {
-      to: "/examiner-nav",
-      iconClass: "bx bx-registered",
-      label: "Examiners",
+      to: "/examiner-Group-List",
+      iconClass: "bx bx-group",
+      label: "Groups",
     },
   ];
 
