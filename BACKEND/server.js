@@ -50,9 +50,11 @@ app.listen(PORT, () => {
   console.log(`Server is up and running on port number: ${PORT}`);
 });
 
+const assessmentRoutes = require('./route/ProjectCoordinator/AssessmentRoutes');
+app.use('/api/assessments', assessmentRoutes);
 
 // Import route modules
-const assessmentRoutes = require('./route/ProjectCoordinator/AssessmentRoutes.js');
+//const assessmentRoutes = require('./route/ProjectCoordinator/AssessmentRoutes.js');
 /* const markSheetRoutes = require('./route/ProjectCoordinator/MarkSheetRoutes.js');
 const presentationRoutes = require('./route/ProjectCoordinator/PresentationRoutes.js');
 const projectRoutes = require('./route/ProjectCoordinator/ProjectRoutes.js');
@@ -64,7 +66,7 @@ const teamRoutes = require('./route/ProjectCoordinator/TeamRoutes.js');
 const userRoutes = require('./route/ProjectCoordinator/UserRoutes.js'); */
 
 // Use routes
-app.use('/api/assessments', assessmentRoutes);
+//app.use('api/assessments', assessmentRoutes);
 /* app.use('/api/mark-sheet', markSheetRoutes);
 app.use('/api/presentations', presentationRoutes);
 app.use('/api/projects', projectRoutes);

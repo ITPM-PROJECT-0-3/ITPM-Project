@@ -54,7 +54,7 @@ const UpdatePswrdForm = () => {
     // Clear authentication token from local storage
     localStorage.removeItem('authToken');
     // Navigate to login page
-    navigate('/loginGrp');
+    navigate('/');
   };
 
   return (
