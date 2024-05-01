@@ -20,4 +20,16 @@ router
   .route("/fetch-group/:id")
   .get(ExaminerUser.fetchGrouplistUnderExaminerEmail);
 
+router
+  .route("/Asigne-progrees1-marks/:id")
+  .put(ExaminerUser.AsignProgrees1MarksMarks);
+
+router
+  .route("/Asigne-progrees2-marks/:id")
+  .put(ExaminerUser.AsignProgress2MarksMarks);
+
+router
+  .route("/Asigne-Final-marks/:id")
+  .put(ExaminerUser.AsignFinalPresantationMarks);
+
 module.exports = router;

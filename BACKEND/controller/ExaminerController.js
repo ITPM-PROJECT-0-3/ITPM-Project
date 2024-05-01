@@ -248,6 +248,132 @@ const AsignproposalMarks = async (req, res, next) => {
   }
 };
 
+const AsignProgrees1MarksMarks = async (req, res, next) => {
+  try {
+    const GroupId = req.params.id;
+    const ExaminerEmail = req.body.Email;
+    const { progreel1Marks } = req.body;
+
+    const group = await Group.findById(GroupId);
+
+    if (!group) {
+      return res.status(404).json({
+        status: "Group not found",
+        message: "No group found with the specified ID.",
+      });
+    }
+
+    const examiner = group.ExaminerDetails.find(
+      (examiner) => examiner.Email === ExaminerEmail
+    );
+
+    if (!examiner) {
+      return res.status(404).json({
+        status: "Examiner not found",
+        message: "No examiner found with the specified email in the group.",
+      });
+    }
+
+    examiner.Marks.push({ progreel1Marks });
+    const updatedGroup = await group.save();
+
+    res.status(200).json({
+      status: "Success",
+      message: "Examiners added successfully.",
+      updatedGroup,
+    });
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
+const AsignProgress2MarksMarks = async (req, res, next) => {
+  try {
+    const GroupId = req.params.id;
+    const ExaminerEmail = req.body.Email;
+    const { progress2Marks } = req.body;
+
+    const group = await Group.findById(GroupId);
+
+    if (!group) {
+      return res.status(404).json({
+        status: "Group not found",
+        message: "No group found with the specified ID.",
+      });
+    }
+
+    const examiner = group.ExaminerDetails.find(
+      (examiner) => examiner.Email === ExaminerEmail
+    );
+
+    if (!examiner) {
+      return res.status(404).json({
+        status: "Examiner not found",
+        message: "No examiner found with the specified email in the group.",
+      });
+    }
+
+    examiner.Marks.push({ progress2Marks });
+    const updatedGroup = await group.save();
+
+    res.status(200).json({
+      status: "Success",
+      message: "Examiners added successfully.",
+      updatedGroup,
+    });
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
+const AsignFinalPresantationMarks = async (req, res, next) => {
+  try {
+    const GroupId = req.params.id;
+    const ExaminerEmail = req.body.Email;
+    const { FinalPresantationMarks } = req.body;
+
+    const group = await Group.findById(GroupId);
+
+    if (!group) {
+      return res.status(404).json({
+        status: "Group not found",
+        message: "No group found with the specified ID.",
+      });
+    }
+
+    const examiner = group.ExaminerDetails.find(
+      (examiner) => examiner.Email === ExaminerEmail
+    );
+
+    if (!examiner) {
+      return res.status(404).json({
+        status: "Examiner not found",
+        message: "No examiner found with the specified email in the group.",
+      });
+    }
+
+    examiner.Marks.push({ FinalPresantationMarks });
+    const updatedGroup = await group.save();
+
+    res.status(200).json({
+      status: "Success",
+      message: "Examiners added successfully.",
+      updatedGroup,
+    });
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
 const fetchStudentGroupLessExaminers = async (req, res, next) => {
   try {
     // Fetch all groups where UserType is "Student"
@@ -325,4 +451,7 @@ module.exports = {
   AsignExaminerforGroup,
   CheckAssignExaminerInGroup,
   fetchGrouplistUnderExaminerEmail,
+  AsignProgrees1MarksMarks,
+  AsignProgress2MarksMarks,
+  AsignFinalPresantationMarks,
 };
