@@ -133,6 +133,8 @@ const RegistrationForm = () => {
   const [supervisors, setSupervisors] = useState([]); 
   const [coSupervisorOptions, setCoSupervisorOptions] = useState([]);
   const navigate = useNavigate();
+  const [supervisorCounts, setSupervisorCounts] = useState({});
+  const [coSupervisorCounts, setCoSupervisorCounts] = useState({});
 
   useEffect(() => {
     // Fetch supervisor names from the backend

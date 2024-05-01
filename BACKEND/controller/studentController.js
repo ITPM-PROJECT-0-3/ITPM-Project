@@ -12,6 +12,21 @@ const registerGroup = async (req, res) => {
   try {
     const { topic, supervisor, coSupervisor, members } = req.body;
 
+    // Check if any member's ITNumber is already in the database
+    const existingMembers = await Group.find({
+      "members.ITNumber": { $in: members.map(member => member.ITNumber) }
+    });
+
+    if (existingMembers.length > 0) {
+      const duplicateITNumbers = existingMembers.flatMap(group => group.members.map(member => member.ITNumber));
+      const duplicateITNumber = duplicateITNumbers[0]; // Take the first duplicate IT number
+      return res.status(400).json({
+        status: "Error",
+        field: "ITNumber", // specify the field causing the error
+        message: `The IT number ${duplicateITNumber} is already registered.`,
+      });
+    }
+
     if (!members || members.length !== 4) {
       return res.status(400).json({
         status: "Error",

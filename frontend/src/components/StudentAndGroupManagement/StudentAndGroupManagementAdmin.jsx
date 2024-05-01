@@ -5,13 +5,22 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
-
 const StudentAndGroupManagementAdmin = () => {
   const [groups, setGroups] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredGroups, setFilteredGroups] = useState([]);
 
   useEffect(() => {
     fetchGroups();
   }, []);
+
+  useEffect(() => {
+    // Filter groups based on the search query
+    const filtered = groups.filter(group =>
+      group.topic.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredGroups(filtered);
+  }, [searchQuery, groups]);
 
   const fetchGroups = async () => {
     try {
@@ -100,10 +109,25 @@ const deleteGroup = async (groupId) => {
   }
 };
 
+const handleSearch = (e) => {
+  setSearchQuery(e.target.value);
+  const query = e.target.value.toLowerCase();
+  const filtered = groups.filter(group =>
+    group.groupId.toLowerCase().includes(query)
+  );
+  setFilteredGroups(filtered);
+};
+
   return (
     <div>
         <div id="sachini-admin-topic">
             <h1>Student And Group Management</h1>
+            <input
+              type="text"
+              placeholder="Search by topic"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
         </div>
     <div id="AllSupplier"> {/* Apply CSS class */}
       <table className="table"> {/* Apply CSS class */}
@@ -116,7 +140,7 @@ const deleteGroup = async (groupId) => {
             <th className="action-column">Actions</th> 
           </tr>
         </thead>
-        <tbody>
+        {/* <tbody>
           {groups.map((group, index) => (
             <tr key={index}>
               <td>{group.groupId}</td>
@@ -146,6 +170,39 @@ const deleteGroup = async (groupId) => {
                   <button id="sachini-admin-edit-btn" onClick={() => editGroup(group.groupId)}>Edit</button>
                   <button id="sachini-admin-dlt-btn" onClick={() => deleteGroup(group.groupId)}>Delete</button>
                 </td>
+            </tr>
+          ))}
+        </tbody> */}
+        <tbody>
+          {filteredGroups.map((group, index) => (
+            <tr key={index}>
+              <td>{group.groupId}</td>
+              <td className="topic-column">{group.topic}</td>
+              <td>{group.supervisor} <br></br> {group.coSupervisor}</td>
+              <td>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>IT Number</th>
+                      <th>Name</th>
+                      <th>Specialization</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {group.members.map((member, idx) => (
+                      <tr key={idx}>
+                        <td>{member.studentID}</td>
+                        <td>{member.name}</td>
+                        <td>{abbreviateSpecialization(member.specialization)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </td>
+              <td>
+                <button id="sachini-admin-edit-btn" onClick={() => editGroup(group.groupId)}>Edit</button>
+                <button id="sachini-admin-dlt-btn" onClick={() => deleteGroup(group.groupId)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
