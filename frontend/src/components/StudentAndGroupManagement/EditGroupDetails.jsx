@@ -9,6 +9,8 @@ const StudentAndGroupManagementAdmin = () => {
   const [groups, setGroups] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredGroups, setFilteredGroups] = useState([]);
+  const [editableGroupIds, setEditableGroupIds] = useState({}); // Initialize as an empty object
+
 
   useEffect(() => {
     fetchGroups();
@@ -101,20 +103,16 @@ const editGroup = (groupId) => {
 
 const deleteGroup = async (groupId) => {
   try {
-    const confirmation = window.confirm("Are you sure you want to delete this group?");
-    if (confirmation) {
       console.log('Deleting group:', groupId); // Log the group ID before making the API call
       const response = await axios.delete(`http://localhost:8000/student/deleteGrp/${groupId}`);
       if (response.status === 200) {
           setGroups(groups.filter(group => group.groupId !== groupId));
           console.log('Group deleted successfully:', groupId);
       }
-    }
   } catch (error) {
       console.error('Error deleting group:', error);
   }
 };
-
 
 const handleSearch = (e) => {
   setSearchQuery(e.target.value);
@@ -183,7 +181,26 @@ const handleSearch = (e) => {
         <tbody>
           {filteredGroups.map((group, index) => (
             <tr key={index}>
-              <td>{group.groupId}</td>
+              <td>
+              {editableGroupIds[group.groupId] ? (
+                <input
+                    type="text"
+                    value={editableGroupIds[group.groupId]}
+                    onChange={(e) => {
+                    const newEditableGroupIds = { ...editableGroupIds };
+                    newEditableGroupIds[group.groupId] = e.target.value;
+                    setEditableGroupIds(newEditableGroupIds);
+                    }}
+                    onBlur={() => {
+                    setEditableGroupIds({});
+                    // Update the groupId here using an API call if needed
+                    }}
+                />
+                ) : (
+                group.groupId
+                )}
+
+              </td>
               <td className="topic-column">{group.topic}</td>
               <td>{group.supervisor} <br></br> {group.coSupervisor}</td>
               <td>
@@ -207,8 +224,7 @@ const handleSearch = (e) => {
                 </table>
               </td>
               <td>
-                <button id="sachini-admin-edit-btn" onClick={() => editGroup(group.groupId)}>Edit</button>
-                <button id="sachini-admin-dlt-btn" onClick={() => deleteGroup(group.groupId)}>Delete</button>
+                <button id="sachini-admin-edit-btn">save</button>
               </td>
             </tr>
           ))}

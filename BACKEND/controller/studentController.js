@@ -187,8 +187,8 @@ const deleteGroup = async (req, res) => {
     }
 
     // Save the group details to DeleteGroup table before deletion
-    const deletedGroup = new DeleteGroup(groupToDelete.toJSON());
-    await deletedGroup.save();
+    // const deletedGroup = new DeleteGroup(groupToDelete.toJSON());
+    // await deletedGroup.save();
 
     // Delete the group from the original table
     const result = await Group.findOneAndDelete({
