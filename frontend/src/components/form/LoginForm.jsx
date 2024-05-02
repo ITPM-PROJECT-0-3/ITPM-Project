@@ -150,6 +150,7 @@ const LoginForm = () => {
             <button type="button" onClick={handleLogin}>
               Login
             </button>
+            <p>Haven't an account? <a href="http://localhost:4000/registration">SIGN UP</a></p>
           </center>
         </form>
         {error && <p id="sachini_error">{error}</p>}
