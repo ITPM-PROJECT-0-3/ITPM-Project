@@ -31,35 +31,68 @@ const StudentAndGroupManagementAdmin = () => {
     }
   };
 
+// const downloadPDF = () => {
+//     const doc = new jsPDF();
+    
+//     const topic = 'Student And Group Management';
+//     doc.setFontSize(16);
+//     doc.text(topic, 10, 60); 
+    
+//     const generatedDateTime = `Generated Date and Time: ${new Date().toLocaleString()}`;
+//     doc.setFontSize(10);
+//     doc.text(generatedDateTime, 10, 75); 
+  
+//     doc.autoTable({
+//       head: [['Group ID', 'Topic', 'Supervisor\nCo-Supervisor', 'Members']],
+//       body: groups.map(group => [
+//         group.groupId,
+//         group.topic,
+//         `${group.supervisor}\n${group.coSupervisor}`,
+//         group.members.map(member => `${member.studentID} : ${member.name} - ${abbreviateSpecialization(member.specialization)}`).join('\n')
+//       ]),
+//       columnStyles: {
+//         0: { cellWidth: 38 }, 
+//         1: { cellWidth: 35 }, 
+//         2: { cellWidth: 30 }, 
+//       },
+//       startY: 85, 
+//     });
+  
+//     doc.save('student_groups.pdf');
+//   };
+
+
 const downloadPDF = () => {
-    const doc = new jsPDF();
+  const doc = new jsPDF();
     
-    const topic = 'Student And Group Management';
-    doc.setFontSize(16);
-    doc.text(topic, 10, 60); 
+  const topic = 'Student And Group Management';
+  doc.setFontSize(16);
+  doc.text(topic, 10, 60); 
     
-    const generatedDateTime = `Generated Date and Time: ${new Date().toLocaleString()}`;
-    doc.setFontSize(10);
-    doc.text(generatedDateTime, 10, 75); 
+  const generatedDateTime = `Generated Date and Time: ${new Date().toLocaleString()}`;
+  doc.setFontSize(10);
+  doc.text(generatedDateTime, 10, 75); 
   
-    doc.autoTable({
-      head: [['Group ID', 'Topic', 'Supervisor\nCo-Supervisor', 'Members']],
-      body: groups.map(group => [
-        group.groupId,
-        group.topic,
-        `${group.supervisor}\n${group.coSupervisor}`,
-        group.members.map(member => `${member.studentID} : ${member.name} - ${abbreviateSpecialization(member.specialization)}`).join('\n')
-      ]),
-      columnStyles: {
-        0: { cellWidth: 38 }, 
-        1: { cellWidth: 35 }, 
-        2: { cellWidth: 30 }, 
-      },
-      startY: 85, 
-    });
+  doc.autoTable({
+    head: [['Group ID', 'Topic', 'Supervisor\nCo-Supervisor', 'Members']],
+    body: filteredGroups.map(group => [
+      group.groupId,
+      group.topic,
+      `${group.supervisor}\n${group.coSupervisor}`,
+      group.members.map(member => `${member.studentID} : ${member.name} - ${abbreviateSpecialization(member.specialization)}`).join('\n')
+    ]),
+    columnStyles: {
+      0: { cellWidth: 38 }, 
+      1: { cellWidth: 35 }, 
+      2: { cellWidth: 30 }, 
+    },
+    startY: 85, 
+  });
   
-    doc.save('student_groups.pdf');
-  };
+  doc.save('filtered_student_groups.pdf');
+};
+
+
   
   
   const abbreviateSpecialization = (specialization) => {
