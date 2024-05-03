@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import toast from "react-hot-toast";
 
-export default function ProposalMarks({ studentId, groupId }) {
+export default function Progress2Marks({ studentId, groupId }) {
   const [marks, setMarks] = useState({});
   const [errors, setErrors] = useState({});
   const examinerEmail = localStorage.getItem("UserEmail");
@@ -50,11 +50,13 @@ export default function ProposalMarks({ studentId, groupId }) {
   };
 
   const criteria = [
-    { name: "Clarity" },
-    { name: "Relevance" },
-    { name: "Methodology" },
-    { name: "Originality" },
-    { name: "Feasibility" },
+    { name: "demonstratedProgress" },
+    { name: "adherenceToTimeline" },
+    { name: "problemSolvingSkills" },
+    { name: "resultsInterpretation" },
+    { name: "innovationCreativity" },
+    { name: "collaborationTeamwork" },
+    { name: "documentationReporting" },
   ];
   console.log(marks.Clarity);
   console.log(getTotalMarks());
@@ -63,11 +65,13 @@ export default function ProposalMarks({ studentId, groupId }) {
     const Marks = [
       {
         StudentID: studentId, // Assuming studentId is defined somewhere in your component
-        clarity: marks.Clarity,
-        relevance: marks.Relevance,
-        methodology: marks.Methodology,
-        originality: marks.Originality,
-        feasibility: marks.Feasibility,
+        demonstratedProgress: marks.demonstratedProgress,
+        adherenceToTimeline: marks.adherenceToTimeline,
+        problemSolvingSkills: marks.problemSolvingSkills,
+        resultsInterpretation: marks.resultsInterpretation,
+        innovationCreativity: marks.innovationCreativity,
+        collaborationTeamwork: marks.collaborationTeamwork,
+        documentationReporting: marks.documentationReporting,
         total: getTotalMarks(),
       },
     ];
@@ -76,8 +80,8 @@ export default function ProposalMarks({ studentId, groupId }) {
     const Id = groupId; // Assuming groupId is defined somewhere in your component
 
     axios
-      .put(`http://localhost:8000/api/examiner/Asigne-proposal-marks/${Id}`, {
-        proposalMarks: Marks,
+      .put(`http://localhost:8000/api/examiner/Asigne-progrees2-marks/${Id}`, {
+        progress2Marks: Marks,
         Email: Email,
       })
       .then((res) => {
@@ -94,31 +98,6 @@ export default function ProposalMarks({ studentId, groupId }) {
         );
       });
   };
-  // console.log(examinerEmail);
-  // console.log(groupId);
-  // useEffect(() => {
-  //   const fetchGroupData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:8000/api/examiner/fetch-group-details/${groupId}`, // Correct parameter
-  //         {
-  //           headers: { ExaminerEmail: examinerEmail }, // Pass headers correctly
-  //         }
-  //       );
-
-  //       console.log("Group data:", response);
-  //       setUser(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching group data:", error.message);
-  //       if (error.response) {
-  //         console.error("Error details:", error.response.data); // Additional information
-  //       }
-  //     }
-  //   };
-
-  //   fetchGroupData(); // Fetch data when component mounts
-  // }, [groupId, examinerEmail]);
-
   return (
     <div>
       {" "}
