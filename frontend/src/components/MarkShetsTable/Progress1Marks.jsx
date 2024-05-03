@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import toast from "react-hot-toast";
 
-export default function ProposalMarks({ studentId, groupId }) {
+export default function Progress1Marks({ studentId, groupId }) {
   const [marks, setMarks] = useState({});
   const [errors, setErrors] = useState({});
   const examinerEmail = localStorage.getItem("UserEmail");
@@ -50,11 +50,11 @@ export default function ProposalMarks({ studentId, groupId }) {
   };
 
   const criteria = [
-    { name: "Clarity" },
-    { name: "Relevance" },
-    { name: "Methodology" },
-    { name: "Originality" },
-    { name: "Feasibility" },
+    { name: "progress" },
+    { name: "adherence" },
+    { name: "problemSolving" },
+    { name: "communication" },
+    { name: "collaboration" },
   ];
   console.log(marks.Clarity);
   console.log(getTotalMarks());
@@ -63,11 +63,11 @@ export default function ProposalMarks({ studentId, groupId }) {
     const Marks = [
       {
         StudentID: studentId, // Assuming studentId is defined somewhere in your component
-        clarity: marks.Clarity,
-        relevance: marks.Relevance,
-        methodology: marks.Methodology,
-        originality: marks.Originality,
-        feasibility: marks.Feasibility,
+        progress: marks.progress,
+        adherence: marks.adherence,
+        problemSolving: marks.problemSolving,
+        communication: marks.communication,
+        collaboration: marks.collaboration,
         total: getTotalMarks(),
       },
     ];
@@ -76,8 +76,8 @@ export default function ProposalMarks({ studentId, groupId }) {
     const Id = groupId; // Assuming groupId is defined somewhere in your component
 
     axios
-      .put(`http://localhost:8000/api/examiner/Asigne-proposal-marks/${Id}`, {
-        proposalMarks: Marks,
+      .put(`http://localhost:8000/api/examiner/Asigne-progrees1-marks/${Id}`, {
+        progreel1Marks: Marks,
         Email: Email,
       })
       .then((res) => {
@@ -94,30 +94,6 @@ export default function ProposalMarks({ studentId, groupId }) {
         );
       });
   };
-  // console.log(examinerEmail);
-  // console.log(groupId);
-  // useEffect(() => {
-  //   const fetchGroupData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:8000/api/examiner/fetch-group-details/${groupId}`, // Correct parameter
-  //         {
-  //           headers: { ExaminerEmail: examinerEmail }, // Pass headers correctly
-  //         }
-  //       );
-
-  //       console.log("Group data:", response);
-  //       setUser(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching group data:", error.message);
-  //       if (error.response) {
-  //         console.error("Error details:", error.response.data); // Additional information
-  //       }
-  //     }
-  //   };
-
-  //   fetchGroupData(); // Fetch data when component mounts
-  // }, [groupId, examinerEmail]);
 
   return (
     <div>

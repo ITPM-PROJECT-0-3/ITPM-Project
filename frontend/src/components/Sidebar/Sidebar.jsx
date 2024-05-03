@@ -91,7 +91,7 @@ function AdminSidebar({ sidebarActive, toggleSidebar, CustomTabs }) {
                 </li>
               ))}
           </ul>
-          <Link to="/">
+          <Link to="">
             <div className="profile_content">
               <div className="profile">
                 <div className="profile_details">

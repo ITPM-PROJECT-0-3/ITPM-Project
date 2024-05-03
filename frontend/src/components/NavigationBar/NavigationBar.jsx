@@ -6,6 +6,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LoginIcon from "@mui/icons-material/Login"; // Import the login icon
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function NavigationBar() {
   const navigate = useNavigate();
@@ -21,8 +22,6 @@ export default function NavigationBar() {
   };
 
   // Custom styles
-
-  
 
   const loginButtonStyle = {
     bgcolor: "#FFAE00", // Background color
@@ -71,6 +70,13 @@ export default function NavigationBar() {
     borderRadius: "0px",
   };
 
+  const userInfoString = localStorage.getItem("UserInfo");
+  const storedUserInfo = JSON.parse(userInfoString);
+
+  function handleLogoutClick() {
+    localStorage.removeItem("UserInfo");
+    window.location.href = "/loginGrp";
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -106,13 +112,24 @@ export default function NavigationBar() {
             <Typography variant="body2" sx={loginText}>
               LOG IN USING YOUR ACCOUNT ON:
             </Typography>
-            <Button
-              startIcon={<LoginIcon />}
-              sx={loginButtonStyle}
-              onClick={handleLoginClick}
-            >
-              SLIIT Login
-            </Button>
+            {storedUserInfo ? (
+              <Button
+                startIcon={<LogoutIcon />}
+                sx={loginButtonStyle}
+                onClick={handleLogoutClick}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                startIcon={<LoginIcon />}
+                sx={loginButtonStyle}
+                onClick={handleLoginClick}
+              >
+                SLIIT Login
+              </Button>
+            )}
+
             <Typography
               variant="body2"
               sx={forgetPasswordText}
