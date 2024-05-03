@@ -2,10 +2,11 @@ const json = require("body-parser/lib/types/json");
 const Supervisor = require("../model/StaffSupervisorModel");
 const errorHandler = require("../utils/error");
 const Group = require("../model/StudentModel");
+const mongoose = require('mongoose');
 
-const createSupervisor = async (req, res, next) => {
+const createSupervisor = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
 
     const existingSupervisor = await Supervisor.findOne({ email });
 
@@ -19,7 +20,6 @@ const createSupervisor = async (req, res, next) => {
     const newSupervisor = new Supervisor({ name, email });
 
     await newSupervisor.save();
-
     res.status(201).json({
       message: "Supervisor created successfully",
       newSupervisor,
@@ -121,6 +121,29 @@ const deleteSupervisor = async (req, res, next) => {
   }
 };
 
+const getGroupsBySupervisor = async (req, res, next) => {
+  try {
+    const ids = req.body.ids;
+    const groups = await Group.find({ '_id': { '$in': ids } });
+    res.status(200).json(groups);
+    if (!groups) {
+      return res.status(404).json({
+        status: "Not Found",
+        message: "No groups found for the supervisor.",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      data: groups,
+    });
+  } catch (error) {
+    console.error('Failed to fetch supervisor groups:', error);
+    next(error);
+  }
+};
+
+
 
 
 const assignMarks = async (req, res, next) => {
@@ -139,20 +162,28 @@ const assignMarks = async (req, res, next) => {
     }
 
     // Find the supervisor in the group
-    const supervisor = group.SupervisorDetails.find(
-      (supervisor) => supervisor.email === supervisorEmail
-    );
+    // const supervisor = group.SupervisorDetails.find(
+    //   (supervisor) => supervisor.email === supervisorEmail
+    // );
 
-    // Check if supervisor exists
-    if (!supervisor) {
-      return res.status(404).json({
-        status: "Error",
-        message: "Supervisor not found with the specified email in the group.",
+    // console.log(supervisor);
+
+    // // Check if supervisor exists
+    // if (!supervisor) {
+    //   return res.status(404).json({
+    //     status: "Error",
+    //     message: "Supervisor not found with the specified email in the group.",
+    //   });
+    // }
+
+    // Add marks to the supervisor
+    if (!group.SupervisorDetails) {
+      group.SupervisorDetails.push({
+        email: supervisorEmail,
+        marks: marks,
       });
     }
 
-    // Add marks to the supervisor
-    supervisor.Marks.push({ marks });
 
     // Save the updated group
     const updatedGroup = await group.save();
@@ -179,4 +210,5 @@ module.exports = {
   assignGroup,
   deleteSupervisor,
   assignMarks,
+  getGroupsBySupervisor,
 };

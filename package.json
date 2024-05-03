@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "node BACKEND/server.js",
+    "dev": "nodemon BACKEND/server.js",
     "start": "nodemon BACKEND/server.js"
   },
   "author": "chanukadevin",

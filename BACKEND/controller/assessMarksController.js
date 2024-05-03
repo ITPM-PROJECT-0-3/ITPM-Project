@@ -1,0 +1,129 @@
+const json = require("body-parser/lib/types/json");
+const errorHandler = require("../utils/error");
+
+const AssessMarks = require("../model/AssessMarksModel");
+
+const assessmentMarks = async (req, res, next) => {
+  try {
+    const { groupId, supervisorId, marks, comment } = req.body;
+
+    const newAssessMarks = new AssessMarks({ groupId, supervisorId, marks, comment });
+
+    await newAssessMarks.save();
+    res.status(201).json({
+      message: "Marks added successfully",
+      newAssessMarks,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+}
+
+const updateAssessmentMarks = async (req, res, next) => {
+  try {
+    const groupId = req.params.id;
+    const { marks, comment } = req.body;
+
+    const assessmentMarks = await AssessMarks.findOne({ groupId });
+
+    if (!assessmentMarks) {
+      return res.status(404).json({
+        status: "Error",
+        message: "No assessment marks found for the given group ID.",
+      });
+    }
+
+    assessmentMarks.marks = marks;
+    assessmentMarks.comment = comment;
+
+    await assessmentMarks.save();
+    res.status(200).json({
+      status: "Assessment Marks Updated",
+      assessmentMarks,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+}
+
+const deleteAssessmentMarks = async (req, res, next) => {
+  try {
+    const groupId = req.params.id;
+
+    const assessmentMarks = await AssessMarks.findOneAndDelete
+      ({ groupId });
+
+    if (!assessmentMarks) {
+      return res.status(404).json({
+        status: "Error",
+        message: "No assessment marks found for the given group ID.",
+      });
+    }
+    res.status(200).json({
+      status: "Assessment Marks Deleted",
+      assessmentMarks,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+}
+
+const fetchAssessmentMarksbySupervisor = async (req, res, next) => {
+  try {
+    const supervisorId = req.params.id;
+
+    const assessmentMarks = await AssessMarks.find({ supervisorId });
+
+    if (!assessmentMarks) {
+      return res.status(404).json({
+        status: "Error",
+        message: "No assessment marks found for the given supervisor ID.",
+      });
+    }
+    res.status(200).json({
+      status: "Assessment Marks Fetched",
+      assessmentMarks,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+}
+
+const fetchAssessmentMarksbyGroup = async (req, res, next) => {
+  try {
+    const groupId = req.params.id;
+
+    const assessmentMarks = await AssessMarks.find({ groupId });
+
+    if (!assessmentMarks) {
+      return res.status(404).json({
+        status: "Error",
+        message: "No assessment marks found for the given group ID.",
+      });
+    }
+    res.status(200).json({
+      status: "Assessment Marks Fetched",
+      assessmentMarks,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+}
+
+module.exports = {
+  assessmentMarks,
+  fetchAssessmentMarksbySupervisor,
+  fetchAssessmentMarksbyGroup,
+  updateAssessmentMarks,
+  deleteAssessmentMarks
+};
