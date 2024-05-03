@@ -232,12 +232,37 @@ const AsignproposalMarks = async (req, res, next) => {
       });
     }
 
-    examiner.Marks.push({ proposalMarks });
+    // Initialize examiner.Marks if not already initialized
+    if (!examiner.Marks) {
+      examiner.Marks = {};
+    }
+
+    // Initialize proposalMarks array if not already initialized
+    if (!examiner.Marks.proposalMarks) {
+      examiner.Marks.proposalMarks = [];
+    }
+
+    // Loop through each proposal mark
+    proposalMarks.forEach((mark) => {
+      // Check if a record with the same StudentID already exists
+      const existingMarkIndex = examiner.Marks.proposalMarks.findIndex(
+        (existingMark) => existingMark.StudentID === mark.StudentID
+      );
+
+      if (existingMarkIndex !== -1) {
+        // If a record with the same StudentID exists, update the existing record
+        examiner.Marks.proposalMarks[existingMarkIndex] = mark;
+      } else {
+        // If a record with the same StudentID does not exist, push the new mark
+        examiner.Marks.proposalMarks.push(mark);
+      }
+    });
+
     const updatedGroup = await group.save();
 
     res.status(200).json({
       status: "Success",
-      message: "Examiners added successfully.",
+      message: "Proposal marks assigned successfully.",
       updatedGroup,
     });
   } catch (error) {
@@ -274,12 +299,37 @@ const AsignProgrees1MarksMarks = async (req, res, next) => {
       });
     }
 
-    examiner.Marks.push({ progreel1Marks });
+    // Initialize examiner.Marks if not already initialized
+    if (!examiner.Marks) {
+      examiner.Marks = {};
+    }
+
+    // Initialize proposalMarks array if not already initialized
+    if (!examiner.Marks.progreel1Marks) {
+      examiner.Marks.progreel1Marks = [];
+    }
+
+    // Loop through each proposal mark
+    progreel1Marks.forEach((mark) => {
+      // Check if a record with the same StudentID already exists
+      const existingMarkIndex = examiner.Marks.progreel1Marks.findIndex(
+        (existingMark) => existingMark.StudentID === mark.StudentID
+      );
+
+      if (existingMarkIndex !== -1) {
+        // If a record with the same StudentID exists, update the existing record
+        examiner.Marks.progreel1Marks[existingMarkIndex] = mark;
+      } else {
+        // If a record with the same StudentID does not exist, push the new mark
+        examiner.Marks.progreel1Marks.push(mark);
+      }
+    });
+
     const updatedGroup = await group.save();
 
     res.status(200).json({
       status: "Success",
-      message: "Examiners added successfully.",
+      message: "Proposal marks assigned successfully.",
       updatedGroup,
     });
   } catch (error) {
@@ -316,12 +366,37 @@ const AsignProgress2MarksMarks = async (req, res, next) => {
       });
     }
 
-    examiner.Marks.push({ progress2Marks });
+    // Initialize examiner.Marks if not already initialized
+    if (!examiner.Marks) {
+      examiner.Marks = {};
+    }
+
+    // Initialize proposalMarks array if not already initialized
+    if (!examiner.Marks.progress2Marks) {
+      examiner.Marks.progress2Marks = [];
+    }
+
+    // Loop through each proposal mark
+    progress2Marks.forEach((mark) => {
+      // Check if a record with the same StudentID already exists
+      const existingMarkIndex = examiner.Marks.progress2Marks.findIndex(
+        (existingMark) => existingMark.StudentID === mark.StudentID
+      );
+
+      if (existingMarkIndex !== -1) {
+        // If a record with the same StudentID exists, update the existing record
+        examiner.Marks.progress2Marks[existingMarkIndex] = mark;
+      } else {
+        // If a record with the same StudentID does not exist, push the new mark
+        examiner.Marks.progress2Marks.push(mark);
+      }
+    });
+
     const updatedGroup = await group.save();
 
     res.status(200).json({
       status: "Success",
-      message: "Examiners added successfully.",
+      message: "Proposal marks assigned successfully.",
       updatedGroup,
     });
   } catch (error) {
@@ -358,12 +433,37 @@ const AsignFinalPresantationMarks = async (req, res, next) => {
       });
     }
 
-    examiner.Marks.push({ FinalPresantationMarks });
+    // Initialize examiner.Marks if not already initialized
+    if (!examiner.Marks) {
+      examiner.Marks = {};
+    }
+
+    // Initialize proposalMarks array if not already initialized
+    if (!examiner.Marks.FinalPresantationMarks) {
+      examiner.Marks.FinalPresantationMarks = [];
+    }
+
+    // Loop through each proposal mark
+    FinalPresantationMarks.forEach((mark) => {
+      // Check if a record with the same StudentID already exists
+      const existingMarkIndex = examiner.Marks.FinalPresantationMarks.findIndex(
+        (existingMark) => existingMark.StudentID === mark.StudentID
+      );
+
+      if (existingMarkIndex !== -1) {
+        // If a record with the same StudentID exists, update the existing record
+        examiner.Marks.FinalPresantationMarks[existingMarkIndex] = mark;
+      } else {
+        // If a record with the same StudentID does not exist, push the new mark
+        examiner.Marks.FinalPresantationMarks.push(mark);
+      }
+    });
+
     const updatedGroup = await group.save();
 
     res.status(200).json({
       status: "Success",
-      message: "Examiners added successfully.",
+      message: "Proposal marks assigned successfully.",
       updatedGroup,
     });
   } catch (error) {
@@ -440,6 +540,49 @@ const fetchGrouplistUnderExaminerEmail = async (req, res, next) => {
   }
 };
 
+const fetchGroupUseMongoId = async (req, res, next) => {
+  try {
+    const id = req.params.groupId;
+    const examinerEmail = req.body.ExaminerEmail;
+
+    // Find the group by its MongoDB ID
+    const group = await Group.findOne({ _id: id });
+
+    if (!group) {
+      return res.status(404).send({ status: "Group not found" });
+    }
+
+    let found = false;
+
+    // Iterate through the examiner details of the group
+    for (let i = 0; i < group.ExaminerDetails.length; i++) {
+      const checkEmail = group.ExaminerDetails[i].Email;
+
+      // If the examiner email matches, return marks and set found to true
+      if (checkEmail === examinerEmail) {
+        found = true;
+        return res.status(200).json({
+          status: "Success",
+          message: "Matched",
+          data: group.ExaminerDetails[i].Marks,
+        });
+      }
+    }
+
+    // If email doesn't match any examiner, return "not found"
+    if (!found) {
+      return res
+        .status(404)
+        .send({ status: "Examiner email not found in group" });
+    }
+  } catch (error) {
+    // Handle errors gracefully
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(error);
+  }
+};
+
 module.exports = {
   RegistraterExaminer,
   fetchSingleExaminer,
@@ -454,4 +597,5 @@ module.exports = {
   AsignProgrees1MarksMarks,
   AsignProgress2MarksMarks,
   AsignFinalPresantationMarks,
+  fetchGroupUseMongoId,
 };

@@ -27,36 +27,43 @@ const memberSchema = new Schema({
   },
 });
 const proposalMarksSchema = new Schema({
-  StudentID :String,
+  StudentID: String,
   clarity: String, // Clarity of the proposal
   relevance: String, // Relevance to the topic
   methodology: String, // Soundness of the proposed methodology
   originality: String, // Originality of the proposal
   feasibility: String, // Feasibility of the proposed work
+  total: String,
 });
 const progree1MarksSchema = new Schema({
-  StudentID :String,
+  StudentID: String,
   progress: String, // Progress made since the proposal stage
   adherence: String, // Adherence to project timeline
   problemSolving: String, // Ability to overcome challenges
   communication: String, // Effectiveness of communication
   collaboration: String, // Collaboration with others (if applicable)
+  total: String,
 });
 const progress2MarksSchema = new Schema({
-  StudentID :String,
-  progress: String, // Progress made since the first evaluation
-  adherence: String, // Continued adherence to project timeline
-  problemSolving: String, // Further ability to overcome challenges
-  dataAnalysis: String, // Quality of data analysis
-  resultsInterpretation: String, // Quality of results interpretation
+  StudentID: String,
+  demonstratedProgress: String, // Assess the extent of project advancement
+  adherenceToTimeline: String, // Evaluate adherence to project schedule
+  problemSolvingSkills: String, // Assess ability to overcome challenges
+  qualityOfDataAnalysis: String, // Evaluate data analysis methods and accuracy
+  resultsInterpretation: String, // Assess clarity and depth of results interpretation
+  innovationCreativity: String, // Evaluate level of innovation and creativity
+  collaborationTeamwork: String, // Assess effectiveness of collaboration and teamwork
+  documentationReporting: String, // Evaluate quality of project documentation and reporting
+  total: String, // Overall score
 });
 const FinalPresantationMarksSchema = new Schema({
-  StudentID :String,
+  StudentID: String,
   content: String, // Relevance and depth of content
   organization: String, // Clarity and organization of presentation
   delivery: String, // Delivery and presentation skills
   visuals: String, // Effectiveness of visual aids (if applicable)
   QnA: String, // Ability to handle questions and answers
+  total: String,
 });
 
 const marksSchema = new Schema({
@@ -82,7 +89,7 @@ const examinerSchema = new Schema({
   Time: {
     type: String,
   },
-  Marks: [marksSchema],
+  Marks: marksSchema,
 });
 
 const supervisorSchema = new Schema({
@@ -95,9 +102,8 @@ const supervisorSchema = new Schema({
   Email: {
     type: String,
   },
-  Marks: [marksSchema], 
+  Marks: [marksSchema],
 });
-
 
 const cosupervisorSchema = new Schema({
   CoSupervisorID: {
@@ -144,10 +150,10 @@ const groupSchema = new Schema(
       default: "Student",
     },
     downloadURLForDoc1: {
-      type: String
+      type: String,
     },
     downloadURLForDoc2: {
-      type: String
+      type: String,
     },
     ExaminerDetails: [examinerSchema],
     SupervisorDetails: [supervisorSchema],

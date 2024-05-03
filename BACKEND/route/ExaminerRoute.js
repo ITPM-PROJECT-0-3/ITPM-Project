@@ -32,4 +32,8 @@ router
   .route("/Asigne-Final-marks/:id")
   .put(ExaminerUser.AsignFinalPresantationMarks);
 
+router
+  .route("/fetch-group-details/:groupId")
+  .get(ExaminerUser.fetchGroupUseMongoId);
+
 module.exports = router;
