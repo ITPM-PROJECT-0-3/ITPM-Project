@@ -124,9 +124,10 @@ const deleteSupervisor = async (req, res, next) => {
 const getGroupsBySupervisor = async (req, res, next) => {
   try {
     const ids = req.body.ids;
+    console.log(ids);
     const groups = await Group.find({ '_id': { '$in': ids } });
-    res.status(200).json(groups);
-    if (!groups) {
+
+    if (!groups || groups.length === 0) {
       return res.status(404).json({
         status: "Not Found",
         message: "No groups found for the supervisor.",
@@ -142,6 +143,8 @@ const getGroupsBySupervisor = async (req, res, next) => {
     next(error);
   }
 };
+
+
 
 
 
