@@ -18,10 +18,10 @@ import IconButton from "@mui/joy/IconButton";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "@mui/joy/Table";
-import ProposalMarks from "../MarkShetsTable/ProposalMarks";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
+import FinalMarks from "../MarkShetsTable/FinalMarks";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#d3dae3",
@@ -32,7 +32,7 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export default function AssignMarks() {
+export default function AssignMarksFinal() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -700,7 +700,7 @@ export default function AssignMarks() {
             </Grid>
             <Grid item xs={6} md={8}>
               <Item>
-                <ProposalMarks
+                <FinalMarks
                   studentId={users.members[0].ITNumber}
                   groupId={users._id}
                 />
@@ -832,7 +832,7 @@ export default function AssignMarks() {
             </Grid>
             <Grid item xs={6} md={8}>
               <Item>
-                <ProposalMarks
+                <FinalMarks
                   studentId={users.members[1].ITNumber}
                   groupId={users._id}
                 />
@@ -963,7 +963,7 @@ export default function AssignMarks() {
             </Grid>
             <Grid item xs={6} md={8}>
               <Item>
-                <ProposalMarks
+                <FinalMarks
                   studentId={users.members[2].ITNumber}
                   groupId={users._id}
                 />
@@ -1094,7 +1094,7 @@ export default function AssignMarks() {
             </Grid>
             <Grid item xs={6} md={8}>
               <Item>
-                <ProposalMarks
+                <FinalMarks
                   studentId={users.members[3].ITNumber}
                   groupId={users._id}
                 />
