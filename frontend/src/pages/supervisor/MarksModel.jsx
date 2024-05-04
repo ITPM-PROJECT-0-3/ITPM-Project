@@ -10,6 +10,8 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+import { showConfirmationAlert } from "../../../../BACKEND/utils/alert,js";
+import { showDefaultAlert } from "../../../../BACKEND/utils/alert,js";
 
 function MarksModal({ open, handleClose: close, currentRow }) {
   const [marks, setMarks] = useState("");
@@ -80,63 +82,126 @@ function MarksModal({ open, handleClose: close, currentRow }) {
   }, [currentRow]);
 
   const handleCreate = async () => {
+    const confirmationMessage = "confirm marks and comments for the group";
+
     const data = {
       groupId: currentRow?.groupId,
       supervisorId: currentRow?.supervisor,
       marks,
       comment,
     };
-    setLoading(true);
-    try {
-      await axios.post(
-        `http://localhost:8000/api/supervisor/assignment-marks/${currentRow.groupId}`,
-        data
-      );
-      handleCloseModal();
-      setLoading(false);
-    } catch (error) {
-      console.error("Failed to submit marks and comments:", error);
-      setLoading(false);
-    }
+    handleCloseModal();
+
+    showConfirmationAlert({
+      confirmationMessage,
+      onConfirm: async () => {
+        setLoading(true);
+        try {
+          await axios.post(
+            `http://localhost:8000/api/supervisor/assignment-marks/${currentRow.groupId}`,
+            data
+          );
+          showDefaultAlert(
+            "success",
+            "Success",
+            "Successfully submitted marks and comments!"
+          );
+
+          setLoading(false);
+        } catch (error) {
+          showDefaultAlert(
+            "error",
+            "Error",
+            "An error occurred. Please try again later."
+          );
+
+          console.error("Failed to submit marks and comments:", error);
+          setLoading(false);
+        }
+      },
+      onCancel: () => {
+        setLoading(false);
+        handleCloseModal();
+      },
+    });
   };
 
   const handleUpdate = async () => {
+    const confirmationMessage =
+      "confirm updating marks and comments for the group";
+
     const data = {
       marks, // As this is the expected field from the API
       comment, // As this is the expected field from the API
     };
-    setLoading(true);
-    try {
-      await axios.put(
-        `http://localhost:8000/api/supervisor/assignment-marks/group/${currentRow.groupId}`, // Correct endpoint with PUT method
-        data
-      );
-      setSnackbar({ open: true, message: "Marks updated successfully!" });
-      handleCloseModal();
-      setLoading(false);
-    } catch (error) {
-      console.error("Failed to submit marks and comments:", error);
-      setSnackbar({ open: true, message: "Failed to update marks!" });
-      setLoading(false);
-    }
+    handleCloseModal();
+    showConfirmationAlert({
+      confirmationMessage,
+      onConfirm: async () => {
+        setLoading(true);
+        setLoading(true);
+        try {
+          await axios.put(
+            `http://localhost:8000/api/supervisor/assignment-marks/group/${currentRow.groupId}`, // Correct endpoint with PUT method
+            data
+          );
+          showDefaultAlert(
+            "success",
+            "Success",
+            "Successfully updated marks and comments!"
+          );
+          handleCloseModal();
+          setLoading(false);
+        } catch (error) {
+          showDefaultAlert(
+            "error",
+            "Error",
+            "An error occurred. Please try again later."
+          );
+          console.error("Failed to submit marks and comments:", error);
+          setSnackbar({ open: true, message: "Failed to update marks!" });
+          setLoading(false);
+        }
+      },
+      onCancel: () => {
+        setLoading(false);
+        handleCloseModal();
+      },
+    });
   };
 
   const handleDelete = async () => {
-    setLoading(true);
-    try {
-      console.log("Deleting marks for group:", currentRow.groupId);
-      await axios.delete(
-        `http://localhost:8000/api/supervisor/assignment-marks/group/${currentRow.groupId}`
-      );
+    const confirmationMessage = "confirm deletion of marks for the group";
 
-      setSnackbar({ open: true, message: "Marks deleted successfully!" });
-      handleCloseModal(); // Close the modal after successful deletion
-      setLoading(false);
-    } catch (error) {
-      console.error("Failed to delete marks:", error);
-      setLoading(false);
-      setSnackbar({ open: true, message: "Failed to delete marks!" });
-    }
+    handleCloseModal();
+
+    showConfirmationAlert({
+      confirmationMessage,
+      onConfirm: async () => {
+        setLoading(true);
+        try {
+          console.log("Deleting marks for group:", currentRow.groupId);
+          await axios.delete(
+            `http://localhost:8000/api/supervisor/assignment-marks/group/${currentRow.groupId}`
+          );
+          showDefaultAlert("success", "Success", "Successfully deleted marks!");
+
+          setLoading(false);
+        } catch (error) {
+          showDefaultAlert(
+            "error",
+            "Error",
+            "An error occurred. Please try again later."
+          );
+          console.error("Failed to delete marks:", error);
+          setLoading(false);
+        }
+      },
+      onCancel: () => {
+        setLoading(false);
+        handleCloseModal();
+      },
+    });
   };
 
   return (
