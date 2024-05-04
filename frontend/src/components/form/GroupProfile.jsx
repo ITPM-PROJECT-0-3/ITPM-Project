@@ -13,6 +13,9 @@ const GroupProfile = () => {
   const [showUpdatePswrdForm, setShowUpdatePswrdForm] = useState(false);
   const [functionDescription, setFunctionDescription] = useState('');
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [supervisorEmail, setSupervisorEmail] = useState('');
+  const [coSupervisorEmail, setCoSupervisorEmail] = useState('');
+
 
   const specializationAbbreviations = {
     'Computer Science and Network Engineering': 'CSNE',
