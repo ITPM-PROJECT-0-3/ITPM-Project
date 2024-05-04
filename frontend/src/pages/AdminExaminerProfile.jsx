@@ -2,16 +2,15 @@ import React, { useState, useEffect } from "react";
 import styles from "../styles/AdminExaminerTable.module.css";
 import AdminSidebar from "../components/Sidebar/Sidebar";
 import AdminHeader from "../components/SlideHeader/SlideHeader";
-import ExaminerlistTable from "../components/ExaminerTable/ExaminerlistTable";
+import AdminExaminerDetails from "../components/Examiner/AdminExaminerDetails";
 
-export default function AdminExaminerTable() {
+export default function AdminExaminerProfile() {
   useEffect(() => {
-    document.title = "Admin Examiner Table | SLIIT";
+    document.title = "Admin Examiner Profile | SLIIT";
     return () => {
       document.title = "SLIIT";
     };
   }, []);
-
   const [sidebarActive, setSidebarActive] = useState(true);
 
   const toggleSidebar = () => {
@@ -45,6 +44,7 @@ export default function AdminExaminerTable() {
     { href: "/admin-nav", label: "Home" },
     { href: "/admin-nav", label: "Dashboard" },
     { href: "/examiner-admin-table", label: "Examiners" },
+    { href: "/examiner-admin-table", label: "Profile" },
   ];
   return (
     <div className={styles.bodyD}>
@@ -64,7 +64,7 @@ export default function AdminExaminerTable() {
         }}
       >
         <AdminHeader customNavLinks={customNavLinks} />
-        <ExaminerlistTable />
+        <AdminExaminerDetails />
       </div>
     </div>
   );
