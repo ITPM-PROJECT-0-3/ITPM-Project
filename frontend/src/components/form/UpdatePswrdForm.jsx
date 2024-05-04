@@ -97,9 +97,9 @@ const UpdatePswrdForm = () => {
         </center>
       </form>
     </div>
-    <div>
+    {/* <div>
     <button id="sachini_logoutButton" onClick={handleLogout}>Logout</button>
-    </div>
+    </div> */}
     </div>
     <Footer /> 
     </div>

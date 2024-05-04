@@ -337,7 +337,7 @@ const RegistrationForm = () => {
 
       {formData.members.map((member, memberIndex) => (
         <div key={memberIndex}>
-          <h5>Member {memberIndex + 1}</h5>
+          <h5>Member {memberIndex + 1} {memberIndex === 0 ? <strong>Leader</strong> : ''}</h5>
             <input
               type="text"
               placeholder='Student Number'
