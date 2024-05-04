@@ -16,6 +16,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { PickersDay } from "@mui/x-date-pickers/PickersDay";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DayCalendarSkeleton } from "@mui/x-date-pickers/DayCalendarSkeleton";
+import ExaminerChart from "../../components/Charts/ExaminerChart";
 
 function getRandomNumber(min, max) {
   return Math.round(Math.random() * (max - min) + min);
@@ -43,20 +44,28 @@ function fakeFetch(date, { signal }) {
   });
 }
 
-const initialValue = dayjs("2022-04-17");
+const initialValue = dayjs("2024-05-4");
 
 function ServerDay(props) {
-  const { highlightedDays = [], day, outsideCurrentMonth, ...other } = props;
+  const {
+    highlightedDays = [],
+    day,
+    outsideCurrentMonth,
+    currentDate,
+    ...other
+  } = props;
 
   const isSelected =
-    !props.outsideCurrentMonth &&
-    highlightedDays.indexOf(props.day.date()) >= 0;
+    !outsideCurrentMonth && highlightedDays.indexOf(day.date()) >= 0;
+
+  const isCurrentDate = day.isSame(currentDate, "day");
 
   return (
     <Badge
-      key={props.day.toString()}
+      key={day.toString()}
       overlap="circular"
       badgeContent={isSelected ? "🌚" : undefined}
+      color={isCurrentDate ? "primary" : undefined}
     >
       <PickersDay
         {...other}
@@ -213,16 +222,12 @@ export default function ExaminerviewDashboard() {
       <br />
       <Row container spacing={1}>
         <Col item xs={6} md={8}>
-          <Card></Card>
+          <Card>
+            <ExaminerChart />
+          </Card>
         </Col>
         <Col item xs={6} md={4}>
-          <Card
-            style={{
-              backgroundColor: "#ffffff",
-              opacity: "0.9",
-              width: "100%",
-            }}
-          >
+          <Card>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateCalendar
                 defaultValue={initialValue}

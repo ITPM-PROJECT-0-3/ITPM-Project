@@ -1,7 +1,8 @@
 @import "../vars.css";
 
 .bodyD {
-    background-image: url('https://static.vecteezy.com/system/resources/previews/010/524/406/non_2x/blue-and-orange-background-wave-free-vector.jpg') !important;
+  background: rgb(23,55,110);
+  background: linear-gradient(225deg, rgba(23,55,110,1) 6%, rgba(255,255,255,1) 65%, rgba(169,174,176,1) 90%);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
