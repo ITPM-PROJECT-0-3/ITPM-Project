@@ -240,7 +240,7 @@ const handleSearch = (e) => {
                 </table>
               </td>
               <td>
-                <button id="sachini-admin-edit-btn" onClick={() => editGroup(group.groupId)}>Edit</button>
+                {/* <button id="sachini-admin-edit-btn" onClick={() => editGroup(group.groupId)}>Edit</button> */}
                 <button id="sachini-admin-dlt-btn" onClick={() => deleteGroup(group.groupId)}>Delete</button>
               </td>
             </tr>

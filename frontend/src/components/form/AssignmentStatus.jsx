@@ -58,7 +58,7 @@ const AssignmentStatus = () => {
           <NavigationBar />
         <div id="sachini-assignment-status">
           <form id="sachini-assignment-form">
-          <h2>Document 1 Assignment Status</h2>
+          <h2>Document 2 Assignment Status</h2>
             <table id="sachini-assignment-table">
               <tbody>
                 <tr>
@@ -69,10 +69,10 @@ const AssignmentStatus = () => {
                     <td><strong>Group ID</strong></td>
                     <td><span>{assignmentStatus.groupId}</span></td>
                 </tr>
-                <tr>
+                {/* <tr>
                     <td className="remain-days"><strong>Remain Days</strong></td>
                     <td className="remain-days"><span>{}</span></td>
-                </tr>
+                </tr> */}
                 <tr>
                   <td><strong>Uploaded File</strong></td>
                   <td>
