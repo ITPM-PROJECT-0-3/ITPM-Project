@@ -151,6 +151,7 @@ const LoginForm = () => {
               Login
             </button>
             <p>Haven't an account? <a href="http://localhost:4000/registration">SIGN UP</a></p>
+            <p><a href="http://localhost:4000/student-group-management">Admin</a></p>
           </center>
         </form>
         {error && <p id="sachini_error">{error}</p>}
