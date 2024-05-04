@@ -46,6 +46,9 @@ app.use("/api/examiner", ExaminerRouter);
 const staffRouter = require("./route/staffRoute.js");
 app.use("/staff", staffRouter);
 
+ const supervisorRoutes = require('./route/supervisorRoute.js');
+ app.use('/supervisor', supervisorRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server is up and running on port number: ${PORT}`);
 });
