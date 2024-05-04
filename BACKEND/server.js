@@ -5,6 +5,8 @@ const cors = require("cors");
 var morgan = require("morgan");
 const bodyParser = require("body-parser");
 const helmet = require('helmet');
+const supervisorRoutes = require('./route/supervisorRoute.js');
+const authRoutes = require('./route/supervisorAuthRoute.js');
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -18,6 +20,17 @@ app.use(express.urlencoded({ extended: true }));
 
 const URL = process.env.MONGODB_URL;
 
+// app.post("/api/supervisor", async (req, res) => {
+//   const { name, email, password } = req.body;
+//   const supervisor = new Supervisor({
+//     name,
+//     email,
+//     password,
+//   });
+//   await supervisor.save();
+//   res.json(supervisor);
+// });
+
 mongoose
   .connect(URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -27,15 +40,8 @@ mongoose
     console.error("MongoDB Connection Error:", error);
   });
 
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
-  return res.status(statusCode).json({
-    success: false,
-    message,
-    statusCode,
-  });
-});
+app.use('/api/supervisor', supervisorRoutes);
+app.use('/api/auth', authRoutes);
 
 const studentRouter = require("./route/studentsRoute.js");
 app.use("/student", studentRouter);
