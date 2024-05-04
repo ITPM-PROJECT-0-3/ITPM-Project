@@ -171,18 +171,18 @@ const GroupProfile = () => {
           </div>
 
           <div id="sachini_contact_supervisors">
-            <h4>Contact Supervisors</h4>
+            <h4>Allocated Supervisors/ Co-supervisors</h4>
             <table id="sachini_supervisor_table">
               <tbody>
                 <tr>
                   <td>Supervisor</td>
                   <td>{groupData.supervisor}</td>
-                  <td>{/* Supervisor's Email */}</td>
+                  {/* <td>{}</td> */}
                 </tr>
                 <tr>
                   <td>Co-Supervisor</td>
                   <td>{groupData.coSupervisor}</td>
-                  <td>{/* Co-Supervisor's Email */}</td>
+                  {/* <td></td> */}
                 </tr>
               </tbody>
             </table>
