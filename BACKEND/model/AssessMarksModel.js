@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const assessMarksSchema = new mongoose.Schema({
   groupId: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   supervisorId: {
     type: String,

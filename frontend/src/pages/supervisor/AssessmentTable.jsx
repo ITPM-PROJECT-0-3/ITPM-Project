@@ -9,6 +9,8 @@ import {
   TableRow,
   Paper,
   Button,
+  TablePagination,
+  TextField,
 } from "@mui/material";
 import MarksModal from "./MarksModel";
 import { useAuth } from "../../contexts/ProjectCoordinator/AuthContext";
@@ -22,29 +24,29 @@ function AssessmentTable() {
   const [groupMongoIds, setGroupMongoIds] = useState([]);
 
   const { currentUser } = useAuth();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    // Extract groupMongoIds when currentUser or currentUser.engagedGroups changes
     if (currentUser) {
-      console.log("Current User:", currentUser.supervisor.engagedGroups);
       const ids = currentUser.supervisor.engagedGroups.map(
         (group) => group.groupMongoId
       );
       setGroupMongoIds(ids);
     }
-  }, []);
+  }, [currentUser]);
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(groupMongoIds);
       try {
-        console.log("Group Mongo IDs:", groupMongoIds);
         const response = await axios.post(
           "http://localhost:8000/api/supervisor/superviser-groups",
           { ids: groupMongoIds }
         );
-        console.log(response.data);
+        console.log(response.data.data);
         setRows(response.data.data);
-        console.log("Rows:", rows);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -52,32 +54,10 @@ function AssessmentTable() {
       }
     };
 
-    // Fetch data only when groupMongoIds is not empty
     if (groupMongoIds.length > 0) {
       fetchData();
     }
   }, [groupMongoIds]);
-
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const requests = ids.map((id) =>
-  //           axios.get(
-  //             `http://localhost:8000/api/supervisor/assignment-marks/group/${id._id}`
-  //           )
-  //         );
-  //         const responses = await Promise.all(requests);
-  //         const data = responses.map((response) => response.data);
-  //         setRows(data);
-  //         setLoading(false);
-  //       } catch (err) {
-  //         setError(err.message);
-  //         setLoading(false);
-  //       }
-  //     };
-
-  //     fetchData();
-  //   }, []);
 
   const handleClickOpen = (row) => {
     setOpen(true);
@@ -88,21 +68,51 @@ function AssessmentTable() {
     setOpen(false);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0); // Reset to first page when searching
+  };
+
+  const filteredRows = rows.filter((row) =>
+    Object.values(row).some(
+      (value) =>
+        typeof value === "string" &&
+        value.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
   return (
     <>
-      {rows && rows.length > 0 ? (
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Group ID</TableCell>
-                <TableCell>Topic</TableCell>
-                <TableCell>Submit Date</TableCell>
-                <TableCell>Marks</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows?.map((row) => (
+      <TextField
+        label="Search Here..."
+        variant="outlined"
+        value={searchTerm}
+        onChange={handleSearch}
+        style={{ marginBottom: "20px" }}
+      />
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Group ID</TableCell>
+              <TableCell>Topic</TableCell>
+              <TableCell>Submit Date</TableCell>
+              <TableCell>Marks</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {filteredRows
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => (
                 <TableRow key={row.groupId}>
                   <TableCell component="th" scope="row">
                     {row.groupId}
@@ -120,28 +130,18 @@ function AssessmentTable() {
                   </TableCell>
                 </TableRow>
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Group ID</TableCell>
-                <TableCell>Topic</TableCell>
-                <TableCell>Submit Date</TableCell>
-                <TableCell>Marks</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={4}>No data found</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={filteredRows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
       <MarksModal
         open={open}
         handleClose={handleClose}

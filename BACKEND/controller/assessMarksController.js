@@ -7,8 +7,13 @@ const assessmentMarks = async (req, res, next) => {
   try {
     const { groupId, supervisorId, marks, comment } = req.body;
 
-    const newAssessMarks = new AssessMarks({ groupId, supervisorId, marks, comment });
+    // Check if a record with the same groupId already exists
+    const existingRecord = await AssessMarks.findOne({ groupId });
+    if (existingRecord) {
+      return res.status(409).json({ error: "A record for this group ID already exists." });
+    }
 
+    const newAssessMarks = new AssessMarks({ groupId, supervisorId, marks, comment });
     await newAssessMarks.save();
     res.status(201).json({
       message: "Marks added successfully",
@@ -16,7 +21,11 @@ const assessmentMarks = async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    if (error.code === 11000) { // MongoDB duplicate key error
+      res.status(409).json({ error: "Duplicate group ID, cannot add multiple records." });
+    } else {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
     next(error);
   }
 }

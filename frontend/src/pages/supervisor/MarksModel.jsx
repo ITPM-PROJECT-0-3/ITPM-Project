@@ -8,15 +8,28 @@ import {
   Button,
   TextField,
   Box,
+  CircularProgress,
 } from "@mui/material";
 
 function MarksModal({ open, handleClose: close, currentRow }) {
   const [marks, setMarks] = useState("");
   const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "" });
   const [documentURL, setDocumentURL] = useState("");
+  const [superviserId, setSuperviserId] = useState("");
+  const [isNewEntry, setIsNewEntry] = useState(true);
+
+  const handleCloseModal = () => {
+    setMarks("");
+    setComment("");
+    setSnackbar({ ...snackbar, open: false });
+    close(); // Call the original handleClose function passed as props
+  };
 
   useEffect(() => {
     if (open && currentRow) {
+      console.log("Fetching marks data for group:", currentRow.groupId);
       const fetchMarksData = async () => {
         try {
           const response = await axios.get(
@@ -45,39 +58,91 @@ function MarksModal({ open, handleClose: close, currentRow }) {
   };
 
   const handleMarksChange = (event) => {
-    setMarks(event.target.value);
+    const value = parseInt(event.target.value, 10);
+    if (!isNaN(value) && value >= 0 && value <= 100) {
+      setMarks(value.toString());
+    }
   };
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    if (currentRow) {
+      if (currentRow.marks != null) {
+        // Assuming 'marks' is not defined for new entries
+        setIsNewEntry(false);
+        setMarks(currentRow.marks);
+        setComment(currentRow.comment);
+      } else {
+        setIsNewEntry(true);
+        setMarks("");
+        setComment("");
+      }
+    }
+  }, [currentRow]);
+
+  const handleCreate = async () => {
     const data = {
       groupId: currentRow?.groupId,
       supervisorId: currentRow?.supervisor,
       marks,
       comment,
     };
+    setLoading(true);
     try {
       await axios.post(
         `http://localhost:8000/api/supervisor/assignment-marks/${currentRow.groupId}`,
         data
       );
-      handleClose(); // Close the modal after successful submission
+      handleCloseModal();
+      setLoading(false);
     } catch (error) {
       console.error("Failed to submit marks and comments:", error);
+      setLoading(false);
     }
   };
 
-  // Modified handleClose to reset state immediately when closing
-  const handleClose = () => {
-    setMarks("");
-    setComment("");
-    setDocumentURL(""); // Optionally reset other states as needed
-    close(); // Call the original handleClose function passed as props
+  const handleUpdate = async () => {
+    const data = {
+      marks, // As this is the expected field from the API
+      comment, // As this is the expected field from the API
+    };
+    setLoading(true);
+    try {
+      await axios.put(
+        `http://localhost:8000/api/supervisor/assignment-marks/group/${currentRow.groupId}`, // Correct endpoint with PUT method
+        data
+      );
+      setSnackbar({ open: true, message: "Marks updated successfully!" });
+      handleCloseModal();
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to submit marks and comments:", error);
+      setSnackbar({ open: true, message: "Failed to update marks!" });
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      console.log("Deleting marks for group:", currentRow.groupId);
+      await axios.delete(
+        `http://localhost:8000/api/supervisor/assignment-marks/group/${currentRow.groupId}`
+      );
+
+      setSnackbar({ open: true, message: "Marks deleted successfully!" });
+      handleCloseModal(); // Close the modal after successful deletion
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to delete marks:", error);
+      setLoading(false);
+      setSnackbar({ open: true, message: "Failed to delete marks!" });
+    }
   };
 
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={handleCloseModal}
       aria-labelledby="form-dialog-title"
       fullWidth
       maxWidth="lg"
@@ -123,12 +188,26 @@ function MarksModal({ open, handleClose: close, currentRow }) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button onClick={handleCloseModal} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="primary">
-          Submit
-        </Button>
+        {isNewEntry ? (
+          <>
+            <Button onClick={handleCreate} color="primary" disabled={loading}>
+              {loading ? <CircularProgress size={24} /> : "Add"}
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={handleDelete} color="secondary" disabled={loading}>
+              {loading ? <CircularProgress size={24} /> : "Delete"}
+            </Button>
+            <Button onClick={handleUpdate} color="primary" disabled={loading}>
+              {loading ? <CircularProgress size={24} /> : "Update"}
+            </Button>
+            x
+          </>
+        )}
       </DialogActions>
     </Dialog>
   );
