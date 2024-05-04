@@ -66,7 +66,7 @@ function MarksModal({ open, handleClose: close, currentRow }) {
 
   useEffect(() => {
     if (currentRow) {
-      if (currentRow.marks != null) {
+      if (currentRow.marks === null) {
         // Assuming 'marks' is not defined for new entries
         setIsNewEntry(false);
         setMarks(currentRow.marks);
@@ -191,23 +191,22 @@ function MarksModal({ open, handleClose: close, currentRow }) {
         <Button onClick={handleCloseModal} color="primary">
           Cancel
         </Button>
-        {isNewEntry ? (
-          <>
-            <Button onClick={handleCreate} color="primary" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : "Add"}
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button onClick={handleDelete} color="secondary" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : "Delete"}
-            </Button>
-            <Button onClick={handleUpdate} color="primary" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : "Update"}
-            </Button>
-            x
-          </>
-        )}
+        {/* {isNewEntry ? ( */}
+        <>
+          <Button onClick={handleCreate} color="primary" disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Add"}
+          </Button>
+        </>
+        {/* ) : ( */}
+        <>
+          <Button onClick={handleDelete} color="secondary" disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Delete"}
+          </Button>
+          <Button onClick={handleUpdate} color="primary" disabled={loading}>
+            {loading ? <CircularProgress size={24} /> : "Update"}
+          </Button>
+        </>
+        {/* )} */}
       </DialogActions>
     </Dialog>
   );
